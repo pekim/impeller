@@ -1,2 +1,5 @@
-internal/lib
+# large files, that could bloat the repo
+internal/interop/bin
+internal/interop/lib
+
 temp
