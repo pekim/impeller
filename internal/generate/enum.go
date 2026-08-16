@@ -7,8 +7,8 @@ import (
 
 type enum struct {
 	gen    *gen
-	name   string
 	cursor clang.Cursor
+	name   string
 }
 
 func (enum enum) generate(file file) {

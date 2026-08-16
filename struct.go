@@ -2,55 +2,84 @@
 
 package impeller
 
-type Context struct{}
+import "structs"
 
-type DisplayList struct{}
+type Context *struct{}
 
-type DisplayListBuilder struct{}
+type DisplayList *struct{}
 
-type Paint struct{}
+type DisplayListBuilder *struct{}
 
-type ColorFilter struct{}
+type Paint *struct{}
 
-type ColorSource struct{}
+type ColorFilter *struct{}
 
-type ImageFilter struct{}
+type ColorSource *struct{}
 
-type MaskFilter struct{}
+type ImageFilter *struct{}
 
-type TypographyContext struct{}
+type MaskFilter *struct{}
 
-type Paragraph struct{}
+type TypographyContext *struct{}
 
-type ParagraphBuilder struct{}
+type Paragraph *struct{}
 
-type ParagraphStyle struct{}
+type ParagraphBuilder *struct{}
 
-type LineMetrics struct{}
+type ParagraphStyle *struct{}
 
-type GlyphInfo struct{}
+type LineMetrics *struct{}
 
-type Path struct{}
+type GlyphInfo *struct{}
 
-type PathBuilder struct{}
+type Path *struct{}
 
-type Surface struct{}
+type PathBuilder *struct{}
 
-type Texture struct{}
+type Surface *struct{}
 
-type VulkanSwapchain struct{}
+type Texture *struct{}
 
-type FragmentProgram struct{}
+type VulkanSwapchain *struct{}
 
-type Rect struct{}
+type FragmentProgram *struct{}
 
-type Point struct{}
+type Rect struct {
+	_ structs.HostLayout
 
-type Size struct{}
+	// X
+	// Y
+	// Width
+	// Height
+}
 
-type ISize struct{}
+type Point struct {
+	_ structs.HostLayout
 
-type Range struct{}
+	// X
+	// Y
+}
+
+type Size struct {
+	_ structs.HostLayout
+
+	// Width
+	// Height
+}
+
+type ISize struct {
+	_ structs.HostLayout
+
+	// Width
+	// Height
+}
+
+type Range struct {
+	_ structs.HostLayout
+
+	// Start
+	// End
+}
 
 /*
 A 4x4 transformation matrix using column-major storage.
@@ -60,7 +89,11 @@ A 4x4 transformation matrix using column-major storage.
 	| m[2] m[6] m[10] m[14] |
 	| m[3] m[7] m[11] m[15] |
 */
-type Matrix struct{}
+type Matrix struct {
+	_ structs.HostLayout
+
+	// M
+}
 
 /*
 A 4x5 matrix using row-major storage used for transforming color values.
@@ -110,18 +143,70 @@ To apply a grayscale conversion filter:
 
 @see      ImpellerColorFilter
 */
-type ColorMatrix struct{}
+type ColorMatrix struct {
+	_ structs.HostLayout
 
-type RoundingRadii struct{}
+	// M
+}
 
-type Color struct{}
+type RoundingRadii struct {
+	_ structs.HostLayout
 
-type TextureDescriptor struct{}
+	// TopLeft
+	// BottomLeft
+	// TopRight
+	// BottomRight
+}
 
-type Mapping struct{}
+type Color struct {
+	_ structs.HostLayout
 
-type ContextVulkanSettings struct{}
+	// Red
+	// Green
+	// Blue
+	// Alpha
+	// ColorSpace
+}
 
-type ContextVulkanInfo struct{}
+type TextureDescriptor struct {
+	_ structs.HostLayout
 
-type TextDecoration struct{}
+	// PixelFormat
+	// Size
+	// MipCount
+}
+
+type Mapping struct {
+	_ structs.HostLayout
+
+	// Data
+	// Length
+	// OnRelease
+}
+
+type ContextVulkanSettings struct {
+	_ structs.HostLayout
+
+	// UserData
+	// ProcAddressCallback
+	// EnableVulkanValidation
+}
+
+type ContextVulkanInfo struct {
+	_ structs.HostLayout
+
+	// VkInstance
+	// VkPhysicalDevice
+	// VkLogicalDevice
+	// GraphicsQueueFamilyIndex
+	// GraphicsQueueIndex
+}
+
+type TextDecoration struct {
+	_ structs.HostLayout
+
+	// Types
+	// Color
+	// Style
+	// ThicknessMultiplier
+}

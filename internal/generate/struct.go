@@ -6,15 +6,34 @@ import (
 )
 
 type struct_ struct {
-	gen    *gen
-	name   string
-	cursor clang.Cursor
+	gen     *gen
+	cursor  clang.Cursor
+	cName   string
+	name    string
+	pointer bool
 }
 
 func (struct_ struct_) generate(file file) {
 	file.Comment(struct_.gen.commentText(struct_.cursor))
-	file.Type().Id(struct_.name).StructFunc(func(_g *jen.Group) {
+	file.Type().Id(struct_.name).Do(func(s *jen.Statement) {
+		if struct_.pointer {
+			s.Op("*")
+		}
+	}).StructFunc(func(g *jen.Group) {
+		if struct_.pointer {
+			return
+		}
 
+		g.Id("_").Qual("structs", "HostLayout")
+		g.Line()
+
+		struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+			if cursor.Kind() == clang.Cursor_FieldDecl {
+				g.Comment(goName(cursor.Spelling()))
+			}
+
+			return clang.ChildVisit_Continue
+		})
 	})
 }
 
@@ -28,4 +47,14 @@ func (structs structs) generate() {
 		struct_.generate(file)
 		file.Line()
 	}
+}
+
+func (structs structs) find(cName string) (*struct_, bool) {
+	for i, struct_ := range structs {
+		if struct_.cName == cName {
+			return &(structs[i]), true
+		}
+	}
+
+	return nil, false
 }

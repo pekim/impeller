@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/go-clang/clang-v15/clang"
@@ -74,27 +75,34 @@ func (gen *gen) findEntities() {
 		case clang.Cursor_EnumDecl:
 			gen.enums = append(gen.enums, enum{
 				gen:    gen,
-				name:   goName(cursor.Spelling()),
 				cursor: cursor,
+				name:   goName(cursor.Spelling()),
 			})
 
 		case clang.Cursor_StructDecl:
+			cName := cursor.Spelling()
 			gen.structs = append(gen.structs, struct_{
 				gen:    gen,
-				name:   goName(cursor.Spelling()),
 				cursor: cursor,
+				cName:  cName,
+				name:   goName(cName),
 			})
 
-			// 		updated := false
-			// 		for i, struct_ := range gen.structs {
-			// 			if struct_.cName == cursor.Spelling() {
-			// 				gen.updateStruct(i, cursor)
-			// 				updated = true
-			// 			}
-			// 		}
-			// 		if !updated {
-			// 			gen.addStruct(cursor)
-			// 		}
+		case clang.Cursor_TypedefDecl:
+			underlyingType := cursor.TypedefDeclUnderlyingType().Spelling()
+			parts := strings.Split(underlyingType, " ")
+
+			switch cursor.TypedefDeclUnderlyingType().Kind() {
+			case clang.Type_Pointer:
+				if parts[0] == "struct" {
+					structName := parts[1]
+					struct_, found := gen.structs.find(structName)
+					if found {
+						struct_.pointer = true
+					}
+
+				}
+			}
 		}
 
 		return clang.ChildVisit_Continue
