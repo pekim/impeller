@@ -72,6 +72,14 @@ func (gen *gen) findEntities() {
 		// 	case clang.Cursor_FunctionDecl:
 		// 		gen.addFunction(cursor)
 
+		case clang.Cursor_EnumDecl:
+			name := strings.TrimPrefix(cursor.Spelling(), "Impeller")
+			gen.enums = append(gen.enums, enum{
+				gen:    gen,
+				name:   name,
+				cursor: cursor,
+			})
+
 		case clang.Cursor_StructDecl:
 			// fmt.Println("STRUCT =>", cursor.Spelling())
 			// 		updated := false
@@ -86,7 +94,7 @@ func (gen *gen) findEntities() {
 			// 		}
 
 		case clang.Cursor_TypedefDecl:
-			underlyingType := cursor.TypedefDeclUnderlyingType().Spelling()
+			// underlyingType := cursor.TypedefDeclUnderlyingType().Spelling()
 			// fmt.Println("TYPEDEF =>", cursor.Spelling(), underlyingType)
 			// fmt.Println("  ", cursor.TypedefDeclUnderlyingType().Kind().Spelling())
 
@@ -97,21 +105,21 @@ func (gen *gen) findEntities() {
 			// 	)
 			// }
 
-			if strings.Contains(underlyingType, "enum ") {
-				name := strings.Split(underlyingType, " ")[1]
-				name = strings.TrimPrefix(name, "Impeller")
+			// if strings.Contains(underlyingType, "enum ") {
+			// 	name := strings.Split(underlyingType, " ")[1]
+			// 	name = strings.TrimPrefix(name, "Impeller")
 
-				cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
-					if cursor.Kind() == clang.Cursor_EnumDecl {
-						gen.enums = append(gen.enums, enum{
-							gen:    gen,
-							name:   name,
-							cursor: cursor,
-						})
-					}
-					return clang.ChildVisit_Continue
-				})
-			}
+			// 	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+			// 		if cursor.Kind() == clang.Cursor_EnumDecl {
+			// 			gen.enums = append(gen.enums, enum{
+			// 				gen:    gen,
+			// 				name:   name,
+			// 				cursor: cursor,
+			// 			})
+			// 		}
+			// 		return clang.ChildVisit_Continue
+			// 	})
+			// }
 
 			// 		if strings.Contains(underlyingType, "struct ") {
 			// 			structName := strings.Split(underlyingType, " ")[1]
