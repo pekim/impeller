@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/go-clang/clang-v15/clang"
@@ -12,6 +13,7 @@ type gen struct {
 	srcFilename    string
 	tu             clang.TranslationUnit
 	lines          []string
+	enums          enums
 	// constantsDoclinks dochtml.Links
 	// structs           structs
 	// typedefs          typedefs
@@ -48,7 +50,7 @@ func (gen *gen) generate() {
 	gen.parseHeaderFile()
 	gen.findEntities()
 	// gen.enrich()
-	// gen.generateFiles()
+	gen.generateFiles()
 	// gen.commentFunctions()
 }
 
@@ -71,7 +73,7 @@ func (gen *gen) findEntities() {
 		// 		gen.addFunction(cursor)
 
 		case clang.Cursor_StructDecl:
-			fmt.Println("STRUCT =>", cursor.Spelling())
+			// fmt.Println("STRUCT =>", cursor.Spelling())
 			// 		updated := false
 			// 		for i, struct_ := range gen.structs {
 			// 			if struct_.cName == cursor.Spelling() {
@@ -85,14 +87,34 @@ func (gen *gen) findEntities() {
 
 		case clang.Cursor_TypedefDecl:
 			underlyingType := cursor.TypedefDeclUnderlyingType().Spelling()
-			fmt.Println("TYPEDEF =>", cursor.Spelling(), underlyingType)
-			fmt.Println("  ", cursor.TypedefDeclUnderlyingType().Kind().Spelling())
-			if cursor.TypedefDeclUnderlyingType().Kind() == clang.Type_Pointer {
-				fmt.Println("    ",
-					cursor.TypedefDeclUnderlyingType().PointeeType().Kind().Spelling(),
-					cursor.TypedefDeclUnderlyingType().PointeeType().Spelling(),
-				)
+			// fmt.Println("TYPEDEF =>", cursor.Spelling(), underlyingType)
+			// fmt.Println("  ", cursor.TypedefDeclUnderlyingType().Kind().Spelling())
+
+			// if cursor.TypedefDeclUnderlyingType().Kind() == clang.Type_Pointer {
+			// 	fmt.Println("    ",
+			// 		cursor.TypedefDeclUnderlyingType().PointeeType().Kind().Spelling(),
+			// 		cursor.TypedefDeclUnderlyingType().PointeeType().Spelling(),
+			// 	)
+			// }
+
+			if strings.Contains(underlyingType, "enum ") {
+				name := strings.Split(underlyingType, " ")[1]
+				name = strings.TrimPrefix(name, "Impeller")
+
+				cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+					if cursor.Kind() == clang.Cursor_EnumDecl {
+						gen.enums = append(gen.enums, enum{
+							name:   name,
+							cursor: cursor,
+						})
+					}
+					return clang.ChildVisit_Continue
+				})
+
+				// fmt.Println(enumName)
+				// fmt.Println("TYPEDEF =>", cursor.Type().Spelling(), cursor.TypedefDeclUnderlyingType().Spelling())
 			}
+
 			// 		if strings.Contains(underlyingType, "struct ") {
 			// 			structName := strings.Split(underlyingType, " ")[1]
 			// 			updated := false
@@ -118,12 +140,13 @@ func (gen *gen) findEntities() {
 	})
 }
 
-func (gen *gen) enrich() {
-	// gen.functions.enrich()
-	// gen.structs.enrich()
-}
+// func (gen *gen) enrich() {
+// 	gen.functions.enrich()
+// 	gen.structs.enrich()
+// }
 
 func (gen *gen) generateFiles() {
+	gen.enums.generate()
 	// gen.functions.generate()
 	// gen.structs.generate()
 	// gen.typedefs.generate()
