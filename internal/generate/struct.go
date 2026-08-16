@@ -17,26 +17,30 @@ type struct_ struct {
 func (struct_ struct_) generate(file file) {
 	file.Comment(struct_.comment)
 
-	file.Type().Id(struct_.name).Do(func(s *jen.Statement) {
-		if struct_.pointer {
-			s.Op("*")
-		}
-	}).StructFunc(func(g *jen.Group) {
-		if struct_.pointer {
-			return
-		}
-
-		g.Id("_").Qual("structs", "HostLayout")
-		g.Line()
-
-		struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
-			if cursor.Kind() == clang.Cursor_FieldDecl {
-				g.Comment(goName(cursor.Spelling()))
+	file.
+		Type().
+		Id(struct_.name).
+		Do(func(s *jen.Statement) {
+			if struct_.pointer {
+				s.Op("*")
+			}
+		}).
+		StructFunc(func(g *jen.Group) {
+			if struct_.pointer {
+				return
 			}
 
-			return clang.ChildVisit_Continue
+			g.Id("_").Qual("structs", "HostLayout")
+			g.Line()
+
+			struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+				if cursor.Kind() == clang.Cursor_FieldDecl {
+					g.Comment(goName(cursor.Spelling()))
+				}
+
+				return clang.ChildVisit_Continue
+			})
 		})
-	})
 }
 
 type structs []struct_
