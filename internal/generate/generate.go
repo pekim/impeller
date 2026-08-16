@@ -82,10 +82,11 @@ func (gen *gen) findEntities() {
 		case clang.Cursor_StructDecl:
 			cName := cursor.Spelling()
 			gen.structs = append(gen.structs, struct_{
-				gen:    gen,
-				cursor: cursor,
-				cName:  cName,
-				name:   goName(cName),
+				gen:     gen,
+				cursor:  cursor,
+				cName:   cName,
+				name:    goName(cName),
+				comment: gen.commentText(cursor),
 			})
 
 		case clang.Cursor_TypedefDecl:
@@ -99,8 +100,11 @@ func (gen *gen) findEntities() {
 					struct_, found := gen.structs.find(structName)
 					if found {
 						struct_.pointer = true
-					}
 
+						if struct_.comment == "" {
+							struct_.comment = gen.commentText(cursor)
+						}
+					}
 				}
 			}
 		}

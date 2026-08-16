@@ -10,11 +10,13 @@ type struct_ struct {
 	cursor  clang.Cursor
 	cName   string
 	name    string
+	comment string
 	pointer bool
 }
 
 func (struct_ struct_) generate(file file) {
-	file.Comment(struct_.gen.commentText(struct_.cursor))
+	file.Comment(struct_.comment)
+
 	file.Type().Id(struct_.name).Do(func(s *jen.Statement) {
 		if struct_.pointer {
 			s.Op("*")
