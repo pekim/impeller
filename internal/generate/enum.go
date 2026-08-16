@@ -1,8 +1,6 @@
 package generate
 
 import (
-	"strings"
-
 	"github.com/dave/jennifer/jen"
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -17,8 +15,7 @@ func (enum enum) generate(file file) {
 	file.Type().Id(enum.name).Id("enum")
 
 	enum.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
-		name := cursor.Spelling()
-		name = strings.TrimPrefix(name, "kImpeller")
+		name := goName(cursor.Spelling())
 		value := int(cursor.EnumConstantDeclValue())
 
 		file.
