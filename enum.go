@@ -93,15 +93,15 @@ const ColorSpaceDisplayP3 ColorSpace = 2
 
 type FontWeight enum
 
-const FontWeight100 FontWeight = 0
-const FontWeight200 FontWeight = 1
-const FontWeight300 FontWeight = 2
-const FontWeight400 FontWeight = 3
-const FontWeight500 FontWeight = 4
-const FontWeight600 FontWeight = 5
-const FontWeight700 FontWeight = 6
-const FontWeight800 FontWeight = 7
-const FontWeight900 FontWeight = 8
+const FontWeight100 FontWeight = 0 // Thin
+const FontWeight200 FontWeight = 1 // Extra-Light
+const FontWeight300 FontWeight = 2 // Light
+const FontWeight400 FontWeight = 3 // Normal/Regular
+const FontWeight500 FontWeight = 4 // Medium
+const FontWeight600 FontWeight = 5 // Semi-bold
+const FontWeight700 FontWeight = 6 // Bold
+const FontWeight800 FontWeight = 7 // Extra-Bold
+const FontWeight900 FontWeight = 8 // Black
 
 type FontStyle enum
 

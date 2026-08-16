@@ -3,10 +3,12 @@ package generate
 import (
 	"strings"
 
+	"github.com/dave/jennifer/jen"
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type enum struct {
+	gen    *gen
 	name   string
 	cursor clang.Cursor
 }
@@ -19,7 +21,17 @@ func (enum enum) generate(file file) {
 		name = strings.TrimPrefix(name, "kImpeller")
 		value := int(cursor.EnumConstantDeclValue())
 
-		file.Const().Id(name).Id(enum.name).Op("=").Lit(value)
+		file.
+			Const().
+			Id(name).Id(enum.name).
+			Op("=").
+			Lit(value).
+			Do(func(s *jen.Statement) {
+				comment := enum.gen.commentText(cursor)
+				if comment != "" {
+					s.Comment(comment)
+				}
+			})
 
 		return clang.ChildVisit_Continue
 	})

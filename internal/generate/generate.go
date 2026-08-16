@@ -104,15 +104,13 @@ func (gen *gen) findEntities() {
 				cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 					if cursor.Kind() == clang.Cursor_EnumDecl {
 						gen.enums = append(gen.enums, enum{
+							gen:    gen,
 							name:   name,
 							cursor: cursor,
 						})
 					}
 					return clang.ChildVisit_Continue
 				})
-
-				// fmt.Println(enumName)
-				// fmt.Println("TYPEDEF =>", cursor.Type().Spelling(), cursor.TypedefDeclUnderlyingType().Spelling())
 			}
 
 			// 		if strings.Contains(underlyingType, "struct ") {
