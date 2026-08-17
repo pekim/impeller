@@ -345,8 +345,11 @@ type ContextVulkanInfo struct {
 type TextDecoration struct {
 	_ structs.HostLayout
 
-	Types               int32
-	Color               Color
+	// A mask of `ImpellerTextDecorationType`s to enable.
+	Types int32
+	// The decoration color.
+	Color Color
+	// The decoration style.
 	Style               TextDecorationStyle
 	ThicknessMultiplier float32
 }

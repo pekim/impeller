@@ -8,6 +8,8 @@ import (
 )
 
 func (struct_ struct_) generateField(g *jen.Group, cursor clang.Cursor) {
+	g.Comment(struct_.gen.commentText(cursor))
+
 	cName := cursor.Spelling()
 	name := goName(cName)
 	typ := cursor.Type().Spelling()
