@@ -10,20 +10,24 @@ type result struct {
 	void     bool
 	isScalar bool
 	scalar   scalar
+	isStruct bool
+	struct_  *struct_
 }
 
-func newResult(typ clang.Type) result {
+func newResult(gen *gen, typ clang.Type) result {
 	result := result{
 		typ:  typ,
 		void: typ.CanonicalType().Kind() == clang.Type_Void,
 	}
+
 	result.scalar, result.isScalar = scalars[clang.CursorKind(result.typ.CanonicalType().Kind())]
+	result.struct_, result.isStruct = gen.structs.findByGoName(goName(typ.Spelling()))
 
 	return result
 }
 
 func (result result) supported() bool {
-	if result.void || result.isScalar {
+	if result.void || result.isScalar || result.isStruct {
 		return true
 	}
 
@@ -39,6 +43,10 @@ func (result result) goDecl() jen.Code {
 		return result.scalar.goType
 	}
 
+	if result.isStruct {
+		return jen.Id(result.struct_.name)
+	}
+
 	panic("result type")
 }
 
@@ -50,6 +58,9 @@ func (result result) goffiVar(g *jen.Group) {
 	if result.isScalar {
 		g.Var().Id("result").Add(result.scalar.goType)
 
+	} else if result.isStruct {
+		g.Var().Id("result").Id(result.struct_.name)
+
 	} else {
 		panic("result type")
 	}
@@ -60,12 +71,7 @@ func (result result) returnVar(g *jen.Group) {
 		return
 	}
 
-	if result.isScalar {
-		g.Return().Id("result")
-
-	} else {
-		panic("result type")
-	}
+	g.Return().Id("result")
 }
 
 func (result result) returnValuePointer() jen.Code {
@@ -73,16 +79,15 @@ func (result result) returnValuePointer() jen.Code {
 		return jen.Nil()
 	}
 
-	if result.isScalar {
-		return jen.Op("&").Id("result")
-	}
-
-	panic("result type")
+	return jen.Op("&").Id("result")
 }
 
 func (result result) typeDescriptor() jen.Code {
 	if result.isScalar {
 		return result.scalar.typeDescriptor
+	}
+	if result.isStruct && result.struct_.handle {
+		return jen.Qual(typesImportPath, "PointerTypeDescriptor")
 	}
 
 	panic("result type")

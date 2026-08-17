@@ -23,7 +23,7 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 		cursor:     cursor,
 		cName:      cName,
 		name:       goName(cName),
-		result:     newResult(cursor.ResultType()),
+		result:     newResult(gen, cursor.ResultType()),
 		params:     newParams(cursor),
 		varName:    "_" + cName,          // don't export the var
 		cifVarName: "_" + cName + "_cif", // don't export the var

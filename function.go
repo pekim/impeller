@@ -275,7 +275,19 @@ A builder builds these immutable paths.
 
 @return     The path builder.
 */
-// UNSUPPORTED :: PathBuilderNew  param count = 0
+func PathBuilderNew() PathBuilder {
+	var result PathBuilder
+	_, err := ffi.CallFunction(
+		_ImpellerPathBuilderNew_cif,
+		_ImpellerPathBuilderNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 @brief      Retain a strong reference to the object. The object can be NULL
@@ -407,7 +419,19 @@ path builder now contains an empty path.
 
 @return     The impeller paint.
 */
-// UNSUPPORTED :: PaintNew  param count = 0
+func PaintNew() Paint {
+	var result Paint
+	_, err := ffi.CallFunction(
+		_ImpellerPaintNew_cif,
+		_ImpellerPaintNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 @brief      Retain a strong reference to the object. The object can be NULL
@@ -1274,7 +1298,19 @@ The device pixel ratio.
 
 @return     The typography context.
 */
-// UNSUPPORTED :: TypographyContextNew  param count = 0
+func TypographyContextNew() TypographyContext {
+	var result TypographyContext
+	_, err := ffi.CallFunction(
+		_ImpellerTypographyContextNew_cif,
+		_ImpellerTypographyContextNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 @brief      Retain a strong reference to the object. The object can be NULL
@@ -1339,7 +1375,19 @@ data is to be used.
 
 @return     The paragraph style.
 */
-// UNSUPPORTED :: ParagraphStyleNew  param count = 0
+func ParagraphStyleNew() ParagraphStyle {
+	var result ParagraphStyle
+	_, err := ffi.CallFunction(
+		_ImpellerParagraphStyleNew_cif,
+		_ImpellerParagraphStyleNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 @brief      Retain a strong reference to the object. The object can be NULL

@@ -93,3 +93,13 @@ func (structs structs) find(cName string) (*struct_, bool) {
 
 	return nil, false
 }
+
+func (structs structs) findByGoName(name string) (*struct_, bool) {
+	for i, struct_ := range structs {
+		if struct_.name == name {
+			return &(structs[i]), true
+		}
+	}
+
+	return nil, false
+}

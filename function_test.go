@@ -10,3 +10,8 @@ func TestGetVersion(t *testing.T) {
 	assert.NoError(t, Init())
 	assert.Equal(t, uint32(0x20404000), GetVersion())
 }
+
+func TestNoArgsConstructor(t *testing.T) {
+	assert.NoError(t, Init())
+	assert.NotNil(t, ParagraphStyleNew())
+}
