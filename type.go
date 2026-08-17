@@ -1,0 +1,23 @@
+package impeller
+
+import "unsafe"
+
+type cint int32
+type enum cint
+
+type Bool cint
+
+func (bool Bool) Bool() bool {
+	return bool != 0
+}
+
+func (bool *Bool) Set(value bool) {
+	if value {
+		*bool = 1
+	} else {
+		*bool = 0
+	}
+}
+
+type Callback unsafe.Pointer                  // TODO
+type VulkanProcAddressCallback unsafe.Pointer // TODO

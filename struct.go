@@ -2,7 +2,10 @@
 
 package impeller
 
-import "structs"
+import (
+	"structs"
+	"unsafe"
+)
 
 /*
 An Impeller graphics context. Contexts are platform and client-rendering-API
@@ -184,38 +187,38 @@ type FragmentProgram *struct{}
 type Rect struct {
 	_ structs.HostLayout
 
-	// X
-	// Y
-	// Width
-	// Height
+	X      float32
+	Y      float32
+	Width  float32
+	Height float32
 }
 
 type Point struct {
 	_ structs.HostLayout
 
-	// X
-	// Y
+	X float32
+	Y float32
 }
 
 type Size struct {
 	_ structs.HostLayout
 
-	// Width
-	// Height
+	Width  float32
+	Height float32
 }
 
 type ISize struct {
 	_ structs.HostLayout
 
-	// Width
-	// Height
+	Width  int64
+	Height int64
 }
 
 type Range struct {
 	_ structs.HostLayout
 
-	// Start
-	// End
+	Start uint64
+	End   uint64
 }
 
 /*
@@ -229,7 +232,7 @@ A 4x4 transformation matrix using column-major storage.
 type Matrix struct {
 	_ structs.HostLayout
 
-	// M
+	M [16]float32
 }
 
 /*
@@ -283,67 +286,67 @@ To apply a grayscale conversion filter:
 type ColorMatrix struct {
 	_ structs.HostLayout
 
-	// M
+	M [20]float32
 }
 
 type RoundingRadii struct {
 	_ structs.HostLayout
 
-	// TopLeft
-	// BottomLeft
-	// TopRight
-	// BottomRight
+	TopLeft     Point
+	BottomLeft  Point
+	TopRight    Point
+	BottomRight Point
 }
 
 type Color struct {
 	_ structs.HostLayout
 
-	// Red
-	// Green
-	// Blue
-	// Alpha
-	// ColorSpace
+	Red        float32
+	Green      float32
+	Blue       float32
+	Alpha      float32
+	ColorSpace ColorSpace
 }
 
 type TextureDescriptor struct {
 	_ structs.HostLayout
 
-	// PixelFormat
-	// Size
-	// MipCount
+	PixelFormat PixelFormat
+	Size        ISize
+	MipCount    uint32
 }
 
 type Mapping struct {
 	_ structs.HostLayout
 
-	// Data
-	// Length
-	// OnRelease
+	Data      unsafe.Pointer
+	Length    uint64
+	OnRelease Callback
 }
 
 type ContextVulkanSettings struct {
 	_ structs.HostLayout
 
-	// UserData
-	// ProcAddressCallback
-	// EnableVulkanValidation
+	UserData               unsafe.Pointer
+	ProcAddressCallback    VulkanProcAddressCallback
+	EnableVulkanValidation Bool
 }
 
 type ContextVulkanInfo struct {
 	_ structs.HostLayout
 
-	// VkInstance
-	// VkPhysicalDevice
-	// VkLogicalDevice
-	// GraphicsQueueFamilyIndex
-	// GraphicsQueueIndex
+	VkInstance               unsafe.Pointer
+	VkPhysicalDevice         unsafe.Pointer
+	VkLogicalDevice          unsafe.Pointer
+	GraphicsQueueFamilyIndex uint32
+	GraphicsQueueIndex       uint32
 }
 
 type TextDecoration struct {
 	_ structs.HostLayout
 
-	// Types
-	// Color
-	// Style
-	// ThicknessMultiplier
+	Types               int32
+	Color               Color
+	Style               TextDecorationStyle
+	ThicknessMultiplier float32
 }

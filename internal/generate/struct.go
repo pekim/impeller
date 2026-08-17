@@ -35,7 +35,7 @@ func (struct_ struct_) generate(file file) {
 
 			struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 				if cursor.Kind() == clang.Cursor_FieldDecl {
-					g.Comment(goName(cursor.Spelling()))
+					struct_.generateField(g, cursor)
 				}
 
 				return clang.ChildVisit_Continue
