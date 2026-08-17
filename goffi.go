@@ -9,20 +9,20 @@ import (
 	types "github.com/go-webgpu/goffi/types"
 )
 
-var _ImpellerGetVersion unsafe.Pointer
-var _ImpellerGetVersion_cif = &types.CallInterface{}
+var funcImpellerGetVersion unsafe.Pointer
+var cifImpellerGetVersion = &types.CallInterface{}
 
-var _ImpellerPathBuilderNew unsafe.Pointer
-var _ImpellerPathBuilderNew_cif = &types.CallInterface{}
+var funcImpellerPathBuilderNew unsafe.Pointer
+var cifImpellerPathBuilderNew = &types.CallInterface{}
 
-var _ImpellerPaintNew unsafe.Pointer
-var _ImpellerPaintNew_cif = &types.CallInterface{}
+var funcImpellerPaintNew unsafe.Pointer
+var cifImpellerPaintNew = &types.CallInterface{}
 
-var _ImpellerTypographyContextNew unsafe.Pointer
-var _ImpellerTypographyContextNew_cif = &types.CallInterface{}
+var funcImpellerTypographyContextNew unsafe.Pointer
+var cifImpellerTypographyContextNew = &types.CallInterface{}
 
-var _ImpellerParagraphStyleNew unsafe.Pointer
-var _ImpellerParagraphStyleNew_cif = &types.CallInterface{}
+var funcImpellerParagraphStyleNew unsafe.Pointer
+var cifImpellerParagraphStyleNew = &types.CallInterface{}
 
 var initialised = false
 
@@ -44,12 +44,12 @@ func Init() error {
 		return err
 	}
 
-	_ImpellerGetVersion, err = ffi.GetSymbol(handle, "ImpellerGetVersion")
+	funcImpellerGetVersion, err = ffi.GetSymbol(handle, "ImpellerGetVersion")
 	if err != nil {
 		return err
 	}
 	err = ffi.PrepareCallInterface(
-		_ImpellerGetVersion_cif,
+		cifImpellerGetVersion,
 		types.DefaultCall,
 		types.UInt32TypeDescriptor,
 		[]*types.TypeDescriptor{})
@@ -57,12 +57,12 @@ func Init() error {
 		return err
 	}
 
-	_ImpellerPathBuilderNew, err = ffi.GetSymbol(handle, "ImpellerPathBuilderNew")
+	funcImpellerPathBuilderNew, err = ffi.GetSymbol(handle, "ImpellerPathBuilderNew")
 	if err != nil {
 		return err
 	}
 	err = ffi.PrepareCallInterface(
-		_ImpellerPathBuilderNew_cif,
+		cifImpellerPathBuilderNew,
 		types.DefaultCall,
 		types.PointerTypeDescriptor,
 		[]*types.TypeDescriptor{})
@@ -70,12 +70,12 @@ func Init() error {
 		return err
 	}
 
-	_ImpellerPaintNew, err = ffi.GetSymbol(handle, "ImpellerPaintNew")
+	funcImpellerPaintNew, err = ffi.GetSymbol(handle, "ImpellerPaintNew")
 	if err != nil {
 		return err
 	}
 	err = ffi.PrepareCallInterface(
-		_ImpellerPaintNew_cif,
+		cifImpellerPaintNew,
 		types.DefaultCall,
 		types.PointerTypeDescriptor,
 		[]*types.TypeDescriptor{})
@@ -83,12 +83,12 @@ func Init() error {
 		return err
 	}
 
-	_ImpellerTypographyContextNew, err = ffi.GetSymbol(handle, "ImpellerTypographyContextNew")
+	funcImpellerTypographyContextNew, err = ffi.GetSymbol(handle, "ImpellerTypographyContextNew")
 	if err != nil {
 		return err
 	}
 	err = ffi.PrepareCallInterface(
-		_ImpellerTypographyContextNew_cif,
+		cifImpellerTypographyContextNew,
 		types.DefaultCall,
 		types.PointerTypeDescriptor,
 		[]*types.TypeDescriptor{})
@@ -96,12 +96,12 @@ func Init() error {
 		return err
 	}
 
-	_ImpellerParagraphStyleNew, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleNew")
+	funcImpellerParagraphStyleNew, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleNew")
 	if err != nil {
 		return err
 	}
 	err = ffi.PrepareCallInterface(
-		_ImpellerParagraphStyleNew_cif,
+		cifImpellerParagraphStyleNew,
 		types.DefaultCall,
 		types.PointerTypeDescriptor,
 		[]*types.TypeDescriptor{})

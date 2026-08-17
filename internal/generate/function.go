@@ -25,8 +25,8 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 		name:       goName(cName),
 		result:     newResult(gen, cursor.ResultType()),
 		params:     newParams(cursor),
-		varName:    "_" + cName,          // don't export the var
-		cifVarName: "_" + cName + "_cif", // don't export the var
+		varName:    "func" + cName,
+		cifVarName: "cif" + cName,
 	}
 }
 

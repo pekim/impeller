@@ -30,8 +30,8 @@ version that is different to the one returned by
 func GetVersion() uint32 {
 	var result uint32
 	_, err := ffi.CallFunction(
-		_ImpellerGetVersion_cif,
-		_ImpellerGetVersion,
+		cifImpellerGetVersion,
+		funcImpellerGetVersion,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{},
 	)
@@ -278,8 +278,8 @@ A builder builds these immutable paths.
 func PathBuilderNew() PathBuilder {
 	var result PathBuilder
 	_, err := ffi.CallFunction(
-		_ImpellerPathBuilderNew_cif,
-		_ImpellerPathBuilderNew,
+		cifImpellerPathBuilderNew,
+		funcImpellerPathBuilderNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{},
 	)
@@ -422,8 +422,8 @@ path builder now contains an empty path.
 func PaintNew() Paint {
 	var result Paint
 	_, err := ffi.CallFunction(
-		_ImpellerPaintNew_cif,
-		_ImpellerPaintNew,
+		cifImpellerPaintNew,
+		funcImpellerPaintNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{},
 	)
@@ -1301,8 +1301,8 @@ The device pixel ratio.
 func TypographyContextNew() TypographyContext {
 	var result TypographyContext
 	_, err := ffi.CallFunction(
-		_ImpellerTypographyContextNew_cif,
-		_ImpellerTypographyContextNew,
+		cifImpellerTypographyContextNew,
+		funcImpellerTypographyContextNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{},
 	)
@@ -1378,8 +1378,8 @@ data is to be used.
 func ParagraphStyleNew() ParagraphStyle {
 	var result ParagraphStyle
 	_, err := ffi.CallFunction(
-		_ImpellerParagraphStyleNew_cif,
-		_ImpellerParagraphStyleNew,
+		cifImpellerParagraphStyleNew,
+		funcImpellerParagraphStyleNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{},
 	)
