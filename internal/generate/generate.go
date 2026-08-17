@@ -15,19 +15,13 @@ type gen struct {
 	lines          []string
 	enums          enums
 	structs        structs
-	// constantsDoclinks dochtml.Links
-	// typedefs          typedefs
-	// functions         functions
-	// functionsDoclinks dochtml.Links
-	// unusedFunctions   []string
+	functions      functions
 }
 
 func Generate() {
 	gen := gen{
 		headerFilename: "internal/interop/include/impeller.h",
 		srcFilename:    "impeller.h",
-		// constantsDoclinks: dochtml.ConstantsLinks(),
-		// functionsDoclinks: dochtml.FunctionsLinks(),
 	}
 
 	timeFunction("TOTAL", func() {
@@ -69,8 +63,12 @@ func (gen *gen) findEntities() {
 
 		switch cursor.Kind() {
 
-		// 	case clang.Cursor_FunctionDecl:
-		// 		gen.addFunction(cursor)
+		case clang.Cursor_FunctionDecl:
+			gen.functions = append(gen.functions, function{
+				gen:    gen,
+				cursor: cursor,
+				name:   goName(cursor.Spelling()),
+			})
 
 		case clang.Cursor_EnumDecl:
 			gen.enums = append(gen.enums, enum{
@@ -100,7 +98,6 @@ func (gen *gen) findEntities() {
 					struct_, found := gen.structs.find(structName)
 					if found {
 						struct_.handle = true
-
 						if struct_.comment == "" {
 							struct_.comment = gen.commentText(cursor)
 						}
@@ -120,9 +117,8 @@ func (gen *gen) findEntities() {
 
 func (gen *gen) generateFiles() {
 	gen.enums.generate()
-	// gen.functions.generate()
+	gen.functions.generate()
 	gen.structs.generate()
-	// gen.typedefs.generate()
 	gen.generateStructTest()
 }
 
