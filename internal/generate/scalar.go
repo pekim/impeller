@@ -6,29 +6,36 @@ import (
 )
 
 var scalars = map[clang.CursorKind]struct {
-	goType jen.Code
+	goType         jen.Code
+	typeDescriptor jen.Code
 }{
 	clang.Type_Bool: {
-		goType: jen.Id("Bool"),
+		goType:         jen.Id("Bool"),
+		typeDescriptor: jen.Qual(typesImportPath, "UInt8TypeDescriptor"),
 	},
 
 	clang.Type_Float: {
-		goType: jen.Float32(),
+		goType:         jen.Float32(),
+		typeDescriptor: jen.Qual(typesImportPath, "FloatTypeDescriptor"),
 	},
 
 	clang.Type_Int: {
-		goType: jen.Int32(),
+		goType:         jen.Int32(),
+		typeDescriptor: jen.Qual(typesImportPath, "SInt32TypeDescriptor"),
 	},
 
 	clang.Type_Long: {
-		goType: jen.Int64(),
+		goType:         jen.Int64(),
+		typeDescriptor: jen.Qual(typesImportPath, "SInt64TypeDescriptor"),
 	},
 
 	clang.Type_UInt: {
-		goType: jen.Uint32(),
+		goType:         jen.Uint32(),
+		typeDescriptor: jen.Qual(typesImportPath, "UInt32TypeDescriptor"),
 	},
 
 	clang.Type_ULong: {
-		goType: jen.Uint64(),
+		goType:         jen.Uint64(),
+		typeDescriptor: jen.Qual(typesImportPath, "UInt64TypeDescriptor"),
 	},
 }

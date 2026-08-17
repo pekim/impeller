@@ -64,11 +64,7 @@ func (gen *gen) findEntities() {
 		switch cursor.Kind() {
 
 		case clang.Cursor_FunctionDecl:
-			gen.functions = append(gen.functions, function{
-				gen:    gen,
-				cursor: cursor,
-				name:   goName(cursor.Spelling()),
-			})
+			gen.functions = append(gen.functions, newFunction(gen, cursor))
 
 		case clang.Cursor_EnumDecl:
 			gen.enums = append(gen.enums, enum{
