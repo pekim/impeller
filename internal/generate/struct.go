@@ -11,36 +11,32 @@ type struct_ struct {
 	cName   string
 	name    string
 	comment string
-	pointer bool
+	handle  bool // defined using the IMPELLER_DEFINE_HANDLE macro
 }
 
 func (struct_ struct_) generate(file file) {
+	pointer := jen.Null()
+	if struct_.handle {
+		pointer = jen.Op("*")
+	}
+
 	file.Comment(struct_.comment)
+	file.Type().Id(struct_.name).Add(pointer).StructFunc(func(g *jen.Group) {
+		if struct_.handle {
+			return
+		}
 
-	file.
-		Type().
-		Id(struct_.name).
-		Do(func(s *jen.Statement) {
-			if struct_.pointer {
-				s.Op("*")
+		g.Id("_").Qual("structs", "HostLayout")
+		g.Line()
+
+		struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+			if cursor.Kind() == clang.Cursor_FieldDecl {
+				struct_.generateField(g, cursor)
 			}
-		}).
-		StructFunc(func(g *jen.Group) {
-			if struct_.pointer {
-				return
-			}
 
-			g.Id("_").Qual("structs", "HostLayout")
-			g.Line()
-
-			struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
-				if cursor.Kind() == clang.Cursor_FieldDecl {
-					struct_.generateField(g, cursor)
-				}
-
-				return clang.ChildVisit_Continue
-			})
+			return clang.ChildVisit_Continue
 		})
+	})
 }
 
 type structs []struct_

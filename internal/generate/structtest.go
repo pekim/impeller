@@ -22,7 +22,7 @@ func (gen gen) generateStructTest() {
 		).
 		ValuesFunc(func(g *jen.Group) {
 			for i, struct_ := range gen.structs {
-				if struct_.pointer {
+				if struct_.handle {
 					continue
 				}
 

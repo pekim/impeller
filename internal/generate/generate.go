@@ -99,7 +99,7 @@ func (gen *gen) findEntities() {
 					structName := parts[1]
 					struct_, found := gen.structs.find(structName)
 					if found {
-						struct_.pointer = true
+						struct_.handle = true
 
 						if struct_.comment == "" {
 							struct_.comment = gen.commentText(cursor)
