@@ -31,12 +31,12 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 }
 
 func (fn function) generate(file file) {
-	file.Comment(fn.gen.commentText(fn.cursor))
-
 	if !fn.supported() {
 		file.Commentf("UNSUPPORTED :: %s  param count = %d", fn.name, fn.cursor.NumArguments())
 		return
 	}
+
+	file.Comment(fn.gen.commentText(fn.cursor))
 
 	file.
 		Func().

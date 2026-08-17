@@ -27,7 +27,6 @@ func Generate() {
 	timeFunction("TOTAL", func() {
 		timeFunction("code generation", gen.generate)
 		timeFunction("statistics", gen.statistics)
-
 	})
 
 	// fmt.Println()
