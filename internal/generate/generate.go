@@ -24,10 +24,9 @@ func Generate() {
 		srcFilename:    "impeller.h",
 	}
 
-	timeFunction("TOTAL", func() {
-		timeFunction("code generation", gen.generate)
-		timeFunction("statistics", gen.statistics)
-	})
+	timeFunction("code generation", gen.generate)
+	gen.printStatistics()
+	fmt.Println()
 
 	// fmt.Println()
 	// usedFunctionCount := len(gen.functions) - len(gen.unusedFunctions)
@@ -47,9 +46,19 @@ func (gen *gen) generate() {
 	// gen.commentFunctions()
 }
 
-func (gen *gen) statistics() {
-	// gen.findUnusedFunctions()
-	// gen.writeUnusedFunctionsFile()
+func (gen *gen) printStatistics() {
+	functionCount := len(gen.functions)
+	supportedFunctionCount := 0
+	for _, fn := range gen.functions {
+		if fn.supported() {
+			supportedFunctionCount++
+		}
+	}
+	fmt.Printf("functions supported  : %d/%d  %1.1f%%\n",
+		supportedFunctionCount,
+		functionCount,
+		(float64(supportedFunctionCount)/float64(functionCount))*100,
+	)
 }
 
 func (gen *gen) findEntities() {
@@ -120,7 +129,7 @@ func (gen *gen) generateFiles() {
 func timeFunction(title string, fn func()) {
 	start := time.Now()
 	fn()
-	fmt.Printf("%-20s : %4.0fms\n",
+	fmt.Printf("%-20s : %.0fms\n",
 		title,
 		time.Since(start).Seconds()*1_000,
 	)
