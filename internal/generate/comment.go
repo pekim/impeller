@@ -32,6 +32,8 @@ func (gen gen) commentText(cursor clang.Cursor) string {
 		line = strings.TrimSpace(line)
 		line = strings.TrimPrefix(line, "///")
 		line = strings.TrimSpace(line)
+		line = strings.TrimPrefix(line, "@brief")
+		line = strings.TrimSpace(line)
 
 		// support code blocks
 		if strings.HasPrefix(line, "```") {

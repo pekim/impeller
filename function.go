@@ -9,7 +9,7 @@ import (
 )
 
 /*
-@brief      Get the version of Impeller standalone API. This is the API that
+Get the version of Impeller standalone API. This is the API that
 will be accepted for validity checks when provided to the
 context creation methods.
 
@@ -42,7 +42,7 @@ func GetVersion() uint32 {
 }
 
 /*
-@brief      Create an OpenGL(ES) Impeller context.
+Create an OpenGL(ES) Impeller context.
 
 @warning    Unlike other context types, the OpenGL ES context can only be
 created, used, and collected on the calling thread. This
@@ -71,7 +71,7 @@ user data.
 // UNSUPPORTED :: ContextCreateOpenGLESNew  param count = 3
 
 /*
-@brief      Create a Metal context using the system default Metal device.
+Create a Metal context using the system default Metal device.
 
 @param[in]  version  The version specified in the IMPELLER_VERSION macro.
 
@@ -80,7 +80,7 @@ user data.
 // UNSUPPORTED :: ContextCreateMetalNew  param count = 1
 
 /*
-@brief      Create a Vulkan context using the provided Vulkan Settings.
+Create a Vulkan context using the provided Vulkan Settings.
 
 @param[in]  version   The version specified in the IMPELLER_VERSION macro.
 @param[in]  settings  The Vulkan settings.
@@ -90,7 +90,7 @@ user data.
 // UNSUPPORTED :: ContextCreateVulkanNew  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  context  The context.
@@ -98,7 +98,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: ContextRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  context  The context.
@@ -106,7 +106,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ContextRelease  param count = 1
 
 /*
-@brief      Get internal Vulkan handles managed by the given Vulkan context.
+Get internal Vulkan handles managed by the given Vulkan context.
 Ownership of the handles is still maintained by Impeller. This
 accessor is just available so embedders can create resources
 using the same device and instance as Impeller for interop.
@@ -122,7 +122,7 @@ the [out] argument unaffected.
 // UNSUPPORTED :: ContextGetVulkanInfo  param count = 2
 
 /*
-@brief      Create a new Vulkan swapchain using a VkSurfaceKHR instance.
+Create a new Vulkan swapchain using a VkSurfaceKHR instance.
 Ownership of the surface is transferred over to Impeller. The
 Vulkan instance the surface is created from must the same as the
 context provided.
@@ -137,7 +137,7 @@ surface passed into the next argument.
 // UNSUPPORTED :: VulkanSwapchainCreateNew  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  swapchain  The swapchain.
@@ -145,7 +145,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: VulkanSwapchainRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  swapchain  The swapchain.
@@ -153,7 +153,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: VulkanSwapchainRelease  param count = 1
 
 /*
-@brief      A potentially blocking operation, acquires the next surface to
+A potentially blocking operation, acquires the next surface to
 render to. Since this may block, surface acquisition must be
 delayed for as long as possible to avoid an idle wait on the
 CPU.
@@ -165,7 +165,7 @@ CPU.
 // UNSUPPORTED :: VulkanSwapchainAcquireNextSurfaceNew  param count = 1
 
 /*
-@brief      Create a new surface by wrapping an existing framebuffer object.
+Create a new surface by wrapping an existing framebuffer object.
 The framebuffer must be complete as determined by
 `glCheckFramebufferStatus`. The framebuffer is still owned by
 the caller and it must be collected once the surface is
@@ -181,7 +181,7 @@ collected.
 // UNSUPPORTED :: SurfaceCreateWrappedFBONew  param count = 4
 
 /*
-@brief      Create a surface by wrapping a Metal drawable. This is useful
+Create a surface by wrapping a Metal drawable. This is useful
 during WSI when the drawable is the backing store of the Metal
 layer being drawn to.
 
@@ -198,7 +198,7 @@ drawable that is being wrapped.
 // UNSUPPORTED :: SurfaceCreateWrappedMetalDrawableNew  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  surface  The surface.
@@ -206,7 +206,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: SurfaceRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  surface  The surface.
@@ -214,7 +214,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: SurfaceRelease  param count = 1
 
 /*
-@brief      Draw a display list onto the surface. The same display list can
+Draw a display list onto the surface. The same display list can
 be drawn multiple times to different surfaces.
 
 @warning    In the OpenGL backend, Impeller will not make an effort to
@@ -233,7 +233,7 @@ buffer) bindings, etc...
 // UNSUPPORTED :: SurfaceDrawDisplayList  param count = 2
 
 /*
-@brief      Present the surface to the underlying window system.
+Present the surface to the underlying window system.
 
 @param[in]  surface  The surface to present.
 
@@ -242,7 +242,7 @@ buffer) bindings, etc...
 // UNSUPPORTED :: SurfacePresent  param count = 1
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  path  The path.
@@ -250,7 +250,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: PathRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  path  The path.
@@ -258,7 +258,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: PathRelease  param count = 1
 
 /*
-@brief      Get the bounds of the path.
+Get the bounds of the path.
 
 The bounds are conservative. That is, they may be larger than
 the actual shape of the path and could include the control
@@ -270,7 +270,7 @@ points and isolated calls to move the cursor.
 // UNSUPPORTED :: PathGetBounds  param count = 2
 
 /*
-@brief      Create a new path builder. Paths themselves are immutable.
+Create a new path builder. Paths themselves are immutable.
 A builder builds these immutable paths.
 
 @return     The path builder.
@@ -290,7 +290,7 @@ func PathBuilderNew() PathBuilder {
 }
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  builder  The builder.
@@ -298,7 +298,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: PathBuilderRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  builder  The builder.
@@ -306,7 +306,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: PathBuilderRelease  param count = 1
 
 /*
-@brief      Move the cursor to the specified location.
+Move the cursor to the specified location.
 
 @param[in]  builder   The builder.
 @param[in]  location  The location.
@@ -314,7 +314,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: PathBuilderMoveTo  param count = 2
 
 /*
-@brief      Add a line segment from the current cursor location to the given
+Add a line segment from the current cursor location to the given
 location. The cursor location is updated to be at the endpoint.
 
 @param[in]  builder   The builder.
@@ -323,7 +323,7 @@ location. The cursor location is updated to be at the endpoint.
 // UNSUPPORTED :: PathBuilderLineTo  param count = 2
 
 /*
-@brief      Add a quadratic curve from whose start point is the cursor to
+Add a quadratic curve from whose start point is the cursor to
 the specified end point using the a single control point.
 
 The new location of the cursor after this call is the end point.
@@ -335,7 +335,7 @@ The new location of the cursor after this call is the end point.
 // UNSUPPORTED :: PathBuilderQuadraticCurveTo  param count = 3
 
 /*
-@brief      Add a cubic curve whose start point is current cursor location
+Add a cubic curve whose start point is current cursor location
 to the specified end point using the two specified control
 points.
 
@@ -350,7 +350,7 @@ supplied.
 // UNSUPPORTED :: PathBuilderCubicCurveTo  param count = 4
 
 /*
-@brief      Adds a rectangle to the path.
+Adds a rectangle to the path.
 
 @param[in]  builder  The builder.
 @param[in]  rect     The rectangle.
@@ -358,7 +358,7 @@ supplied.
 // UNSUPPORTED :: PathBuilderAddRect  param count = 2
 
 /*
-@brief      Add an arc to the path.
+Add an arc to the path.
 
 @param[in]  builder              The builder.
 @param[in]  oval_bounds          The oval bounds.
@@ -368,7 +368,7 @@ supplied.
 // UNSUPPORTED :: PathBuilderAddArc  param count = 4
 
 /*
-@brief      Add an oval to the path.
+Add an oval to the path.
 
 @param[in]  builder      The builder.
 @param[in]  oval_bounds  The oval bounds.
@@ -376,7 +376,7 @@ supplied.
 // UNSUPPORTED :: PathBuilderAddOval  param count = 2
 
 /*
-@brief      Add a rounded rect with potentially non-uniform radii to the
+Add a rounded rect with potentially non-uniform radii to the
 path.
 
 @param[in]  builder         The builder.
@@ -386,14 +386,14 @@ path.
 // UNSUPPORTED :: PathBuilderAddRoundedRect  param count = 3
 
 /*
-@brief      Close the path.
+Close the path.
 
 @param[in]  builder  The builder.
 */
 // UNSUPPORTED :: PathBuilderClose  param count = 1
 
 /*
-@brief      Create a new path by copying the existing built-up path. The
+Create a new path by copying the existing built-up path. The
 existing path can continue being added to.
 
 @param[in]  builder  The builder.
@@ -404,7 +404,7 @@ existing path can continue being added to.
 // UNSUPPORTED :: PathBuilderCopyPathNew  param count = 2
 
 /*
-@brief      Create a new path using the existing built-up path. The existing
+Create a new path using the existing built-up path. The existing
 path builder now contains an empty path.
 
 @param[in]  builder  The builder.
@@ -415,7 +415,7 @@ path builder now contains an empty path.
 // UNSUPPORTED :: PathBuilderTakePathNew  param count = 2
 
 /*
-@brief      Create a new paint with default values.
+Create a new paint with default values.
 
 @return     The impeller paint.
 */
@@ -434,7 +434,7 @@ func PaintNew() Paint {
 }
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  paint  The paint.
@@ -442,7 +442,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: PaintRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  paint  The paint.
@@ -450,7 +450,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: PaintRelease  param count = 1
 
 /*
-@brief      Set the paint color.
+Set the paint color.
 
 @param[in]  paint  The paint.
 @param[in]  color  The color.
@@ -458,7 +458,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: PaintSetColor  param count = 2
 
 /*
-@brief      Set the paint blend mode. The blend mode controls how the new
+Set the paint blend mode. The blend mode controls how the new
 paints contents are mixed with the values already drawn using
 previous draw calls.
 
@@ -468,7 +468,7 @@ previous draw calls.
 // UNSUPPORTED :: PaintSetBlendMode  param count = 2
 
 /*
-@brief      Set the paint draw style. The style controls if the closed
+Set the paint draw style. The style controls if the closed
 shapes are filled and/or stroked.
 
 @param[in]  paint  The paint.
@@ -477,7 +477,7 @@ shapes are filled and/or stroked.
 // UNSUPPORTED :: PaintSetDrawStyle  param count = 2
 
 /*
-@brief      Sets how strokes rendered using this paint are capped.
+Sets how strokes rendered using this paint are capped.
 
 @param[in]  paint  The paint.
 @param[in]  cap    The stroke cap style.
@@ -485,7 +485,7 @@ shapes are filled and/or stroked.
 // UNSUPPORTED :: PaintSetStrokeCap  param count = 2
 
 /*
-@brief      Sets how strokes rendered using this paint are joined.
+Sets how strokes rendered using this paint are joined.
 
 @param[in]  paint  The paint.
 @param[in]  join   The join.
@@ -493,7 +493,7 @@ shapes are filled and/or stroked.
 // UNSUPPORTED :: PaintSetStrokeJoin  param count = 2
 
 /*
-@brief      Set the width of the strokes rendered using this paint.
+Set the width of the strokes rendered using this paint.
 
 @param[in]  paint  The paint.
 @param[in]  width  The width.
@@ -501,7 +501,7 @@ shapes are filled and/or stroked.
 // UNSUPPORTED :: PaintSetStrokeWidth  param count = 2
 
 /*
-@brief      Set the miter limit of the strokes rendered using this paint.
+Set the miter limit of the strokes rendered using this paint.
 
 @param[in]  paint  The paint.
 @param[in]  miter  The miter limit.
@@ -509,7 +509,7 @@ shapes are filled and/or stroked.
 // UNSUPPORTED :: PaintSetStrokeMiter  param count = 2
 
 /*
-@brief      Set the color filter of the paint.
+Set the color filter of the paint.
 
 Color filters are functions that take two colors and mix them to
 produce a single color. This color is then usually merged with
@@ -521,7 +521,7 @@ the destination during blending.
 // UNSUPPORTED :: PaintSetColorFilter  param count = 2
 
 /*
-@brief      Set the color source of the paint.
+Set the color source of the paint.
 
 Color sources are functions that generate colors for each
 texture element covered by a draw call.
@@ -532,7 +532,7 @@ texture element covered by a draw call.
 // UNSUPPORTED :: PaintSetColorSource  param count = 2
 
 /*
-@brief      Set the image filter of a paint.
+Set the image filter of a paint.
 
 Image filters are functions that are applied to regions of a
 texture to produce a single color.
@@ -543,7 +543,7 @@ texture to produce a single color.
 // UNSUPPORTED :: PaintSetImageFilter  param count = 2
 
 /*
-@brief      Set the mask filter of a paint.
+Set the mask filter of a paint.
 
 @param[in]  paint        The paint.
 @param[in]  mask_filter  The mask filter.
@@ -551,7 +551,7 @@ texture to produce a single color.
 // UNSUPPORTED :: PaintSetMaskFilter  param count = 2
 
 /*
-@brief      Create a texture with decompressed bytes.
+Create a texture with decompressed bytes.
 
 Impeller will do its best to perform the transfer of this data
 to GPU memory with a minimal number of copies. Towards this
@@ -586,7 +586,7 @@ otherwise.
 // UNSUPPORTED :: TextureCreateWithContentsNew  param count = 4
 
 /*
-@brief      Create a texture with an externally created OpenGL texture
+Create a texture with an externally created OpenGL texture
 handle.
 
 Ownership of the handle is transferred over to Impeller after a
@@ -612,7 +612,7 @@ texture handle, NULL otherwise.
 // UNSUPPORTED :: TextureCreateWithOpenGLTextureHandleNew  param count = 3
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  texture  The texture.
@@ -620,7 +620,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: TextureRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  texture  The texture.
@@ -628,7 +628,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: TextureRelease  param count = 1
 
 /*
-@brief      Get the OpenGL handle associated with this texture. If this is
+Get the OpenGL handle associated with this texture. If this is
 not an OpenGL texture, this method will always return 0.
 
 OpenGL handles are lazily created, this method will return
@@ -643,7 +643,7 @@ where Impeller knows there is an OpenGL context available.
 // UNSUPPORTED :: TextureGetOpenGLHandle  param count = 1
 
 /*
-@brief      Create a new fragment program using data obtained by compiling a
+Create a new fragment program using data obtained by compiling a
 GLSL shader with `impellerc`.
 
 @warning    The data provided must be compiled by `impellerc`. Providing raw
@@ -661,7 +661,7 @@ thread.
 // UNSUPPORTED :: FragmentProgramNew  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  fragment_program  The fragment program.
@@ -669,7 +669,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: FragmentProgramRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  fragment_program  The fragment program.
@@ -677,7 +677,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: FragmentProgramRelease  param count = 1
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  color_source  The color source.
@@ -685,7 +685,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: ColorSourceRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  color_source  The color source.
@@ -693,7 +693,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ColorSourceRelease  param count = 1
 
 /*
-@brief      Create a color source that forms a linear gradient.
+Create a color source that forms a linear gradient.
 
 @param[in]  start_point     The start point.
 @param[in]  end_point       The end point.
@@ -708,7 +708,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ColorSourceCreateLinearGradientNew  param count = 7
 
 /*
-@brief      Create a color source that forms a radial gradient.
+Create a color source that forms a radial gradient.
 
 @param[in]  center          The center.
 @param[in]  radius          The radius.
@@ -723,7 +723,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ColorSourceCreateRadialGradientNew  param count = 7
 
 /*
-@brief      Create a color source that forms a conical gradient.
+Create a color source that forms a conical gradient.
 
 @param[in]  start_center    The start center.
 @param[in]  start_radius    The start radius.
@@ -740,7 +740,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ColorSourceCreateConicalGradientNew  param count = 9
 
 /*
-@brief      Create a color source that forms a sweep gradient.
+Create a color source that forms a sweep gradient.
 
 @param[in]  center          The center.
 @param[in]  start           The start.
@@ -756,7 +756,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ColorSourceCreateSweepGradientNew  param count = 8
 
 /*
-@brief      Create a color source that samples from an image.
+Create a color source that samples from an image.
 
 @param[in]  image                 The image.
 @param[in]  horizontal_tile_mode  The horizontal tile mode.
@@ -769,7 +769,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ColorSourceCreateImageNew  param count = 5
 
 /*
-@brief      Create a color source whose pixels are shaded by a fragment
+Create a color source whose pixels are shaded by a fragment
 program.
 
 @see        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
@@ -786,7 +786,7 @@ program.
 // UNSUPPORTED :: ColorSourceCreateFragmentProgramNew  param count = 6
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  color_filter  The color filter.
@@ -794,7 +794,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: ColorFilterRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  color_filter  The color filter.
@@ -802,7 +802,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ColorFilterRelease  param count = 1
 
 /*
-@brief      Create a color filter that performs blending of pixel values
+Create a color filter that performs blending of pixel values
 independently.
 
 @param[in]  color       The color.
@@ -813,7 +813,7 @@ independently.
 // UNSUPPORTED :: ColorFilterCreateBlendNew  param count = 2
 
 /*
-@brief      Create a color filter that transforms pixel color values
+Create a color filter that transforms pixel color values
 independently.
 
 @param[in]  color_matrix  The color matrix.
@@ -823,7 +823,7 @@ independently.
 // UNSUPPORTED :: ColorFilterCreateColorMatrixNew  param count = 1
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  mask_filter  The mask filter.
@@ -831,7 +831,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: MaskFilterRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  mask_filter  The mask filter.
@@ -839,7 +839,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: MaskFilterRelease  param count = 1
 
 /*
-@brief      Create a mask filter that blurs contents in the masked shape.
+Create a mask filter that blurs contents in the masked shape.
 
 @param[in]  style  The style.
 @param[in]  sigma  The sigma.
@@ -849,7 +849,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: MaskFilterCreateBlurNew  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  image_filter  The image filter.
@@ -857,7 +857,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: ImageFilterRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  image_filter  The image filter.
@@ -865,7 +865,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ImageFilterRelease  param count = 1
 
 /*
-@brief      Creates an image filter that applies a Gaussian blur.
+Creates an image filter that applies a Gaussian blur.
 
 The Gaussian blur applied may be an approximation for
 performance.
@@ -880,7 +880,7 @@ performance.
 // UNSUPPORTED :: ImageFilterCreateBlurNew  param count = 3
 
 /*
-@brief      Creates an image filter that enhances the per-channel pixel
+Creates an image filter that enhances the per-channel pixel
 values to the maximum value in a circle around the pixel.
 
 @param[in]  x_radius  The x radius.
@@ -891,7 +891,7 @@ values to the maximum value in a circle around the pixel.
 // UNSUPPORTED :: ImageFilterCreateDilateNew  param count = 2
 
 /*
-@brief      Creates an image filter that dampens the per-channel pixel
+Creates an image filter that dampens the per-channel pixel
 values to the minimum value in a circle around the pixel.
 
 @param[in]  x_radius  The x radius.
@@ -902,7 +902,7 @@ values to the minimum value in a circle around the pixel.
 // UNSUPPORTED :: ImageFilterCreateErodeNew  param count = 2
 
 /*
-@brief      Creates an image filter that applies a transformation matrix to
+Creates an image filter that applies a transformation matrix to
 the underlying image.
 
 @param[in]  matrix    The transformation matrix.
@@ -913,7 +913,7 @@ the underlying image.
 // UNSUPPORTED :: ImageFilterCreateMatrixNew  param count = 2
 
 /*
-@brief      Create an image filter where each pixel is shaded by a fragment
+Create an image filter where each pixel is shaded by a fragment
 program.
 
 @see        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
@@ -930,7 +930,7 @@ program.
 // UNSUPPORTED :: ImageFilterCreateFragmentProgramNew  param count = 6
 
 /*
-@brief      Creates a composed filter that when applied is identical to
+Creates a composed filter that when applied is identical to
 subsequently applying the inner and then the outer filters.
 
   destination = outer_filter(inner_filter(source))
@@ -943,7 +943,7 @@ subsequently applying the inner and then the outer filters.
 // UNSUPPORTED :: ImageFilterCreateComposeNew  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  display_list  The display list.
@@ -951,7 +951,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: DisplayListRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  display_list  The display list.
@@ -959,7 +959,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: DisplayListRelease  param count = 1
 
 /*
-@brief      Create a new display list builder.
+Create a new display list builder.
 
 An optional cull rectangle may be specified. Impeller is allowed
 to treat the contents outside this rectangle as being undefined.
@@ -972,7 +972,7 @@ This may aid performance optimizations.
 // UNSUPPORTED :: DisplayListBuilderNew  param count = 1
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  builder  The display list builder.
@@ -980,7 +980,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: DisplayListBuilderRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  builder  The display list builder.
@@ -988,7 +988,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: DisplayListBuilderRelease  param count = 1
 
 /*
-@brief      Create a new display list using the rendering intent already
+Create a new display list using the rendering intent already
 encoded in the builder. The builder is reset after this call.
 
 @param[in]  builder  The builder.
@@ -998,7 +998,7 @@ encoded in the builder. The builder is reset after this call.
 // UNSUPPORTED :: DisplayListBuilderCreateDisplayListNew  param count = 1
 
 /*
-@brief      Stashes the current transformation and clip state onto a save
+Stashes the current transformation and clip state onto a save
 stack.
 
 @param[in]  builder  The builder.
@@ -1006,7 +1006,7 @@ stack.
 // UNSUPPORTED :: DisplayListBuilderSave  param count = 1
 
 /*
-@brief      Stashes the current transformation and clip state onto a save
+Stashes the current transformation and clip state onto a save
 stack and creates and creates an offscreen layer onto which
 subsequent rendering intent will be directed to.
 
@@ -1022,7 +1022,7 @@ back onto the display display list.
 // UNSUPPORTED :: DisplayListBuilderSaveLayer  param count = 4
 
 /*
-@brief      Pops the last entry pushed onto the save stack using a call to
+Pops the last entry pushed onto the save stack using a call to
 `ImpellerDisplayListBuilderSave` or
 `ImpellerDisplayListBuilderSaveLayer`.
 
@@ -1031,7 +1031,7 @@ back onto the display display list.
 // UNSUPPORTED :: DisplayListBuilderRestore  param count = 1
 
 /*
-@brief      Apply a scale to the transformation matrix currently on top of
+Apply a scale to the transformation matrix currently on top of
 the save stack.
 
 @param[in]  builder  The builder.
@@ -1041,7 +1041,7 @@ the save stack.
 // UNSUPPORTED :: DisplayListBuilderScale  param count = 3
 
 /*
-@brief      Apply a clockwise rotation to the transformation matrix
+Apply a clockwise rotation to the transformation matrix
 currently on top of the save stack.
 
 @param[in]  builder        The builder.
@@ -1050,7 +1050,7 @@ currently on top of the save stack.
 // UNSUPPORTED :: DisplayListBuilderRotate  param count = 2
 
 /*
-@brief      Apply a translation to the transformation matrix currently on
+Apply a translation to the transformation matrix currently on
 top of the save stack.
 
 @param[in]  builder        The builder.
@@ -1060,7 +1060,7 @@ top of the save stack.
 // UNSUPPORTED :: DisplayListBuilderTranslate  param count = 3
 
 /*
-@brief      Appends the the provided transformation to the transformation
+Appends the the provided transformation to the transformation
 already on the save stack.
 
 @param[in]  builder    The builder.
@@ -1069,7 +1069,7 @@ already on the save stack.
 // UNSUPPORTED :: DisplayListBuilderTransform  param count = 2
 
 /*
-@brief      Clear the transformation on top of the save stack and replace it
+Clear the transformation on top of the save stack and replace it
 with a new value.
 
 @param[in]  builder    The builder.
@@ -1078,7 +1078,7 @@ with a new value.
 // UNSUPPORTED :: DisplayListBuilderSetTransform  param count = 2
 
 /*
-@brief      Get the transformation currently built up on the top of the
+Get the transformation currently built up on the top of the
 transformation stack.
 
 @param[in]  builder        The builder.
@@ -1087,7 +1087,7 @@ transformation stack.
 // UNSUPPORTED :: DisplayListBuilderGetTransform  param count = 2
 
 /*
-@brief      Reset the transformation on top of the transformation stack to
+Reset the transformation on top of the transformation stack to
 identity.
 
 @param[in]  builder  The builder.
@@ -1095,7 +1095,7 @@ identity.
 // UNSUPPORTED :: DisplayListBuilderResetTransform  param count = 1
 
 /*
-@brief      Get the current size of the save stack.
+Get the current size of the save stack.
 
 @param[in]  builder  The builder.
 
@@ -1104,7 +1104,7 @@ identity.
 // UNSUPPORTED :: DisplayListBuilderGetSaveCount  param count = 1
 
 /*
-@brief      Effectively calls ImpellerDisplayListBuilderRestore till the
+Effectively calls ImpellerDisplayListBuilderRestore till the
 size of the save stack becomes a specified count.
 
 @param[in]  builder  The builder.
@@ -1113,7 +1113,7 @@ size of the save stack becomes a specified count.
 // UNSUPPORTED :: DisplayListBuilderRestoreToCount  param count = 2
 
 /*
-@brief      Reduces the clip region to the intersection of the current clip
+Reduces the clip region to the intersection of the current clip
 and the given rectangle taking into account the clip operation.
 
 @param[in]  builder  The builder.
@@ -1123,7 +1123,7 @@ and the given rectangle taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderClipRect  param count = 3
 
 /*
-@brief      Reduces the clip region to the intersection of the current clip
+Reduces the clip region to the intersection of the current clip
 and the given oval taking into account the clip operation.
 
 @param[in]  builder      The builder.
@@ -1133,7 +1133,7 @@ and the given oval taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderClipOval  param count = 3
 
 /*
-@brief      Reduces the clip region to the intersection of the current clip
+Reduces the clip region to the intersection of the current clip
 and the given rounded rectangle taking into account the clip
 operation.
 
@@ -1145,7 +1145,7 @@ operation.
 // UNSUPPORTED :: DisplayListBuilderClipRoundedRect  param count = 4
 
 /*
-@brief      Reduces the clip region to the intersection of the current clip
+Reduces the clip region to the intersection of the current clip
 and the given path taking into account the clip operation.
 
 @param[in]  builder  The builder.
@@ -1155,7 +1155,7 @@ and the given path taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderClipPath  param count = 3
 
 /*
-@brief      Fills the current clip with the specified paint.
+Fills the current clip with the specified paint.
 
 @param[in]  builder  The builder.
 @param[in]  paint    The paint.
@@ -1163,7 +1163,7 @@ and the given path taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderDrawPaint  param count = 2
 
 /*
-@brief      Draws a line segment.
+Draws a line segment.
 
 @param[in]  builder  The builder.
 @param[in]  from     The starting point of the line.
@@ -1173,7 +1173,7 @@ and the given path taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderDrawLine  param count = 4
 
 /*
-@brief      Draws a dash line segment.
+Draws a dash line segment.
 
 @param[in]  builder     The builder.
 @param[in]  from        The starting point of the line.
@@ -1185,7 +1185,7 @@ and the given path taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderDrawDashedLine  param count = 6
 
 /*
-@brief      Draws a rectangle.
+Draws a rectangle.
 
 @param[in]  builder  The builder.
 @param[in]  rect     The rectangle.
@@ -1194,7 +1194,7 @@ and the given path taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderDrawRect  param count = 3
 
 /*
-@brief      Draws an oval.
+Draws an oval.
 
 @param[in]  builder      The builder.
 @param[in]  oval_bounds  The oval bounds.
@@ -1203,7 +1203,7 @@ and the given path taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderDrawOval  param count = 3
 
 /*
-@brief      Draws a rounded rect.
+Draws a rounded rect.
 
 @param[in]  builder  The builder.
 @param[in]  rect     The rectangle.
@@ -1213,7 +1213,7 @@ and the given path taking into account the clip operation.
 // UNSUPPORTED :: DisplayListBuilderDrawRoundedRect  param count = 4
 
 /*
-@brief      Draws a shape that is the different between the specified
+Draws a shape that is the different between the specified
 rectangles (each with configurable corner radii).
 
 @param[in]  builder      The builder.
@@ -1226,7 +1226,7 @@ rectangles (each with configurable corner radii).
 // UNSUPPORTED :: DisplayListBuilderDrawRoundedRectDifference  param count = 6
 
 /*
-@brief      Draws the specified shape.
+Draws the specified shape.
 
 @param[in]  builder  The builder.
 @param[in]  path     The path.
@@ -1235,7 +1235,7 @@ rectangles (each with configurable corner radii).
 // UNSUPPORTED :: DisplayListBuilderDrawPath  param count = 3
 
 /*
-@brief      Flattens the contents of another display list into the one
+Flattens the contents of another display list into the one
 currently being built.
 
 @param[in]  builder       The builder.
@@ -1245,7 +1245,7 @@ currently being built.
 // UNSUPPORTED :: DisplayListBuilderDrawDisplayList  param count = 3
 
 /*
-@brief      Draw a paragraph at the specified point.
+Draw a paragraph at the specified point.
 
 @param[in]  builder    The builder.
 @param[in]  paragraph  The paragraph.
@@ -1254,7 +1254,7 @@ currently being built.
 // UNSUPPORTED :: DisplayListBuilderDrawParagraph  param count = 3
 
 /*
-@brief      Draw a shadow for a Path given a material elevation. If the
+Draw a shadow for a Path given a material elevation. If the
 occluding object is not opaque, additional hints (via the
 `occluder_is_transparent` argument) must be provided to render
 the shadow correctly.
@@ -1271,7 +1271,7 @@ The device pixel ratio.
 // UNSUPPORTED :: DisplayListBuilderDrawShadow  param count = 6
 
 /*
-@brief      Draw a texture at the specified point.
+Draw a texture at the specified point.
 
 @param[in]  builder   The builder.
 @param[in]  texture   The texture.
@@ -1282,7 +1282,7 @@ The device pixel ratio.
 // UNSUPPORTED :: DisplayListBuilderDrawTexture  param count = 5
 
 /*
-@brief      Draw a portion of texture at the specified location.
+Draw a portion of texture at the specified location.
 
 @param[in]  builder   The builder.
 @param[in]  texture   The texture.
@@ -1294,7 +1294,7 @@ The device pixel ratio.
 // UNSUPPORTED :: DisplayListBuilderDrawTextureRect  param count = 6
 
 /*
-@brief      Create a new typography contents.
+Create a new typography contents.
 
 @return     The typography context.
 */
@@ -1313,7 +1313,7 @@ func TypographyContextNew() TypographyContext {
 }
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  context  The typography context.
@@ -1321,7 +1321,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: TypographyContextRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  context  The typography context.
@@ -1329,7 +1329,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: TypographyContextRelease  param count = 1
 
 /*
-@brief      Register a custom font.
+Register a custom font.
 
 The following font formats are supported:
 * OpenType font collections (.ttc extension)
@@ -1371,7 +1371,7 @@ data is to be used.
 // UNSUPPORTED :: TypographyContextRegisterFont  param count = 4
 
 /*
-@brief      Create a new paragraph style.
+Create a new paragraph style.
 
 @return     The paragraph style.
 */
@@ -1390,7 +1390,7 @@ func ParagraphStyleNew() ParagraphStyle {
 }
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  paragraph_style  The paragraph style.
@@ -1398,7 +1398,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  paragraph_style  The paragraph style.
@@ -1406,7 +1406,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleRelease  param count = 1
 
 /*
-@brief      Set the paint used to render the text glyph contents.
+Set the paint used to render the text glyph contents.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  paint            The paint.
@@ -1414,7 +1414,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleSetForeground  param count = 2
 
 /*
-@brief      Set the paint used to render the background of the text glyphs.
+Set the paint used to render the background of the text glyphs.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  paint            The paint.
@@ -1422,7 +1422,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleSetBackground  param count = 2
 
 /*
-@brief      Set the weight of the font to select when rendering glyphs.
+Set the weight of the font to select when rendering glyphs.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  weight           The weight.
@@ -1430,7 +1430,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleSetFontWeight  param count = 2
 
 /*
-@brief      Set whether the glyphs should be bolded or italicized.
+Set whether the glyphs should be bolded or italicized.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  style            The style.
@@ -1438,7 +1438,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleSetFontStyle  param count = 2
 
 /*
-@brief      Set the font family.
+Set the font family.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  family_name      The family name.
@@ -1446,7 +1446,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleSetFontFamily  param count = 2
 
 /*
-@brief      Set the font size.
+Set the font size.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  size             The size.
@@ -1454,7 +1454,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphStyleSetFontSize  param count = 2
 
 /*
-@brief      The height of the text as a multiple of text size.
+The height of the text as a multiple of text size.
 
 When height is 0.0, the line height will be determined by the
 font's metrics directly, which may differ from the font size.
@@ -1467,7 +1467,7 @@ size, and be exactly fontSize * height logical pixels tall.
 // UNSUPPORTED :: ParagraphStyleSetHeight  param count = 2
 
 /*
-@brief      Set the alignment of text within the paragraph.
+Set the alignment of text within the paragraph.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  align            The align.
@@ -1475,7 +1475,7 @@ size, and be exactly fontSize * height logical pixels tall.
 // UNSUPPORTED :: ParagraphStyleSetTextAlignment  param count = 2
 
 /*
-@brief      Set the directionality of the text within the paragraph.
+Set the directionality of the text within the paragraph.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  direction        The direction.
@@ -1483,7 +1483,7 @@ size, and be exactly fontSize * height logical pixels tall.
 // UNSUPPORTED :: ParagraphStyleSetTextDirection  param count = 2
 
 /*
-@brief      Set one of more text decorations on the paragraph. Decorations
+Set one of more text decorations on the paragraph. Decorations
 can be underlines, overlines, strikethroughs, etc.. The style of
 decorations can be set as well (dashed, dotted, wavy, etc..)
 
@@ -1493,7 +1493,7 @@ decorations can be set as well (dashed, dotted, wavy, etc..)
 // UNSUPPORTED :: ParagraphStyleSetTextDecoration  param count = 2
 
 /*
-@brief      Set the maximum line count within the paragraph.
+Set the maximum line count within the paragraph.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  max_lines        The maximum lines.
@@ -1501,7 +1501,7 @@ decorations can be set as well (dashed, dotted, wavy, etc..)
 // UNSUPPORTED :: ParagraphStyleSetMaxLines  param count = 2
 
 /*
-@brief      Set the paragraph locale.
+Set the paragraph locale.
 
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  locale           The locale.
@@ -1509,7 +1509,7 @@ decorations can be set as well (dashed, dotted, wavy, etc..)
 // UNSUPPORTED :: ParagraphStyleSetLocale  param count = 2
 
 /*
-@brief      Set the UTF-8 string to use as the ellipsis. Pass `nullptr` to
+Set the UTF-8 string to use as the ellipsis. Pass `nullptr` to
 clear the setting to default.
 
 @param[in]  paragraph_style  The paragraph style.
@@ -1518,7 +1518,7 @@ clear the setting to default.
 // UNSUPPORTED :: ParagraphStyleSetEllipsis  param count = 2
 
 /*
-@brief      Create a new paragraph builder.
+Create a new paragraph builder.
 
 @param[in]  context  The context.
 
@@ -1527,7 +1527,7 @@ clear the setting to default.
 // UNSUPPORTED :: ParagraphBuilderNew  param count = 1
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  paragraph_builder  The paragraph builder.
@@ -1535,7 +1535,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphBuilderRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  paragraph_builder  The paragraph_builder.
@@ -1543,7 +1543,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphBuilderRelease  param count = 1
 
 /*
-@brief      Push a new paragraph style onto the paragraph style stack
+Push a new paragraph style onto the paragraph style stack
 managed by the paragraph builder.
 
 Not all paragraph styles can be combined. For instance, it does
@@ -1564,7 +1564,7 @@ the addition of any text.
 // UNSUPPORTED :: ParagraphBuilderPushStyle  param count = 2
 
 /*
-@brief      Pop a previously pushed paragraph style from the paragraph style
+Pop a previously pushed paragraph style from the paragraph style
 stack.
 
 @param[in]  paragraph_builder  The paragraph builder.
@@ -1572,7 +1572,7 @@ stack.
 // UNSUPPORTED :: ParagraphBuilderPopStyle  param count = 1
 
 /*
-@brief      Add UTF-8 encoded text to the paragraph. The text will be styled
+Add UTF-8 encoded text to the paragraph. The text will be styled
 according to the paragraph style already on top of the paragraph
 style stack.
 
@@ -1583,7 +1583,7 @@ style stack.
 // UNSUPPORTED :: ParagraphBuilderAddText  param count = 3
 
 /*
-@brief      Layout and build a new paragraph using the specified width. The
+Layout and build a new paragraph using the specified width. The
 resulting paragraph is immutable. The paragraph builder must be
 discarded and a new one created to build more paragraphs.
 
@@ -1595,7 +1595,7 @@ discarded and a new one created to build more paragraphs.
 // UNSUPPORTED :: ParagraphBuilderBuildParagraphNew  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  paragraph  The paragraph.
@@ -1603,7 +1603,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: ParagraphRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  paragraph  The paragraph.
@@ -1687,7 +1687,7 @@ breaking.
 // UNSUPPORTED :: ParagraphGetLineCount  param count = 1
 
 /*
-@brief      Get the range into the UTF-16 code unit buffer that represents
+Get the range into the UTF-16 code unit buffer that represents
 the word at the specified caret location in the same buffer.
 
 Word boundaries are defined more precisely in [Unicode Standard
@@ -1700,7 +1700,7 @@ Annex #29](http://www.unicode.org/reports/tr29/#Word_Boundaries)
 // UNSUPPORTED :: ParagraphGetWordBoundary  param count = 3
 
 /*
-@brief      Get the line metrics of this laid out paragraph. Calculating the
+Get the line metrics of this laid out paragraph. Calculating the
 line metrics is expensive. The first time line metrics are
 requested, they will be cached along with the paragraph (which
 is immutable).
@@ -1712,7 +1712,7 @@ is immutable).
 // UNSUPPORTED :: ParagraphGetLineMetrics  param count = 1
 
 /*
-@brief      Create a new instance of glyph info that can be queried for
+Create a new instance of glyph info that can be queried for
 information about the glyph at the given UTF-16 code unit index.
 The instance must be freed using `ImpellerGlyphInfoRelease`.
 
@@ -1724,7 +1724,7 @@ The instance must be freed using `ImpellerGlyphInfoRelease`.
 // UNSUPPORTED :: ParagraphCreateGlyphInfoAtCodeUnitIndexNew  param count = 2
 
 /*
-@brief      Create a new instance of glyph info that can be queried for
+Create a new instance of glyph info that can be queried for
 information about the glyph closest to the specified coordinates
 relative to the origin of the paragraph. The instance must be
 freed using `ImpellerGlyphInfoRelease`.
@@ -1738,7 +1738,7 @@ freed using `ImpellerGlyphInfoRelease`.
 // UNSUPPORTED :: ParagraphCreateGlyphInfoAtParagraphCoordinatesNew  param count = 3
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  line_metrics  The line metrics.
@@ -1746,7 +1746,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: LineMetricsRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  line_metrics  The line metrics.
@@ -1754,7 +1754,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: LineMetricsRelease  param count = 1
 
 /*
-@brief      The rise from the baseline as calculated from the font and style
+The rise from the baseline as calculated from the font and style
 for this line ignoring the height from the text style.
 
 @param[in]  metrics  The metrics.
@@ -1765,7 +1765,7 @@ for this line ignoring the height from the text style.
 // UNSUPPORTED :: LineMetricsGetUnscaledAscent  param count = 2
 
 /*
-@brief      The rise from the baseline as calculated from the font and style
+The rise from the baseline as calculated from the font and style
 for this line.
 
 @param[in]  metrics  The metrics.
@@ -1776,7 +1776,7 @@ for this line.
 // UNSUPPORTED :: LineMetricsGetAscent  param count = 2
 
 /*
-@brief      The drop from the baseline as calculated from the font and style
+The drop from the baseline as calculated from the font and style
 for this line.
 
 @param[in]  metrics  The metrics.
@@ -1787,7 +1787,7 @@ for this line.
 // UNSUPPORTED :: LineMetricsGetDescent  param count = 2
 
 /*
-@brief      The y coordinate of the baseline for this line from the top of
+The y coordinate of the baseline for this line from the top of
 the paragraph.
 
 @param[in]  metrics  The metrics.
@@ -1798,7 +1798,7 @@ the paragraph.
 // UNSUPPORTED :: LineMetricsGetBaseline  param count = 2
 
 /*
-@brief      Used to determine if this line ends with an explicit line break
+Used to determine if this line ends with an explicit line break
 (e.g. '\n') or is the end of the paragraph.
 
 @param[in]  metrics  The metrics.
@@ -1809,7 +1809,7 @@ the paragraph.
 // UNSUPPORTED :: LineMetricsIsHardbreak  param count = 2
 
 /*
-@brief      Width of the line from the left edge of the leftmost glyph to
+Width of the line from the left edge of the leftmost glyph to
 the right edge of the rightmost glyph.
 
 @param[in]  metrics  The metrics.
@@ -1820,7 +1820,7 @@ the right edge of the rightmost glyph.
 // UNSUPPORTED :: LineMetricsGetWidth  param count = 2
 
 /*
-@brief      Total height of the line from the top edge to the bottom edge.
+Total height of the line from the top edge to the bottom edge.
 
 @param[in]  metrics  The metrics.
 @param[in]  line     The line index (zero based).
@@ -1830,7 +1830,7 @@ the right edge of the rightmost glyph.
 // UNSUPPORTED :: LineMetricsGetHeight  param count = 2
 
 /*
-@brief      The x coordinate of left edge of the line.
+The x coordinate of left edge of the line.
 
 @param[in]  metrics  The metrics.
 @param[in]  line     The line index (zero based).
@@ -1840,7 +1840,7 @@ the right edge of the rightmost glyph.
 // UNSUPPORTED :: LineMetricsGetLeft  param count = 2
 
 /*
-@brief      Fetch the start index in the buffer of UTF-16 code units used to
+Fetch the start index in the buffer of UTF-16 code units used to
 represent the paragraph line.
 
 @param[in]  metrics  The metrics.
@@ -1851,7 +1851,7 @@ represent the paragraph line.
 // UNSUPPORTED :: LineMetricsGetCodeUnitStartIndex  param count = 2
 
 /*
-@brief      Fetch the end index in the buffer of UTF-16 code units used to
+Fetch the end index in the buffer of UTF-16 code units used to
 represent the paragraph line.
 
 @param[in]  metrics  The metrics.
@@ -1862,7 +1862,7 @@ represent the paragraph line.
 // UNSUPPORTED :: LineMetricsGetCodeUnitEndIndex  param count = 2
 
 /*
-@brief      Fetch the end index (excluding whitespace) in the buffer of
+Fetch the end index (excluding whitespace) in the buffer of
 UTF-16 code units used to represent the paragraph line.
 
 @param[in]  metrics  The metrics.
@@ -1873,7 +1873,7 @@ UTF-16 code units used to represent the paragraph line.
 // UNSUPPORTED :: LineMetricsGetCodeUnitEndIndexExcludingWhitespace  param count = 2
 
 /*
-@brief      Fetch the end index (including newlines) in the buffer of UTF-16
+Fetch the end index (including newlines) in the buffer of UTF-16
 code units used to represent the paragraph line.
 
 @param[in]  metrics  The metrics.
@@ -1884,7 +1884,7 @@ code units used to represent the paragraph line.
 // UNSUPPORTED :: LineMetricsGetCodeUnitEndIndexIncludingNewline  param count = 2
 
 /*
-@brief      Retain a strong reference to the object. The object can be NULL
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 @param[in]  glyph_info  The glyph information.
@@ -1892,7 +1892,7 @@ in which case this method is a no-op.
 // UNSUPPORTED :: GlyphInfoRetain  param count = 1
 
 /*
-@brief      Release a previously retained reference to the object. The
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 @param[in]  glyph_info  The glyph information.
@@ -1900,7 +1900,7 @@ object can be NULL in which case this method is a no-op.
 // UNSUPPORTED :: GlyphInfoRelease  param count = 1
 
 /*
-@brief      Fetch the start index in the buffer of UTF-16 code units used to
+Fetch the start index in the buffer of UTF-16 code units used to
 represent the grapheme cluster for a glyph.
 
 @param[in]  glyph_info  The glyph information.
@@ -1910,7 +1910,7 @@ represent the grapheme cluster for a glyph.
 // UNSUPPORTED :: GlyphInfoGetGraphemeClusterCodeUnitRangeBegin  param count = 1
 
 /*
-@brief      Fetch the end index in the buffer of UTF-16 code units used to
+Fetch the end index in the buffer of UTF-16 code units used to
 represent the grapheme cluster for a glyph.
 
 @param[in]  glyph_info  The glyph information.
@@ -1920,7 +1920,7 @@ represent the grapheme cluster for a glyph.
 // UNSUPPORTED :: GlyphInfoGetGraphemeClusterCodeUnitRangeEnd  param count = 1
 
 /*
-@brief      Fetch the bounds of the grapheme cluster for the glyph in the
+Fetch the bounds of the grapheme cluster for the glyph in the
 coordinate space of the paragraph.
 
 @param[in]  glyph_info  The glyph information.
