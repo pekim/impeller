@@ -5,10 +5,12 @@ import (
 	"github.com/go-clang/clang-v15/clang"
 )
 
-var scalars = map[clang.CursorKind]struct {
+type scalar struct {
 	goType         jen.Code
 	typeDescriptor jen.Code
-}{
+}
+
+var scalars = map[clang.CursorKind]scalar{
 	clang.Type_Bool: {
 		goType:         jen.Id("Bool"),
 		typeDescriptor: jen.Qual(typesImportPath, "UInt8TypeDescriptor"),

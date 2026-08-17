@@ -1,8 +1,6 @@
 package generate
 
 import (
-	"fmt"
-
 	"github.com/dave/jennifer/jen"
 )
 
@@ -10,13 +8,14 @@ const goffiImportPath = "github.com/go-webgpu/goffi/ffi"
 const typesImportPath = "github.com/go-webgpu/goffi/types"
 
 func (fn function) generateGoffiVar(file file) {
-	file.Var().Id(fn.cName).Qual("unsafe", "Pointer")
-	file.Var().Id(fn.cName+"_cif").Op("=").Op("&").Qual(typesImportPath, "CallInterface").Block()
+	file.Var().Id(fn.varName).Qual("unsafe", "Pointer")
+	file.Var().Id(fn.cifVarName).Op("=").Op("&").Qual(typesImportPath, "CallInterface").Block()
+	file.Line()
 }
 
 func (fn function) generateGoffiGetSymbol(g *jen.Group) {
 	g.
-		List(jen.Id(fn.cName), jen.Id("err")).
+		List(jen.Id(fn.varName), jen.Id("err")).
 		Op("=").
 		Qual(goffiImportPath, "GetSymbol").Call(
 		jen.Id("handle"),
@@ -34,9 +33,8 @@ func (fn function) generateGoffiPrepareCallInterface(g *jen.Group) {
 		return
 	}
 
-	fmt.Println(fn.cName)
 	g.Id("err").Op("=").Qual(goffiImportPath, "PrepareCallInterface").Call(
-		jen.Line().Id(fn.cName+"_cif"),
+		jen.Line().Id(fn.cifVarName),
 		jen.Line().Qual(typesImportPath, "DefaultCall"),
 		jen.Line().Add(fn.result.typeDescriptor()),
 		jen.Line().Index().Op("*").Qual(typesImportPath, "TypeDescriptor").ValuesFunc(func(g *jen.Group) {
@@ -67,7 +65,9 @@ func (functions functions) generateGoffi() {
 	defer file.save()
 
 	for _, fn := range functions {
-		fn.generateGoffiVar(file)
+		if fn.supported() {
+			fn.generateGoffiVar(file)
+		}
 	}
 	functions.generateGoffiInit(file)
 }
@@ -115,14 +115,12 @@ func (functions functions) generateGoffiInit(file file) {
 		g.Line()
 
 		for _, fn := range functions {
-			fn.generateGoffiGetSymbol(g)
+			if fn.supported() {
+				fn.generateGoffiGetSymbol(g)
+				fn.generateGoffiPrepareCallInterface(g)
+				g.Line()
+			}
 		}
-		g.Line()
-
-		for _, fn := range functions {
-			fn.generateGoffiPrepareCallInterface(g)
-		}
-		g.Line()
 
 		g.Return(jen.Nil())
 	})

@@ -6,23 +6,27 @@ import (
 )
 
 type function struct {
-	gen    *gen
-	cursor clang.Cursor
-	cName  string
-	name   string
-	result result
-	params params
+	gen        *gen
+	cursor     clang.Cursor
+	cName      string
+	name       string
+	result     result
+	params     params
+	varName    string
+	cifVarName string
 }
 
 func newFunction(gen *gen, cursor clang.Cursor) function {
 	cName := cursor.Spelling()
 	return function{
-		gen:    gen,
-		cursor: cursor,
-		cName:  cName,
-		name:   goName(cName),
-		result: result{typ: cursor.ResultType()},
-		params: newParams(cursor),
+		gen:        gen,
+		cursor:     cursor,
+		cName:      cName,
+		name:       goName(cName),
+		result:     newResult(cursor.ResultType()),
+		params:     newParams(cursor),
+		varName:    "_" + cName,          // don't export the var
+		cifVarName: "_" + cName + "_cif", // don't export the var
 	}
 }
 
@@ -40,20 +44,27 @@ func (fn function) generate(file file) {
 		Params().
 		Add(fn.result.goDecl()).
 		BlockFunc(func(g *jen.Group) {
-			g.Qual("fmt", "Println").Call(jen.Lit("TODO"))
-			g.Return(jen.Lit(42))
+			fn.result.goffiVar(g)
 
-			/*
-				var result uint32
-					_, err := ffi.CallFunction(ImpellerGetVersion_cif, ImpellerGetVersion,
-					unsafe.Pointer(&result),
-					[]unsafe.Pointer{},
-				)
-				if err != nil {
-					panic(err)
-				}
-				return result
-			*/
+			g.
+				List(jen.Id("_"), jen.Id("err")).
+				Op(":=").
+				Qual(goffiImportPath, "CallFunction").
+				CallFunc(func(g *jen.Group) {
+					g.Line().Id(fn.cifVarName)
+					g.Line().Id(fn.varName)
+					g.Line().Qual("unsafe", "Pointer").Parens(fn.result.returnValuePointer())
+					g.Line().Index().Qual("unsafe", "Pointer").ValuesFunc(func(_g *jen.Group) {
+
+					})
+					g.Line()
+				})
+
+			g.If(jen.Id("err").Op("!=").Nil()).Block(
+				jen.Panic(jen.Id("err")),
+			)
+
+			fn.result.returnVar(g)
 		})
 }
 

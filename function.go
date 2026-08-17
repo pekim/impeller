@@ -2,7 +2,11 @@
 
 package impeller
 
-import "fmt"
+import (
+	"unsafe"
+
+	ffi "github.com/go-webgpu/goffi/ffi"
+)
 
 /*
 @brief      Get the version of Impeller standalone API. This is the API that
@@ -24,8 +28,17 @@ version that is different to the one returned by
 @return     The version of the standalone API.
 */
 func GetVersion() uint32 {
-	fmt.Println("TODO")
-	return 42
+	var result uint32
+	_, err := ffi.CallFunction(
+		_ImpellerGetVersion_cif,
+		_ImpellerGetVersion,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
 }
 
 /*
