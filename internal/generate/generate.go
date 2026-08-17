@@ -27,23 +27,12 @@ func Generate() {
 	timeFunction("code generation", gen.generate)
 	gen.printStatistics()
 	fmt.Println()
-
-	// fmt.Println()
-	// usedFunctionCount := len(gen.functions) - len(gen.unusedFunctions)
-	// fmt.Printf("sqlite3 API functions supported : %d/%d  %1.1f%%\n",
-	// 	usedFunctionCount,
-	// 	len(gen.functions),
-	// 	(float64(usedFunctionCount)/float64(len(gen.functions)))*100,
-	// )
-	// fmt.Println()
 }
 
 func (gen *gen) generate() {
 	gen.parseHeaderFile()
 	gen.findEntities()
-	// gen.enrich()
 	gen.generateFiles()
-	// gen.commentFunctions()
 }
 
 func (gen *gen) printStatistics() {
@@ -113,11 +102,6 @@ func (gen *gen) findEntities() {
 		return clang.ChildVisit_Continue
 	})
 }
-
-// func (gen *gen) enrich() {
-// 	gen.functions.enrich()
-// 	gen.structs.enrich()
-// }
 
 func (gen *gen) generateFiles() {
 	gen.enums.generate()
