@@ -24,7 +24,7 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 		cName:      cName,
 		name:       goName(cName),
 		result:     newResult(gen, cursor.ResultType()),
-		params:     newParams(cursor),
+		params:     newParams(gen, cursor),
 		varName:    "func" + cName,
 		cifVarName: "cif" + cName,
 	}
@@ -41,7 +41,7 @@ func (fn function) generate(file file) {
 	file.
 		Func().
 		Id(fn.name).
-		Params().
+		ParamsFunc(fn.params.goDecl).
 		Add(fn.result.goDecl()).
 		BlockFunc(func(g *jen.Group) {
 			fn.result.goffiVar(g)
@@ -54,8 +54,11 @@ func (fn function) generate(file file) {
 					g.Line().Id(fn.cifVarName)
 					g.Line().Id(fn.varName)
 					g.Line().Qual("unsafe", "Pointer").Parens(fn.result.returnValuePointer())
-					g.Line().Index().Qual("unsafe", "Pointer").ValuesFunc(func(_g *jen.Group) {
-
+					g.Line().Index().Qual("unsafe", "Pointer").ValuesFunc(func(g *jen.Group) {
+						for _, param := range fn.params {
+							g.Line().Qual("unsafe", "Pointer").Parens(jen.Op("&").Add(param.cArgName()))
+						}
+						g.Line()
 					})
 					g.Line()
 				})

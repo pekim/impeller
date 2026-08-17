@@ -27,7 +27,13 @@ func newResult(gen *gen, typ clang.Type) result {
 }
 
 func (result result) supported() bool {
-	if result.void || result.isScalar || result.isStruct {
+	if result.void {
+		return true
+	}
+	if result.isScalar {
+		return true
+	}
+	if result.isStruct && result.struct_.handle {
 		return true
 	}
 
@@ -83,6 +89,9 @@ func (result result) returnValuePointer() jen.Code {
 }
 
 func (result result) typeDescriptor() jen.Code {
+	if result.void {
+		return voidTypeDescriptor
+	}
 	if result.isScalar {
 		return result.scalar.typeDescriptor
 	}

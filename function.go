@@ -43,39 +43,281 @@ func GetVersion() uint32 {
 
 // UNSUPPORTED :: ContextCreateOpenGLESNew  param count = 3
 
-// UNSUPPORTED :: ContextCreateMetalNew  param count = 1
+/*
+Create a Metal context using the system default Metal device.
+
+@param[in]  version  The version specified in the IMPELLER_VERSION macro.
+
+@return     The Metal context or NULL if one cannot be created.
+*/
+func ContextCreateMetalNew(version uint32) Context {
+	var result Context
+	_, err := ffi.CallFunction(
+		cifImpellerContextCreateMetalNew,
+		funcImpellerContextCreateMetalNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&version),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: ContextCreateVulkanNew  param count = 2
 
-// UNSUPPORTED :: ContextRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: ContextRelease  param count = 1
+@param[in]  context  The context.
+*/
+func ContextRetain(context Context) {
+	_, err := ffi.CallFunction(
+		cifImpellerContextRetain,
+		funcImpellerContextRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  context  The context.
+*/
+func ContextRelease(context Context) {
+	_, err := ffi.CallFunction(
+		cifImpellerContextRelease,
+		funcImpellerContextRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ContextGetVulkanInfo  param count = 2
 
 // UNSUPPORTED :: VulkanSwapchainCreateNew  param count = 2
 
-// UNSUPPORTED :: VulkanSwapchainRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: VulkanSwapchainRelease  param count = 1
+@param[in]  swapchain  The swapchain.
+*/
+func VulkanSwapchainRetain(swapchain VulkanSwapchain) {
+	_, err := ffi.CallFunction(
+		cifImpellerVulkanSwapchainRetain,
+		funcImpellerVulkanSwapchainRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&swapchain),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: VulkanSwapchainAcquireNextSurfaceNew  param count = 1
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  swapchain  The swapchain.
+*/
+func VulkanSwapchainRelease(swapchain VulkanSwapchain) {
+	_, err := ffi.CallFunction(
+		cifImpellerVulkanSwapchainRelease,
+		funcImpellerVulkanSwapchainRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&swapchain),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+A potentially blocking operation, acquires the next surface to
+render to. Since this may block, surface acquisition must be
+delayed for as long as possible to avoid an idle wait on the
+CPU.
+
+@param[in]  swapchain  The swapchain.
+
+@return     The surface if one could be obtained, NULL otherwise.
+*/
+func VulkanSwapchainAcquireNextSurfaceNew(swapchain VulkanSwapchain) Surface {
+	var result Surface
+	_, err := ffi.CallFunction(
+		cifImpellerVulkanSwapchainAcquireNextSurfaceNew,
+		funcImpellerVulkanSwapchainAcquireNextSurfaceNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&swapchain),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: SurfaceCreateWrappedFBONew  param count = 4
 
 // UNSUPPORTED :: SurfaceCreateWrappedMetalDrawableNew  param count = 2
 
-// UNSUPPORTED :: SurfaceRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: SurfaceRelease  param count = 1
+@param[in]  surface  The surface.
+*/
+func SurfaceRetain(surface Surface) {
+	_, err := ffi.CallFunction(
+		cifImpellerSurfaceRetain,
+		funcImpellerSurfaceRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&surface),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: SurfaceDrawDisplayList  param count = 2
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
 
-// UNSUPPORTED :: SurfacePresent  param count = 1
+@param[in]  surface  The surface.
+*/
+func SurfaceRelease(surface Surface) {
+	_, err := ffi.CallFunction(
+		cifImpellerSurfaceRelease,
+		funcImpellerSurfaceRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&surface),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: PathRetain  param count = 1
+/*
+Draw a display list onto the surface. The same display list can
+be drawn multiple times to different surfaces.
 
-// UNSUPPORTED :: PathRelease  param count = 1
+@warning    In the OpenGL backend, Impeller will not make an effort to
+preserve the OpenGL state that is current in the context.
+Embedders that perform additional OpenGL operations in the
+context should expect the reset state after control transitions
+back to them. Key state to watch out for would be the viewports,
+stencil rects, test toggles, resource (texture, framebuffer,
+buffer) bindings, etc...
+
+@param[in]  surface       The surface to draw the display list to.
+@param[in]  display_list  The display list to draw onto the surface.
+
+@return     If the display list could be drawn onto the surface.
+*/
+func SurfaceDrawDisplayList(surface Surface, display_list DisplayList) Bool {
+	var result Bool
+	_, err := ffi.CallFunction(
+		cifImpellerSurfaceDrawDisplayList,
+		funcImpellerSurfaceDrawDisplayList,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&surface),
+			unsafe.Pointer(&display_list),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Present the surface to the underlying window system.
+
+@param[in]  surface  The surface to present.
+
+@return     True if the surface could be presented.
+*/
+func SurfacePresent(surface Surface) Bool {
+	var result Bool
+	_, err := ffi.CallFunction(
+		cifImpellerSurfacePresent,
+		funcImpellerSurfacePresent,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&surface),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
+
+@param[in]  path  The path.
+*/
+func PathRetain(path Path) {
+	_, err := ffi.CallFunction(
+		cifImpellerPathRetain,
+		funcImpellerPathRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&path),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  path  The path.
+*/
+func PathRelease(path Path) {
+	_, err := ffi.CallFunction(
+		cifImpellerPathRelease,
+		funcImpellerPathRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&path),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: PathGetBounds  param count = 2
 
@@ -99,9 +341,45 @@ func PathBuilderNew() PathBuilder {
 	return result
 }
 
-// UNSUPPORTED :: PathBuilderRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: PathBuilderRelease  param count = 1
+@param[in]  builder  The builder.
+*/
+func PathBuilderRetain(builder PathBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerPathBuilderRetain,
+		funcImpellerPathBuilderRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  builder  The builder.
+*/
+func PathBuilderRelease(builder PathBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerPathBuilderRelease,
+		funcImpellerPathBuilderRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: PathBuilderMoveTo  param count = 2
 
@@ -119,7 +397,24 @@ func PathBuilderNew() PathBuilder {
 
 // UNSUPPORTED :: PathBuilderAddRoundedRect  param count = 3
 
-// UNSUPPORTED :: PathBuilderClose  param count = 1
+/*
+Close the path.
+
+@param[in]  builder  The builder.
+*/
+func PathBuilderClose(builder PathBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerPathBuilderClose,
+		funcImpellerPathBuilderClose,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: PathBuilderCopyPathNew  param count = 2
 
@@ -144,9 +439,45 @@ func PaintNew() Paint {
 	return result
 }
 
-// UNSUPPORTED :: PaintRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: PaintRelease  param count = 1
+@param[in]  paint  The paint.
+*/
+func PaintRetain(paint Paint) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintRetain,
+		funcImpellerPaintRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  paint  The paint.
+*/
+func PaintRelease(paint Paint) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintRelease,
+		funcImpellerPaintRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: PaintSetColor  param count = 2
 
@@ -158,37 +489,296 @@ func PaintNew() Paint {
 
 // UNSUPPORTED :: PaintSetStrokeJoin  param count = 2
 
-// UNSUPPORTED :: PaintSetStrokeWidth  param count = 2
+/*
+Set the width of the strokes rendered using this paint.
 
-// UNSUPPORTED :: PaintSetStrokeMiter  param count = 2
+@param[in]  paint  The paint.
+@param[in]  width  The width.
+*/
+func PaintSetStrokeWidth(paint Paint, width float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetStrokeWidth,
+		funcImpellerPaintSetStrokeWidth,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&width),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: PaintSetColorFilter  param count = 2
+/*
+Set the miter limit of the strokes rendered using this paint.
 
-// UNSUPPORTED :: PaintSetColorSource  param count = 2
+@param[in]  paint  The paint.
+@param[in]  miter  The miter limit.
+*/
+func PaintSetStrokeMiter(paint Paint, miter float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetStrokeMiter,
+		funcImpellerPaintSetStrokeMiter,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&miter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: PaintSetImageFilter  param count = 2
+/*
+Set the color filter of the paint.
 
-// UNSUPPORTED :: PaintSetMaskFilter  param count = 2
+Color filters are functions that take two colors and mix them to
+produce a single color. This color is then usually merged with
+the destination during blending.
+
+@param[in]  paint         The paint.
+@param[in]  color_filter  The color filter.
+*/
+func PaintSetColorFilter(paint Paint, color_filter ColorFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetColorFilter,
+		funcImpellerPaintSetColorFilter,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&color_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set the color source of the paint.
+
+Color sources are functions that generate colors for each
+texture element covered by a draw call.
+
+@param[in]  paint         The paint.
+@param[in]  color_source  The color source.
+*/
+func PaintSetColorSource(paint Paint, color_source ColorSource) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetColorSource,
+		funcImpellerPaintSetColorSource,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&color_source),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set the image filter of a paint.
+
+Image filters are functions that are applied to regions of a
+texture to produce a single color.
+
+@param[in]  paint         The paint.
+@param[in]  image_filter  The image filter.
+*/
+func PaintSetImageFilter(paint Paint, image_filter ImageFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetImageFilter,
+		funcImpellerPaintSetImageFilter,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&image_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set the mask filter of a paint.
+
+@param[in]  paint        The paint.
+@param[in]  mask_filter  The mask filter.
+*/
+func PaintSetMaskFilter(paint Paint, mask_filter MaskFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetMaskFilter,
+		funcImpellerPaintSetMaskFilter,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&mask_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: TextureCreateWithContentsNew  param count = 4
 
 // UNSUPPORTED :: TextureCreateWithOpenGLTextureHandleNew  param count = 3
 
-// UNSUPPORTED :: TextureRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: TextureRelease  param count = 1
+@param[in]  texture  The texture.
+*/
+func TextureRetain(texture Texture) {
+	_, err := ffi.CallFunction(
+		cifImpellerTextureRetain,
+		funcImpellerTextureRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&texture),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: TextureGetOpenGLHandle  param count = 1
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  texture  The texture.
+*/
+func TextureRelease(texture Texture) {
+	_, err := ffi.CallFunction(
+		cifImpellerTextureRelease,
+		funcImpellerTextureRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&texture),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Get the OpenGL handle associated with this texture. If this is
+not an OpenGL texture, this method will always return 0.
+
+OpenGL handles are lazily created, this method will return
+GL_NONE is no OpenGL handle is available. To ensure that this
+call eagerly creates an OpenGL texture, call this on a thread
+where Impeller knows there is an OpenGL context available.
+
+@param[in]  texture  The texture.
+
+@return     The OpenGL handle if one is available, GL_NONE otherwise.
+*/
+func TextureGetOpenGLHandle(texture Texture) uint64 {
+	var result uint64
+	_, err := ffi.CallFunction(
+		cifImpellerTextureGetOpenGLHandle,
+		funcImpellerTextureGetOpenGLHandle,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&texture),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: FragmentProgramNew  param count = 2
 
-// UNSUPPORTED :: FragmentProgramRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: FragmentProgramRelease  param count = 1
+@param[in]  fragment_program  The fragment program.
+*/
+func FragmentProgramRetain(fragment_program FragmentProgram) {
+	_, err := ffi.CallFunction(
+		cifImpellerFragmentProgramRetain,
+		funcImpellerFragmentProgramRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&fragment_program),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: ColorSourceRetain  param count = 1
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
 
-// UNSUPPORTED :: ColorSourceRelease  param count = 1
+@param[in]  fragment_program  The fragment program.
+*/
+func FragmentProgramRelease(fragment_program FragmentProgram) {
+	_, err := ffi.CallFunction(
+		cifImpellerFragmentProgramRelease,
+		funcImpellerFragmentProgramRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&fragment_program),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
+
+@param[in]  color_source  The color source.
+*/
+func ColorSourceRetain(color_source ColorSource) {
+	_, err := ffi.CallFunction(
+		cifImpellerColorSourceRetain,
+		funcImpellerColorSourceRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&color_source),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  color_source  The color source.
+*/
+func ColorSourceRelease(color_source ColorSource) {
+	_, err := ffi.CallFunction(
+		cifImpellerColorSourceRelease,
+		funcImpellerColorSourceRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&color_source),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ColorSourceCreateLinearGradientNew  param count = 7
 
@@ -202,59 +792,436 @@ func PaintNew() Paint {
 
 // UNSUPPORTED :: ColorSourceCreateFragmentProgramNew  param count = 6
 
-// UNSUPPORTED :: ColorFilterRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: ColorFilterRelease  param count = 1
+@param[in]  color_filter  The color filter.
+*/
+func ColorFilterRetain(color_filter ColorFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerColorFilterRetain,
+		funcImpellerColorFilterRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&color_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  color_filter  The color filter.
+*/
+func ColorFilterRelease(color_filter ColorFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerColorFilterRelease,
+		funcImpellerColorFilterRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&color_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ColorFilterCreateBlendNew  param count = 2
 
 // UNSUPPORTED :: ColorFilterCreateColorMatrixNew  param count = 1
 
-// UNSUPPORTED :: MaskFilterRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: MaskFilterRelease  param count = 1
+@param[in]  mask_filter  The mask filter.
+*/
+func MaskFilterRetain(mask_filter MaskFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerMaskFilterRetain,
+		funcImpellerMaskFilterRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&mask_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  mask_filter  The mask filter.
+*/
+func MaskFilterRelease(mask_filter MaskFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerMaskFilterRelease,
+		funcImpellerMaskFilterRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&mask_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: MaskFilterCreateBlurNew  param count = 2
 
-// UNSUPPORTED :: ImageFilterRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: ImageFilterRelease  param count = 1
+@param[in]  image_filter  The image filter.
+*/
+func ImageFilterRetain(image_filter ImageFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerImageFilterRetain,
+		funcImpellerImageFilterRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&image_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  image_filter  The image filter.
+*/
+func ImageFilterRelease(image_filter ImageFilter) {
+	_, err := ffi.CallFunction(
+		cifImpellerImageFilterRelease,
+		funcImpellerImageFilterRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&image_filter),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ImageFilterCreateBlurNew  param count = 3
 
-// UNSUPPORTED :: ImageFilterCreateDilateNew  param count = 2
+/*
+Creates an image filter that enhances the per-channel pixel
+values to the maximum value in a circle around the pixel.
 
-// UNSUPPORTED :: ImageFilterCreateErodeNew  param count = 2
+@param[in]  x_radius  The x radius.
+@param[in]  y_radius  The y radius.
+
+@return     The image filter.
+*/
+func ImageFilterCreateDilateNew(x_radius float32, y_radius float32) ImageFilter {
+	var result ImageFilter
+	_, err := ffi.CallFunction(
+		cifImpellerImageFilterCreateDilateNew,
+		funcImpellerImageFilterCreateDilateNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&x_radius),
+			unsafe.Pointer(&y_radius),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Creates an image filter that dampens the per-channel pixel
+values to the minimum value in a circle around the pixel.
+
+@param[in]  x_radius  The x radius.
+@param[in]  y_radius  The y radius.
+
+@return     The image filter.
+*/
+func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
+	var result ImageFilter
+	_, err := ffi.CallFunction(
+		cifImpellerImageFilterCreateErodeNew,
+		funcImpellerImageFilterCreateErodeNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&x_radius),
+			unsafe.Pointer(&y_radius),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: ImageFilterCreateMatrixNew  param count = 2
 
 // UNSUPPORTED :: ImageFilterCreateFragmentProgramNew  param count = 6
 
-// UNSUPPORTED :: ImageFilterCreateComposeNew  param count = 2
+/*
+Creates a composed filter that when applied is identical to
+subsequently applying the inner and then the outer filters.
 
-// UNSUPPORTED :: DisplayListRetain  param count = 1
+	destination = outer_filter(inner_filter(source))
 
-// UNSUPPORTED :: DisplayListRelease  param count = 1
+@param[in]  outer  The outer image filter.
+@param[in]  inner  The inner image filter.
+
+@return     The combined image filter.
+*/
+func ImageFilterCreateComposeNew(outer ImageFilter, inner ImageFilter) ImageFilter {
+	var result ImageFilter
+	_, err := ffi.CallFunction(
+		cifImpellerImageFilterCreateComposeNew,
+		funcImpellerImageFilterCreateComposeNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&outer),
+			unsafe.Pointer(&inner),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
+
+@param[in]  display_list  The display list.
+*/
+func DisplayListRetain(display_list DisplayList) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListRetain,
+		funcImpellerDisplayListRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&display_list),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  display_list  The display list.
+*/
+func DisplayListRelease(display_list DisplayList) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListRelease,
+		funcImpellerDisplayListRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&display_list),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: DisplayListBuilderNew  param count = 1
 
-// UNSUPPORTED :: DisplayListBuilderRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: DisplayListBuilderRelease  param count = 1
+@param[in]  builder  The display list builder.
+*/
+func DisplayListBuilderRetain(builder DisplayListBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderRetain,
+		funcImpellerDisplayListBuilderRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: DisplayListBuilderCreateDisplayListNew  param count = 1
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
 
-// UNSUPPORTED :: DisplayListBuilderSave  param count = 1
+@param[in]  builder  The display list builder.
+*/
+func DisplayListBuilderRelease(builder DisplayListBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderRelease,
+		funcImpellerDisplayListBuilderRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Create a new display list using the rendering intent already
+encoded in the builder. The builder is reset after this call.
+
+@param[in]  builder  The builder.
+
+@return     The display list.
+*/
+func DisplayListBuilderCreateDisplayListNew(builder DisplayListBuilder) DisplayList {
+	var result DisplayList
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderCreateDisplayListNew,
+		funcImpellerDisplayListBuilderCreateDisplayListNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Stashes the current transformation and clip state onto a save
+stack.
+
+@param[in]  builder  The builder.
+*/
+func DisplayListBuilderSave(builder DisplayListBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderSave,
+		funcImpellerDisplayListBuilderSave,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: DisplayListBuilderSaveLayer  param count = 4
 
-// UNSUPPORTED :: DisplayListBuilderRestore  param count = 1
+/*
+Pops the last entry pushed onto the save stack using a call to
+`ImpellerDisplayListBuilderSave` or
+`ImpellerDisplayListBuilderSaveLayer`.
 
-// UNSUPPORTED :: DisplayListBuilderScale  param count = 3
+@param[in]  builder  The builder.
+*/
+func DisplayListBuilderRestore(builder DisplayListBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderRestore,
+		funcImpellerDisplayListBuilderRestore,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: DisplayListBuilderRotate  param count = 2
+/*
+Apply a scale to the transformation matrix currently on top of
+the save stack.
 
-// UNSUPPORTED :: DisplayListBuilderTranslate  param count = 3
+@param[in]  builder  The builder.
+@param[in]  x_scale  The x scale.
+@param[in]  y_scale  The y scale.
+*/
+func DisplayListBuilderScale(builder DisplayListBuilder, x_scale float32, y_scale float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderScale,
+		funcImpellerDisplayListBuilderScale,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&x_scale),
+			unsafe.Pointer(&y_scale),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Apply a clockwise rotation to the transformation matrix
+currently on top of the save stack.
+
+@param[in]  builder        The builder.
+@param[in]  angle_degrees  The angle in degrees.
+*/
+func DisplayListBuilderRotate(builder DisplayListBuilder, angle_degrees float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderRotate,
+		funcImpellerDisplayListBuilderRotate,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&angle_degrees),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Apply a translation to the transformation matrix currently on
+top of the save stack.
+
+@param[in]  builder        The builder.
+@param[in]  x_translation  The x translation.
+@param[in]  y_translation  The y translation.
+*/
+func DisplayListBuilderTranslate(builder DisplayListBuilder, x_translation float32, y_translation float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderTranslate,
+		funcImpellerDisplayListBuilderTranslate,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&x_translation),
+			unsafe.Pointer(&y_translation),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: DisplayListBuilderTransform  param count = 2
 
@@ -262,11 +1229,70 @@ func PaintNew() Paint {
 
 // UNSUPPORTED :: DisplayListBuilderGetTransform  param count = 2
 
-// UNSUPPORTED :: DisplayListBuilderResetTransform  param count = 1
+/*
+Reset the transformation on top of the transformation stack to
+identity.
 
-// UNSUPPORTED :: DisplayListBuilderGetSaveCount  param count = 1
+@param[in]  builder  The builder.
+*/
+func DisplayListBuilderResetTransform(builder DisplayListBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderResetTransform,
+		funcImpellerDisplayListBuilderResetTransform,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: DisplayListBuilderRestoreToCount  param count = 2
+/*
+Get the current size of the save stack.
+
+@param[in]  builder  The builder.
+
+@return     The save stack size.
+*/
+func DisplayListBuilderGetSaveCount(builder DisplayListBuilder) uint32 {
+	var result uint32
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderGetSaveCount,
+		funcImpellerDisplayListBuilderGetSaveCount,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Effectively calls ImpellerDisplayListBuilderRestore till the
+size of the save stack becomes a specified count.
+
+@param[in]  builder  The builder.
+@param[in]  count    The count.
+*/
+func DisplayListBuilderRestoreToCount(builder DisplayListBuilder, count uint32) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderRestoreToCount,
+		funcImpellerDisplayListBuilderRestoreToCount,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&count),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: DisplayListBuilderClipRect  param count = 3
 
@@ -276,7 +1302,26 @@ func PaintNew() Paint {
 
 // UNSUPPORTED :: DisplayListBuilderClipPath  param count = 3
 
-// UNSUPPORTED :: DisplayListBuilderDrawPaint  param count = 2
+/*
+Fills the current clip with the specified paint.
+
+@param[in]  builder  The builder.
+@param[in]  paint    The paint.
+*/
+func DisplayListBuilderDrawPaint(builder DisplayListBuilder, paint Paint) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderDrawPaint,
+		funcImpellerDisplayListBuilderDrawPaint,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&paint),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: DisplayListBuilderDrawLine  param count = 4
 
@@ -290,9 +1335,52 @@ func PaintNew() Paint {
 
 // UNSUPPORTED :: DisplayListBuilderDrawRoundedRectDifference  param count = 6
 
-// UNSUPPORTED :: DisplayListBuilderDrawPath  param count = 3
+/*
+Draws the specified shape.
 
-// UNSUPPORTED :: DisplayListBuilderDrawDisplayList  param count = 3
+@param[in]  builder  The builder.
+@param[in]  path     The path.
+@param[in]  paint    The paint.
+*/
+func DisplayListBuilderDrawPath(builder DisplayListBuilder, path Path, paint Paint) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderDrawPath,
+		funcImpellerDisplayListBuilderDrawPath,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&path),
+			unsafe.Pointer(&paint),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Flattens the contents of another display list into the one
+currently being built.
+
+@param[in]  builder       The builder.
+@param[in]  display_list  The display list.
+@param[in]  opacity       The opacity.
+*/
+func DisplayListBuilderDrawDisplayList(builder DisplayListBuilder, display_list DisplayList, opacity float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderDrawDisplayList,
+		funcImpellerDisplayListBuilderDrawDisplayList,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&display_list),
+			unsafe.Pointer(&opacity),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: DisplayListBuilderDrawParagraph  param count = 3
 
@@ -321,9 +1409,45 @@ func TypographyContextNew() TypographyContext {
 	return result
 }
 
-// UNSUPPORTED :: TypographyContextRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: TypographyContextRelease  param count = 1
+@param[in]  context  The typography context.
+*/
+func TypographyContextRetain(context TypographyContext) {
+	_, err := ffi.CallFunction(
+		cifImpellerTypographyContextRetain,
+		funcImpellerTypographyContextRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  context  The typography context.
+*/
+func TypographyContextRelease(context TypographyContext) {
+	_, err := ffi.CallFunction(
+		cifImpellerTypographyContextRelease,
+		funcImpellerTypographyContextRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: TypographyContextRegisterFont  param count = 4
 
@@ -346,13 +1470,87 @@ func ParagraphStyleNew() ParagraphStyle {
 	return result
 }
 
-// UNSUPPORTED :: ParagraphStyleRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: ParagraphStyleRelease  param count = 1
+@param[in]  paragraph_style  The paragraph style.
+*/
+func ParagraphStyleRetain(paragraph_style ParagraphStyle) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleRetain,
+		funcImpellerParagraphStyleRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: ParagraphStyleSetForeground  param count = 2
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
 
-// UNSUPPORTED :: ParagraphStyleSetBackground  param count = 2
+@param[in]  paragraph_style  The paragraph style.
+*/
+func ParagraphStyleRelease(paragraph_style ParagraphStyle) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleRelease,
+		funcImpellerParagraphStyleRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set the paint used to render the text glyph contents.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  paint            The paint.
+*/
+func ParagraphStyleSetForeground(paragraph_style ParagraphStyle, paint Paint) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetForeground,
+		funcImpellerParagraphStyleSetForeground,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&paint),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set the paint used to render the background of the text glyphs.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  paint            The paint.
+*/
+func ParagraphStyleSetBackground(paragraph_style ParagraphStyle, paint Paint) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetBackground,
+		funcImpellerParagraphStyleSetBackground,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&paint),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ParagraphStyleSetFontWeight  param count = 2
 
@@ -360,9 +1558,52 @@ func ParagraphStyleNew() ParagraphStyle {
 
 // UNSUPPORTED :: ParagraphStyleSetFontFamily  param count = 2
 
-// UNSUPPORTED :: ParagraphStyleSetFontSize  param count = 2
+/*
+Set the font size.
 
-// UNSUPPORTED :: ParagraphStyleSetHeight  param count = 2
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  size             The size.
+*/
+func ParagraphStyleSetFontSize(paragraph_style ParagraphStyle, size float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetFontSize,
+		funcImpellerParagraphStyleSetFontSize,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&size),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+The height of the text as a multiple of text size.
+
+When height is 0.0, the line height will be determined by the
+font's metrics directly, which may differ from the font size.
+Otherwise the line height of the text will be a multiple of font
+size, and be exactly fontSize * height logical pixels tall.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  height           The height.
+*/
+func ParagraphStyleSetHeight(paragraph_style ParagraphStyle, height float32) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetHeight,
+		funcImpellerParagraphStyleSetHeight,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&height),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ParagraphStyleSetTextAlignment  param count = 2
 
@@ -370,57 +1611,500 @@ func ParagraphStyleNew() ParagraphStyle {
 
 // UNSUPPORTED :: ParagraphStyleSetTextDecoration  param count = 2
 
-// UNSUPPORTED :: ParagraphStyleSetMaxLines  param count = 2
+/*
+Set the maximum line count within the paragraph.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  max_lines        The maximum lines.
+*/
+func ParagraphStyleSetMaxLines(paragraph_style ParagraphStyle, max_lines uint32) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetMaxLines,
+		funcImpellerParagraphStyleSetMaxLines,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&max_lines),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ParagraphStyleSetLocale  param count = 2
 
 // UNSUPPORTED :: ParagraphStyleSetEllipsis  param count = 2
 
-// UNSUPPORTED :: ParagraphBuilderNew  param count = 1
+/*
+Create a new paragraph builder.
 
-// UNSUPPORTED :: ParagraphBuilderRetain  param count = 1
+@param[in]  context  The context.
 
-// UNSUPPORTED :: ParagraphBuilderRelease  param count = 1
+@return     The paragraph builder.
+*/
+func ParagraphBuilderNew(context TypographyContext) ParagraphBuilder {
+	var result ParagraphBuilder
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphBuilderNew,
+		funcImpellerParagraphBuilderNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
-// UNSUPPORTED :: ParagraphBuilderPushStyle  param count = 2
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: ParagraphBuilderPopStyle  param count = 1
+@param[in]  paragraph_builder  The paragraph builder.
+*/
+func ParagraphBuilderRetain(paragraph_builder ParagraphBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphBuilderRetain,
+		funcImpellerParagraphBuilderRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  paragraph_builder  The paragraph_builder.
+*/
+func ParagraphBuilderRelease(paragraph_builder ParagraphBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphBuilderRelease,
+		funcImpellerParagraphBuilderRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Push a new paragraph style onto the paragraph style stack
+managed by the paragraph builder.
+
+Not all paragraph styles can be combined. For instance, it does
+not make sense to mix text alignment for different text runs
+within a paragraph. In such cases, the preference of the the
+first paragraph style on the style stack will take hold.
+
+If text is pushed onto the paragraph builder without a style
+previously pushed onto the stack, a default paragraph text style
+will be used. This may not always be desirable because some
+style element cannot be overridden. It is recommended that a
+default paragraph style always be pushed onto the stack before
+the addition of any text.
+
+@param[in]  paragraph_builder  The paragraph builder.
+@param[in]  style              The style.
+*/
+func ParagraphBuilderPushStyle(paragraph_builder ParagraphBuilder, style ParagraphStyle) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphBuilderPushStyle,
+		funcImpellerParagraphBuilderPushStyle,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_builder),
+			unsafe.Pointer(&style),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Pop a previously pushed paragraph style from the paragraph style
+stack.
+
+@param[in]  paragraph_builder  The paragraph builder.
+*/
+func ParagraphBuilderPopStyle(paragraph_builder ParagraphBuilder) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphBuilderPopStyle,
+		funcImpellerParagraphBuilderPopStyle,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_builder),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ParagraphBuilderAddText  param count = 3
 
-// UNSUPPORTED :: ParagraphBuilderBuildParagraphNew  param count = 2
+/*
+Layout and build a new paragraph using the specified width. The
+resulting paragraph is immutable. The paragraph builder must be
+discarded and a new one created to build more paragraphs.
 
-// UNSUPPORTED :: ParagraphRetain  param count = 1
+@param[in]  paragraph_builder  The paragraph builder.
+@param[in]  width              The paragraph width.
 
-// UNSUPPORTED :: ParagraphRelease  param count = 1
+@return     The paragraph if one can be created, NULL otherwise.
+*/
+func ParagraphBuilderBuildParagraphNew(paragraph_builder ParagraphBuilder, width float32) Paragraph {
+	var result Paragraph
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphBuilderBuildParagraphNew,
+		funcImpellerParagraphBuilderBuildParagraphNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_builder),
+			unsafe.Pointer(&width),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
-// UNSUPPORTED :: ParagraphGetMaxWidth  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: ParagraphGetHeight  param count = 1
+@param[in]  paragraph  The paragraph.
+*/
+func ParagraphRetain(paragraph Paragraph) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphRetain,
+		funcImpellerParagraphRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: ParagraphGetLongestLineWidth  param count = 1
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
 
-// UNSUPPORTED :: ParagraphGetMinIntrinsicWidth  param count = 1
+@param[in]  paragraph  The paragraph.
+*/
+func ParagraphRelease(paragraph Paragraph) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphRelease,
+		funcImpellerParagraphRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: ParagraphGetMaxIntrinsicWidth  param count = 1
+/*
+@see        `ImpellerParagraphGetMinIntrinsicWidth`
 
-// UNSUPPORTED :: ParagraphGetIdeographicBaseline  param count = 1
+@param[in]  paragraph  The paragraph.
 
-// UNSUPPORTED :: ParagraphGetAlphabeticBaseline  param count = 1
+@return     The width provided to the paragraph builder during the call to
+layout. This is the maximum width any line in the laid out
+paragraph can occupy. But, it is not necessarily the actual
+width of the paragraph after layout.
+*/
+func ParagraphGetMaxWidth(paragraph Paragraph) float32 {
+	var result float32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetMaxWidth,
+		funcImpellerParagraphGetMaxWidth,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
-// UNSUPPORTED :: ParagraphGetLineCount  param count = 1
+/*
+@param[in]  paragraph  The paragraph.
+
+@return     The height of the laid out paragraph. This is **not** a tight
+bounding box and some glyphs may not reach the minimum location
+they are allowed to reach.
+*/
+func ParagraphGetHeight(paragraph Paragraph) float32 {
+	var result float32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetHeight,
+		funcImpellerParagraphGetHeight,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+@param[in]  paragraph  The paragraph.
+
+@return     The length of the longest line in the paragraph. This is the
+horizontal distance between the left edge of the leftmost glyph
+and the right edge of the rightmost glyph, in the longest line
+in the paragraph.
+*/
+func ParagraphGetLongestLineWidth(paragraph Paragraph) float32 {
+	var result float32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetLongestLineWidth,
+		funcImpellerParagraphGetLongestLineWidth,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+@see        `ImpellerParagraphGetMaxWidth`
+
+@param[in]  paragraph  The paragraph.
+
+@return     The actual width of the longest line in the paragraph after
+layout. This is expected to be less than or equal to
+`ImpellerParagraphGetMaxWidth`.
+*/
+func ParagraphGetMinIntrinsicWidth(paragraph Paragraph) float32 {
+	var result float32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetMinIntrinsicWidth,
+		funcImpellerParagraphGetMinIntrinsicWidth,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+@param[in]  paragraph  The paragraph.
+
+@return     The width of the paragraph without line breaking.
+*/
+func ParagraphGetMaxIntrinsicWidth(paragraph Paragraph) float32 {
+	var result float32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetMaxIntrinsicWidth,
+		funcImpellerParagraphGetMaxIntrinsicWidth,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+@param[in]  paragraph  The paragraph.
+
+@return     The distance from the top of the paragraph to the ideographic
+baseline of the first line when using ideographic fonts
+(Japanese, Korean, etc...).
+*/
+func ParagraphGetIdeographicBaseline(paragraph Paragraph) float32 {
+	var result float32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetIdeographicBaseline,
+		funcImpellerParagraphGetIdeographicBaseline,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+@param[in]  paragraph  The paragraph.
+
+@return     The distance from the top of the paragraph to the alphabetic
+baseline of the first line when using alphabetic fonts (A-Z,
+a-z, Greek, etc...).
+*/
+func ParagraphGetAlphabeticBaseline(paragraph Paragraph) float32 {
+	var result float32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetAlphabeticBaseline,
+		funcImpellerParagraphGetAlphabeticBaseline,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+@param[in]  paragraph  The paragraph.
+
+@return     The number of lines visible in the paragraph after line
+breaking.
+*/
+func ParagraphGetLineCount(paragraph Paragraph) uint32 {
+	var result uint32
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetLineCount,
+		funcImpellerParagraphGetLineCount,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: ParagraphGetWordBoundary  param count = 3
 
-// UNSUPPORTED :: ParagraphGetLineMetrics  param count = 1
+/*
+Get the line metrics of this laid out paragraph. Calculating the
+line metrics is expensive. The first time line metrics are
+requested, they will be cached along with the paragraph (which
+is immutable).
 
-// UNSUPPORTED :: ParagraphCreateGlyphInfoAtCodeUnitIndexNew  param count = 2
+@param[in]  paragraph  The paragraph.
+
+@return     The line metrics.
+*/
+func ParagraphGetLineMetrics(paragraph Paragraph) LineMetrics {
+	var result LineMetrics
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphGetLineMetrics,
+		funcImpellerParagraphGetLineMetrics,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Create a new instance of glyph info that can be queried for
+information about the glyph at the given UTF-16 code unit index.
+The instance must be freed using `ImpellerGlyphInfoRelease`.
+
+@param[in]  paragraph        The paragraph.
+@param[in]  code_unit_index  The UTF-16 code unit index.
+
+@return     The glyph information.
+*/
+func ParagraphCreateGlyphInfoAtCodeUnitIndexNew(paragraph Paragraph, code_unit_index uint64) GlyphInfo {
+	var result GlyphInfo
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphCreateGlyphInfoAtCodeUnitIndexNew,
+		funcImpellerParagraphCreateGlyphInfoAtCodeUnitIndexNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+			unsafe.Pointer(&code_unit_index),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: ParagraphCreateGlyphInfoAtParagraphCoordinatesNew  param count = 3
 
-// UNSUPPORTED :: LineMetricsRetain  param count = 1
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
 
-// UNSUPPORTED :: LineMetricsRelease  param count = 1
+@param[in]  line_metrics  The line metrics.
+*/
+func LineMetricsRetain(line_metrics LineMetrics) {
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsRetain,
+		funcImpellerLineMetricsRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&line_metrics),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  line_metrics  The line metrics.
+*/
+func LineMetricsRelease(line_metrics LineMetrics) {
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsRelease,
+		funcImpellerLineMetricsRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&line_metrics),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: LineMetricsGetUnscaledAscent  param count = 2
 
@@ -430,7 +2114,31 @@ func ParagraphStyleNew() ParagraphStyle {
 
 // UNSUPPORTED :: LineMetricsGetBaseline  param count = 2
 
-// UNSUPPORTED :: LineMetricsIsHardbreak  param count = 2
+/*
+Used to determine if this line ends with an explicit line break
+(e.g. '\n') or is the end of the paragraph.
+
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     True if the line is a hard break.
+*/
+func LineMetricsIsHardbreak(metrics LineMetrics, line uint64) Bool {
+	var result Bool
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsIsHardbreak,
+		funcImpellerLineMetricsIsHardbreak,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: LineMetricsGetWidth  param count = 2
 
@@ -438,24 +2146,219 @@ func ParagraphStyleNew() ParagraphStyle {
 
 // UNSUPPORTED :: LineMetricsGetLeft  param count = 2
 
-// UNSUPPORTED :: LineMetricsGetCodeUnitStartIndex  param count = 2
+/*
+Fetch the start index in the buffer of UTF-16 code units used to
+represent the paragraph line.
 
-// UNSUPPORTED :: LineMetricsGetCodeUnitEndIndex  param count = 2
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
 
-// UNSUPPORTED :: LineMetricsGetCodeUnitEndIndexExcludingWhitespace  param count = 2
+@return     The UTF-16 code units start index.
+*/
+func LineMetricsGetCodeUnitStartIndex(metrics LineMetrics, line uint64) uint64 {
+	var result uint64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetCodeUnitStartIndex,
+		funcImpellerLineMetricsGetCodeUnitStartIndex,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
-// UNSUPPORTED :: LineMetricsGetCodeUnitEndIndexIncludingNewline  param count = 2
+/*
+Fetch the end index in the buffer of UTF-16 code units used to
+represent the paragraph line.
 
-// UNSUPPORTED :: GlyphInfoRetain  param count = 1
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
 
-// UNSUPPORTED :: GlyphInfoRelease  param count = 1
+@return     The UTF-16 code units end index.
+*/
+func LineMetricsGetCodeUnitEndIndex(metrics LineMetrics, line uint64) uint64 {
+	var result uint64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetCodeUnitEndIndex,
+		funcImpellerLineMetricsGetCodeUnitEndIndex,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
-// UNSUPPORTED :: GlyphInfoGetGraphemeClusterCodeUnitRangeBegin  param count = 1
+/*
+Fetch the end index (excluding whitespace) in the buffer of
+UTF-16 code units used to represent the paragraph line.
 
-// UNSUPPORTED :: GlyphInfoGetGraphemeClusterCodeUnitRangeEnd  param count = 1
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     The UTF-16 code units end index excluding whitespace.
+*/
+func LineMetricsGetCodeUnitEndIndexExcludingWhitespace(metrics LineMetrics, line uint64) uint64 {
+	var result uint64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetCodeUnitEndIndexExcludingWhitespace,
+		funcImpellerLineMetricsGetCodeUnitEndIndexExcludingWhitespace,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Fetch the end index (including newlines) in the buffer of UTF-16
+code units used to represent the paragraph line.
+
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     The UTF-16 code units end index including newlines.
+*/
+func LineMetricsGetCodeUnitEndIndexIncludingNewline(metrics LineMetrics, line uint64) uint64 {
+	var result uint64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetCodeUnitEndIndexIncludingNewline,
+		funcImpellerLineMetricsGetCodeUnitEndIndexIncludingNewline,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Retain a strong reference to the object. The object can be NULL
+in which case this method is a no-op.
+
+@param[in]  glyph_info  The glyph information.
+*/
+func GlyphInfoRetain(glyph_info GlyphInfo) {
+	_, err := ffi.CallFunction(
+		cifImpellerGlyphInfoRetain,
+		funcImpellerGlyphInfoRetain,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&glyph_info),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Release a previously retained reference to the object. The
+object can be NULL in which case this method is a no-op.
+
+@param[in]  glyph_info  The glyph information.
+*/
+func GlyphInfoRelease(glyph_info GlyphInfo) {
+	_, err := ffi.CallFunction(
+		cifImpellerGlyphInfoRelease,
+		funcImpellerGlyphInfoRelease,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&glyph_info),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Fetch the start index in the buffer of UTF-16 code units used to
+represent the grapheme cluster for a glyph.
+
+@param[in]  glyph_info  The glyph information.
+
+@return     The UTF-16 code units start index.
+*/
+func GlyphInfoGetGraphemeClusterCodeUnitRangeBegin(glyph_info GlyphInfo) uint64 {
+	var result uint64
+	_, err := ffi.CallFunction(
+		cifImpellerGlyphInfoGetGraphemeClusterCodeUnitRangeBegin,
+		funcImpellerGlyphInfoGetGraphemeClusterCodeUnitRangeBegin,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&glyph_info),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Fetch the end index in the buffer of UTF-16 code units used to
+represent the grapheme cluster for a glyph.
+
+@param[in]  glyph_info  The glyph information.
+
+@return     The UTF-16 code units end index.
+*/
+func GlyphInfoGetGraphemeClusterCodeUnitRangeEnd(glyph_info GlyphInfo) uint64 {
+	var result uint64
+	_, err := ffi.CallFunction(
+		cifImpellerGlyphInfoGetGraphemeClusterCodeUnitRangeEnd,
+		funcImpellerGlyphInfoGetGraphemeClusterCodeUnitRangeEnd,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&glyph_info),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: GlyphInfoGetGraphemeClusterBounds  param count = 2
 
-// UNSUPPORTED :: GlyphInfoIsEllipsis  param count = 1
+/*
+@param[in]  glyph_info  The glyph information.
+
+@return     True if the glyph represents an ellipsis. False otherwise.
+*/
+func GlyphInfoIsEllipsis(glyph_info GlyphInfo) Bool {
+	var result Bool
+	_, err := ffi.CallFunction(
+		cifImpellerGlyphInfoIsEllipsis,
+		funcImpellerGlyphInfoIsEllipsis,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&glyph_info),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 // UNSUPPORTED :: GlyphInfoGetTextDirection  param count = 1

@@ -15,3 +15,16 @@ func TestNoArgsConstructor(t *testing.T) {
 	assert.NoError(t, Init())
 	assert.NotNil(t, ParagraphStyleNew())
 }
+
+func TestFloatArg(t *testing.T) {
+	assert.NoError(t, Init())
+	assert.NotNil(t, ImageFilterCreateDilateNew(5, 10))
+}
+
+func TestHandleArg(t *testing.T) {
+	assert.NoError(t, Init())
+
+	paint := PaintNew()
+	assert.NotNil(t, paint)
+	PaintSetStrokeMiter(paint, 4)
+}
