@@ -123,7 +123,7 @@ func (gen *gen) generateFiles() {
 	// gen.functions.generate()
 	gen.structs.generate()
 	// gen.typedefs.generate()
-	// gen.generateStructTest()
+	gen.generateStructTest()
 }
 
 func timeFunction(title string, fn func()) {

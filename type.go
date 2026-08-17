@@ -5,7 +5,7 @@ import "unsafe"
 type cint int32
 type enum cint
 
-type Bool cint
+type Bool uint8
 
 func (bool Bool) Bool() bool {
 	return bool != 0
