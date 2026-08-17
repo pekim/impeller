@@ -87,7 +87,7 @@ func (result result) typeDescriptor() jen.Code {
 		return result.scalar.typeDescriptor
 	}
 	if result.isStruct && result.struct_.handle {
-		return jen.Qual(typesImportPath, "PointerTypeDescriptor")
+		return pointerTypeDescriptor
 	}
 
 	panic("result type")

@@ -1,6 +1,8 @@
 package impeller
 
-import "unsafe"
+import (
+	"unsafe"
+)
 
 type cint int32
 type enum cint

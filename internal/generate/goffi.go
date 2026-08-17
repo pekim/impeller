@@ -7,6 +7,8 @@ import (
 const goffiImportPath = "github.com/go-webgpu/goffi/ffi"
 const typesImportPath = "github.com/go-webgpu/goffi/types"
 
+var pointerTypeDescriptor = jen.Qual(typesImportPath, "PointerTypeDescriptor")
+
 func (fn function) generateGoffiVar(file file) {
 	file.Var().Id(fn.varName).Qual("unsafe", "Pointer")
 	file.Var().Id(fn.cifVarName).Op("=").Op("&").Qual(typesImportPath, "CallInterface").Block()
