@@ -416,9 +416,57 @@ func PathBuilderClose(builder PathBuilder) {
 	}
 }
 
-// UNSUPPORTED :: PathBuilderCopyPathNew  param count = 2
+/*
+Create a new path by copying the existing built-up path. The
+existing path can continue being added to.
 
-// UNSUPPORTED :: PathBuilderTakePathNew  param count = 2
+@param[in]  builder  The builder.
+@param[in]  fill     The fill.
+
+@return     The impeller path.
+*/
+func PathBuilderCopyPathNew(builder PathBuilder, fill FillType) Path {
+	var result Path
+	_, err := ffi.CallFunction(
+		cifImpellerPathBuilderCopyPathNew,
+		funcImpellerPathBuilderCopyPathNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&fill),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Create a new path using the existing built-up path. The existing
+path builder now contains an empty path.
+
+@param[in]  builder  The builder.
+@param[in]  fill     The fill.
+
+@return     The impeller path.
+*/
+func PathBuilderTakePathNew(builder PathBuilder, fill FillType) Path {
+	var result Path
+	_, err := ffi.CallFunction(
+		cifImpellerPathBuilderTakePathNew,
+		funcImpellerPathBuilderTakePathNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&fill),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Create a new paint with default values.
@@ -481,13 +529,92 @@ func PaintRelease(paint Paint) {
 
 // UNSUPPORTED :: PaintSetColor  param count = 2
 
-// UNSUPPORTED :: PaintSetBlendMode  param count = 2
+/*
+Set the paint blend mode. The blend mode controls how the new
+paints contents are mixed with the values already drawn using
+previous draw calls.
 
-// UNSUPPORTED :: PaintSetDrawStyle  param count = 2
+@param[in]  paint  The paint.
+@param[in]  mode   The mode.
+*/
+func PaintSetBlendMode(paint Paint, mode BlendMode) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetBlendMode,
+		funcImpellerPaintSetBlendMode,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&mode),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
-// UNSUPPORTED :: PaintSetStrokeCap  param count = 2
+/*
+Set the paint draw style. The style controls if the closed
+shapes are filled and/or stroked.
 
-// UNSUPPORTED :: PaintSetStrokeJoin  param count = 2
+@param[in]  paint  The paint.
+@param[in]  style  The style.
+*/
+func PaintSetDrawStyle(paint Paint, style DrawStyle) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetDrawStyle,
+		funcImpellerPaintSetDrawStyle,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&style),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Sets how strokes rendered using this paint are capped.
+
+@param[in]  paint  The paint.
+@param[in]  cap    The stroke cap style.
+*/
+func PaintSetStrokeCap(paint Paint, cap StrokeCap) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetStrokeCap,
+		funcImpellerPaintSetStrokeCap,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&cap),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Sets how strokes rendered using this paint are joined.
+
+@param[in]  paint  The paint.
+@param[in]  join   The join.
+*/
+func PaintSetStrokeJoin(paint Paint, join StrokeJoin) {
+	_, err := ffi.CallFunction(
+		cifImpellerPaintSetStrokeJoin,
+		funcImpellerPaintSetStrokeJoin,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paint),
+			unsafe.Pointer(&join),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 /*
 Set the width of the strokes rendered using this paint.
@@ -876,7 +1003,30 @@ func MaskFilterRelease(mask_filter MaskFilter) {
 	}
 }
 
-// UNSUPPORTED :: MaskFilterCreateBlurNew  param count = 2
+/*
+Create a mask filter that blurs contents in the masked shape.
+
+@param[in]  style  The style.
+@param[in]  sigma  The sigma.
+
+@return     The mask filter.
+*/
+func MaskFilterCreateBlurNew(style BlurStyle, sigma float32) MaskFilter {
+	var result MaskFilter
+	_, err := ffi.CallFunction(
+		cifImpellerMaskFilterCreateBlurNew,
+		funcImpellerMaskFilterCreateBlurNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&style),
+			unsafe.Pointer(&sigma),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -918,7 +1068,35 @@ func ImageFilterRelease(image_filter ImageFilter) {
 	}
 }
 
-// UNSUPPORTED :: ImageFilterCreateBlurNew  param count = 3
+/*
+Creates an image filter that applies a Gaussian blur.
+
+The Gaussian blur applied may be an approximation for
+performance.
+
+@param[in]  x_sigma    The x sigma.
+@param[in]  y_sigma    The y sigma.
+@param[in]  tile_mode  The tile mode.
+
+@return     The image filter.
+*/
+func ImageFilterCreateBlurNew(x_sigma float32, y_sigma float32, tile_mode TileMode) ImageFilter {
+	var result ImageFilter
+	_, err := ffi.CallFunction(
+		cifImpellerImageFilterCreateBlurNew,
+		funcImpellerImageFilterCreateBlurNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&x_sigma),
+			unsafe.Pointer(&y_sigma),
+			unsafe.Pointer(&tile_mode),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Creates an image filter that enhances the per-channel pixel
@@ -1300,7 +1478,29 @@ func DisplayListBuilderRestoreToCount(builder DisplayListBuilder, count uint32) 
 
 // UNSUPPORTED :: DisplayListBuilderClipRoundedRect  param count = 4
 
-// UNSUPPORTED :: DisplayListBuilderClipPath  param count = 3
+/*
+Reduces the clip region to the intersection of the current clip
+and the given path taking into account the clip operation.
+
+@param[in]  builder  The builder.
+@param[in]  path     The path.
+@param[in]  op       The operation.
+*/
+func DisplayListBuilderClipPath(builder DisplayListBuilder, path Path, op ClipOperation) {
+	_, err := ffi.CallFunction(
+		cifImpellerDisplayListBuilderClipPath,
+		funcImpellerDisplayListBuilderClipPath,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&builder),
+			unsafe.Pointer(&path),
+			unsafe.Pointer(&op),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 /*
 Fills the current clip with the specified paint.
@@ -1552,9 +1752,47 @@ func ParagraphStyleSetBackground(paragraph_style ParagraphStyle, paint Paint) {
 	}
 }
 
-// UNSUPPORTED :: ParagraphStyleSetFontWeight  param count = 2
+/*
+Set the weight of the font to select when rendering glyphs.
 
-// UNSUPPORTED :: ParagraphStyleSetFontStyle  param count = 2
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  weight           The weight.
+*/
+func ParagraphStyleSetFontWeight(paragraph_style ParagraphStyle, weight FontWeight) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetFontWeight,
+		funcImpellerParagraphStyleSetFontWeight,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&weight),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set whether the glyphs should be bolded or italicized.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  style            The style.
+*/
+func ParagraphStyleSetFontStyle(paragraph_style ParagraphStyle, style FontStyle) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetFontStyle,
+		funcImpellerParagraphStyleSetFontStyle,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&style),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ParagraphStyleSetFontFamily  param count = 2
 
@@ -1605,9 +1843,47 @@ func ParagraphStyleSetHeight(paragraph_style ParagraphStyle, height float32) {
 	}
 }
 
-// UNSUPPORTED :: ParagraphStyleSetTextAlignment  param count = 2
+/*
+Set the alignment of text within the paragraph.
 
-// UNSUPPORTED :: ParagraphStyleSetTextDirection  param count = 2
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  align            The align.
+*/
+func ParagraphStyleSetTextAlignment(paragraph_style ParagraphStyle, align TextAlignment) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetTextAlignment,
+		funcImpellerParagraphStyleSetTextAlignment,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&align),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set the directionality of the text within the paragraph.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  direction        The direction.
+*/
+func ParagraphStyleSetTextDirection(paragraph_style ParagraphStyle, direction TextDirection) {
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetTextDirection,
+		funcImpellerParagraphStyleSetTextDirection,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&direction),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 // UNSUPPORTED :: ParagraphStyleSetTextDecoration  param count = 2
 

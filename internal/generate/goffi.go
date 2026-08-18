@@ -7,6 +7,7 @@ import (
 const goffiImportPath = "github.com/go-webgpu/goffi/ffi"
 const typesImportPath = "github.com/go-webgpu/goffi/types"
 
+var enumTypeDescriptor = jen.Qual(typesImportPath, "SInt32TypeDescriptor")
 var pointerTypeDescriptor = jen.Qual(typesImportPath, "PointerTypeDescriptor")
 var voidTypeDescriptor = jen.Qual(typesImportPath, "VoidTypeDescriptor")
 

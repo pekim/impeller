@@ -45,3 +45,13 @@ func (enums enums) generate() {
 		file.Line()
 	}
 }
+
+func (enums enums) findByGoName(name string) (*enum, bool) {
+	for i, enum_ := range enums {
+		if enum_.name == name {
+			return &(enums[i]), true
+		}
+	}
+
+	return nil, false
+}

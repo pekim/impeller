@@ -20,6 +20,9 @@ func newParam(gen *gen, cursor clang.Cursor) param {
 }
 
 func (param param) supported() bool {
+	if param.isEnum {
+		return true
+	}
 	if param.isScalar {
 		return true
 	}
@@ -35,10 +38,12 @@ func (param param) goDecl(g *jen.Group) {
 }
 
 func (param param) cArgName() jen.Code {
+	if param.isEnum {
+		return jen.Id(param.name)
+	}
 	if param.isScalar {
 		return jen.Id(param.name)
 	}
-
 	if param.isStruct {
 		return jen.Id(param.name)
 	}

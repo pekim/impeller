@@ -60,6 +60,12 @@ var cifImpellerPathBuilderRelease = &types.CallInterface{}
 var funcImpellerPathBuilderClose unsafe.Pointer
 var cifImpellerPathBuilderClose = &types.CallInterface{}
 
+var funcImpellerPathBuilderCopyPathNew unsafe.Pointer
+var cifImpellerPathBuilderCopyPathNew = &types.CallInterface{}
+
+var funcImpellerPathBuilderTakePathNew unsafe.Pointer
+var cifImpellerPathBuilderTakePathNew = &types.CallInterface{}
+
 var funcImpellerPaintNew unsafe.Pointer
 var cifImpellerPaintNew = &types.CallInterface{}
 
@@ -68,6 +74,18 @@ var cifImpellerPaintRetain = &types.CallInterface{}
 
 var funcImpellerPaintRelease unsafe.Pointer
 var cifImpellerPaintRelease = &types.CallInterface{}
+
+var funcImpellerPaintSetBlendMode unsafe.Pointer
+var cifImpellerPaintSetBlendMode = &types.CallInterface{}
+
+var funcImpellerPaintSetDrawStyle unsafe.Pointer
+var cifImpellerPaintSetDrawStyle = &types.CallInterface{}
+
+var funcImpellerPaintSetStrokeCap unsafe.Pointer
+var cifImpellerPaintSetStrokeCap = &types.CallInterface{}
+
+var funcImpellerPaintSetStrokeJoin unsafe.Pointer
+var cifImpellerPaintSetStrokeJoin = &types.CallInterface{}
 
 var funcImpellerPaintSetStrokeWidth unsafe.Pointer
 var cifImpellerPaintSetStrokeWidth = &types.CallInterface{}
@@ -120,11 +138,17 @@ var cifImpellerMaskFilterRetain = &types.CallInterface{}
 var funcImpellerMaskFilterRelease unsafe.Pointer
 var cifImpellerMaskFilterRelease = &types.CallInterface{}
 
+var funcImpellerMaskFilterCreateBlurNew unsafe.Pointer
+var cifImpellerMaskFilterCreateBlurNew = &types.CallInterface{}
+
 var funcImpellerImageFilterRetain unsafe.Pointer
 var cifImpellerImageFilterRetain = &types.CallInterface{}
 
 var funcImpellerImageFilterRelease unsafe.Pointer
 var cifImpellerImageFilterRelease = &types.CallInterface{}
+
+var funcImpellerImageFilterCreateBlurNew unsafe.Pointer
+var cifImpellerImageFilterCreateBlurNew = &types.CallInterface{}
 
 var funcImpellerImageFilterCreateDilateNew unsafe.Pointer
 var cifImpellerImageFilterCreateDilateNew = &types.CallInterface{}
@@ -174,6 +198,9 @@ var cifImpellerDisplayListBuilderGetSaveCount = &types.CallInterface{}
 var funcImpellerDisplayListBuilderRestoreToCount unsafe.Pointer
 var cifImpellerDisplayListBuilderRestoreToCount = &types.CallInterface{}
 
+var funcImpellerDisplayListBuilderClipPath unsafe.Pointer
+var cifImpellerDisplayListBuilderClipPath = &types.CallInterface{}
+
 var funcImpellerDisplayListBuilderDrawPaint unsafe.Pointer
 var cifImpellerDisplayListBuilderDrawPaint = &types.CallInterface{}
 
@@ -207,11 +234,23 @@ var cifImpellerParagraphStyleSetForeground = &types.CallInterface{}
 var funcImpellerParagraphStyleSetBackground unsafe.Pointer
 var cifImpellerParagraphStyleSetBackground = &types.CallInterface{}
 
+var funcImpellerParagraphStyleSetFontWeight unsafe.Pointer
+var cifImpellerParagraphStyleSetFontWeight = &types.CallInterface{}
+
+var funcImpellerParagraphStyleSetFontStyle unsafe.Pointer
+var cifImpellerParagraphStyleSetFontStyle = &types.CallInterface{}
+
 var funcImpellerParagraphStyleSetFontSize unsafe.Pointer
 var cifImpellerParagraphStyleSetFontSize = &types.CallInterface{}
 
 var funcImpellerParagraphStyleSetHeight unsafe.Pointer
 var cifImpellerParagraphStyleSetHeight = &types.CallInterface{}
+
+var funcImpellerParagraphStyleSetTextAlignment unsafe.Pointer
+var cifImpellerParagraphStyleSetTextAlignment = &types.CallInterface{}
+
+var funcImpellerParagraphStyleSetTextDirection unsafe.Pointer
+var cifImpellerParagraphStyleSetTextDirection = &types.CallInterface{}
 
 var funcImpellerParagraphStyleSetMaxLines unsafe.Pointer
 var cifImpellerParagraphStyleSetMaxLines = &types.CallInterface{}
@@ -578,6 +617,38 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerPathBuilderCopyPathNew, err = ffi.GetSymbol(handle, "ImpellerPathBuilderCopyPathNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerPathBuilderCopyPathNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerPathBuilderTakePathNew, err = ffi.GetSymbol(handle, "ImpellerPathBuilderTakePathNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerPathBuilderTakePathNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerPaintNew, err = ffi.GetSymbol(handle, "ImpellerPaintNew")
 	if err != nil {
 		return err
@@ -616,6 +687,70 @@ func Init() error {
 		types.VoidTypeDescriptor,
 		[]*types.TypeDescriptor{
 			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerPaintSetBlendMode, err = ffi.GetSymbol(handle, "ImpellerPaintSetBlendMode")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerPaintSetBlendMode,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerPaintSetDrawStyle, err = ffi.GetSymbol(handle, "ImpellerPaintSetDrawStyle")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerPaintSetDrawStyle,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerPaintSetStrokeCap, err = ffi.GetSymbol(handle, "ImpellerPaintSetStrokeCap")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerPaintSetStrokeCap,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerPaintSetStrokeJoin, err = ffi.GetSymbol(handle, "ImpellerPaintSetStrokeJoin")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerPaintSetStrokeJoin,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
 		})
 	if err != nil {
 		return err
@@ -882,6 +1017,22 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerMaskFilterCreateBlurNew, err = ffi.GetSymbol(handle, "ImpellerMaskFilterCreateBlurNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerMaskFilterCreateBlurNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.SInt32TypeDescriptor,
+			types.FloatTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerImageFilterRetain, err = ffi.GetSymbol(handle, "ImpellerImageFilterRetain")
 	if err != nil {
 		return err
@@ -907,6 +1058,23 @@ func Init() error {
 		types.VoidTypeDescriptor,
 		[]*types.TypeDescriptor{
 			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerImageFilterCreateBlurNew, err = ffi.GetSymbol(handle, "ImpellerImageFilterCreateBlurNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerImageFilterCreateBlurNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.FloatTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.SInt32TypeDescriptor,
 		})
 	if err != nil {
 		return err
@@ -1161,6 +1329,23 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerDisplayListBuilderClipPath, err = ffi.GetSymbol(handle, "ImpellerDisplayListBuilderClipPath")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerDisplayListBuilderClipPath,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerDisplayListBuilderDrawPaint, err = ffi.GetSymbol(handle, "ImpellerDisplayListBuilderDrawPaint")
 	if err != nil {
 		return err
@@ -1329,6 +1514,38 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerParagraphStyleSetFontWeight, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetFontWeight")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphStyleSetFontWeight,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerParagraphStyleSetFontStyle, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetFontStyle")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphStyleSetFontStyle,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerParagraphStyleSetFontSize, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetFontSize")
 	if err != nil {
 		return err
@@ -1356,6 +1573,38 @@ func Init() error {
 		[]*types.TypeDescriptor{
 			types.PointerTypeDescriptor,
 			types.FloatTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerParagraphStyleSetTextAlignment, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetTextAlignment")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphStyleSetTextAlignment,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerParagraphStyleSetTextDirection, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetTextDirection")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphStyleSetTextDirection,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.SInt32TypeDescriptor,
 		})
 	if err != nil {
 		return err
