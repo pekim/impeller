@@ -39,7 +39,7 @@ func (gen *gen) printStatistics() {
 	functionCount := len(gen.functions)
 	supportedFunctionCount := 0
 	for _, fn := range gen.functions {
-		if fn.supported() {
+		if supported, _ := fn.supported(); supported {
 			supportedFunctionCount++
 		}
 	}

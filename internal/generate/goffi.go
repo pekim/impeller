@@ -33,7 +33,7 @@ func (fn function) generateGoffiGetSymbol(g *jen.Group) {
 }
 
 func (fn function) generateGoffiPrepareCallInterface(g *jen.Group) {
-	if !fn.supported() {
+	if supported, _ := fn.supported(); !supported {
 		return
 	}
 
@@ -69,7 +69,7 @@ func (functions functions) generateGoffi() {
 	defer file.save()
 
 	for _, fn := range functions {
-		if fn.supported() {
+		if supported, _ := fn.supported(); supported {
 			fn.generateGoffiVar(file)
 		}
 	}
@@ -119,7 +119,7 @@ func (functions functions) generateGoffiInit(file file) {
 		g.Line()
 
 		for _, fn := range functions {
-			if fn.supported() {
+			if supported, _ := fn.supported(); supported {
 				fn.generateGoffiGetSymbol(g)
 				fn.generateGoffiPrepareCallInterface(g)
 				g.Line()

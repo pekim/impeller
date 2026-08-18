@@ -41,7 +41,7 @@ func GetVersion() uint32 {
 	return result
 }
 
-// UNSUPPORTED :: ContextCreateOpenGLESNew  param count = 3
+// UNSUPPORTED ContextCreateOpenGLESNew : param gl_proc_address_callback is "ImpellerProcAddressCallback"
 
 /*
 Create a Metal context using the system default Metal device.
@@ -66,7 +66,7 @@ func ContextCreateMetalNew(version uint32) Context {
 	return result
 }
 
-// UNSUPPORTED :: ContextCreateVulkanNew  param count = 2
+// UNSUPPORTED ContextCreateVulkanNew : param settings is "const ImpellerContextVulkanSettings *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -108,9 +108,9 @@ func ContextRelease(context Context) {
 	}
 }
 
-// UNSUPPORTED :: ContextGetVulkanInfo  param count = 2
+// UNSUPPORTED ContextGetVulkanInfo : param out_vulkan_info is "ImpellerContextVulkanInfo *"
 
-// UNSUPPORTED :: VulkanSwapchainCreateNew  param count = 2
+// UNSUPPORTED VulkanSwapchainCreateNew : param vulkan_surface_khr is "void *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -178,9 +178,9 @@ func VulkanSwapchainAcquireNextSurfaceNew(swapchain VulkanSwapchain) Surface {
 	return result
 }
 
-// UNSUPPORTED :: SurfaceCreateWrappedFBONew  param count = 4
+// UNSUPPORTED SurfaceCreateWrappedFBONew : param size is "const ImpellerISize *"
 
-// UNSUPPORTED :: SurfaceCreateWrappedMetalDrawableNew  param count = 2
+// UNSUPPORTED SurfaceCreateWrappedMetalDrawableNew : param metal_drawable is "void *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -319,7 +319,7 @@ func PathRelease(path Path) {
 	}
 }
 
-// UNSUPPORTED :: PathGetBounds  param count = 2
+// UNSUPPORTED PathGetBounds : param out_bounds is "ImpellerRect *"
 
 /*
 Create a new path builder. Paths themselves are immutable.
@@ -381,21 +381,21 @@ func PathBuilderRelease(builder PathBuilder) {
 	}
 }
 
-// UNSUPPORTED :: PathBuilderMoveTo  param count = 2
+// UNSUPPORTED PathBuilderMoveTo : param location is "const ImpellerPoint *"
 
-// UNSUPPORTED :: PathBuilderLineTo  param count = 2
+// UNSUPPORTED PathBuilderLineTo : param location is "const ImpellerPoint *"
 
-// UNSUPPORTED :: PathBuilderQuadraticCurveTo  param count = 3
+// UNSUPPORTED PathBuilderQuadraticCurveTo : param control_point is "const ImpellerPoint *"
 
-// UNSUPPORTED :: PathBuilderCubicCurveTo  param count = 4
+// UNSUPPORTED PathBuilderCubicCurveTo : param control_point_1 is "const ImpellerPoint *"
 
-// UNSUPPORTED :: PathBuilderAddRect  param count = 2
+// UNSUPPORTED PathBuilderAddRect : param rect is "const ImpellerRect *"
 
-// UNSUPPORTED :: PathBuilderAddArc  param count = 4
+// UNSUPPORTED PathBuilderAddArc : param oval_bounds is "const ImpellerRect *"
 
-// UNSUPPORTED :: PathBuilderAddOval  param count = 2
+// UNSUPPORTED PathBuilderAddOval : param oval_bounds is "const ImpellerRect *"
 
-// UNSUPPORTED :: PathBuilderAddRoundedRect  param count = 3
+// UNSUPPORTED PathBuilderAddRoundedRect : param rect is "const ImpellerRect *"
 
 /*
 Close the path.
@@ -527,7 +527,7 @@ func PaintRelease(paint Paint) {
 	}
 }
 
-// UNSUPPORTED :: PaintSetColor  param count = 2
+// UNSUPPORTED PaintSetColor : param color is "const ImpellerColor *"
 
 /*
 Set the paint blend mode. The blend mode controls how the new
@@ -752,9 +752,9 @@ func PaintSetMaskFilter(paint Paint, mask_filter MaskFilter) {
 	}
 }
 
-// UNSUPPORTED :: TextureCreateWithContentsNew  param count = 4
+// UNSUPPORTED TextureCreateWithContentsNew : param descriptor is "const ImpellerTextureDescriptor *"
 
-// UNSUPPORTED :: TextureCreateWithOpenGLTextureHandleNew  param count = 3
+// UNSUPPORTED TextureCreateWithOpenGLTextureHandleNew : param descriptor is "const ImpellerTextureDescriptor *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -825,7 +825,7 @@ func TextureGetOpenGLHandle(texture Texture) uint64 {
 	return result
 }
 
-// UNSUPPORTED :: FragmentProgramNew  param count = 2
+// UNSUPPORTED FragmentProgramNew : param data is "const ImpellerMapping *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -907,17 +907,17 @@ func ColorSourceRelease(color_source ColorSource) {
 	}
 }
 
-// UNSUPPORTED :: ColorSourceCreateLinearGradientNew  param count = 7
+// UNSUPPORTED ColorSourceCreateLinearGradientNew : param start_point is "const ImpellerPoint *"
 
-// UNSUPPORTED :: ColorSourceCreateRadialGradientNew  param count = 7
+// UNSUPPORTED ColorSourceCreateRadialGradientNew : param center is "const ImpellerPoint *"
 
-// UNSUPPORTED :: ColorSourceCreateConicalGradientNew  param count = 9
+// UNSUPPORTED ColorSourceCreateConicalGradientNew : param start_center is "const ImpellerPoint *"
 
-// UNSUPPORTED :: ColorSourceCreateSweepGradientNew  param count = 8
+// UNSUPPORTED ColorSourceCreateSweepGradientNew : param center is "const ImpellerPoint *"
 
-// UNSUPPORTED :: ColorSourceCreateImageNew  param count = 5
+// UNSUPPORTED ColorSourceCreateImageNew : param transformation is "const ImpellerMatrix *"
 
-// UNSUPPORTED :: ColorSourceCreateFragmentProgramNew  param count = 6
+// UNSUPPORTED ColorSourceCreateFragmentProgramNew : param samplers is "ImpellerTexture  _Nonnull *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -959,9 +959,9 @@ func ColorFilterRelease(color_filter ColorFilter) {
 	}
 }
 
-// UNSUPPORTED :: ColorFilterCreateBlendNew  param count = 2
+// UNSUPPORTED ColorFilterCreateBlendNew : param color is "const ImpellerColor *"
 
-// UNSUPPORTED :: ColorFilterCreateColorMatrixNew  param count = 1
+// UNSUPPORTED ColorFilterCreateColorMatrixNew : param color_matrix is "const ImpellerColorMatrix *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -1150,9 +1150,9 @@ func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
 	return result
 }
 
-// UNSUPPORTED :: ImageFilterCreateMatrixNew  param count = 2
+// UNSUPPORTED ImageFilterCreateMatrixNew : param matrix is "const ImpellerMatrix *"
 
-// UNSUPPORTED :: ImageFilterCreateFragmentProgramNew  param count = 6
+// UNSUPPORTED ImageFilterCreateFragmentProgramNew : param samplers is "ImpellerTexture  _Nonnull *"
 
 /*
 Creates a composed filter that when applied is identical to
@@ -1222,7 +1222,7 @@ func DisplayListRelease(display_list DisplayList) {
 	}
 }
 
-// UNSUPPORTED :: DisplayListBuilderNew  param count = 1
+// UNSUPPORTED DisplayListBuilderNew : param cull_rect is "const ImpellerRect *"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -1308,7 +1308,7 @@ func DisplayListBuilderSave(builder DisplayListBuilder) {
 	}
 }
 
-// UNSUPPORTED :: DisplayListBuilderSaveLayer  param count = 4
+// UNSUPPORTED DisplayListBuilderSaveLayer : param bounds is "const ImpellerRect *"
 
 /*
 Pops the last entry pushed onto the save stack using a call to
@@ -1401,11 +1401,11 @@ func DisplayListBuilderTranslate(builder DisplayListBuilder, x_translation float
 	}
 }
 
-// UNSUPPORTED :: DisplayListBuilderTransform  param count = 2
+// UNSUPPORTED DisplayListBuilderTransform : param transform is "const ImpellerMatrix *"
 
-// UNSUPPORTED :: DisplayListBuilderSetTransform  param count = 2
+// UNSUPPORTED DisplayListBuilderSetTransform : param transform is "const ImpellerMatrix *"
 
-// UNSUPPORTED :: DisplayListBuilderGetTransform  param count = 2
+// UNSUPPORTED DisplayListBuilderGetTransform : param out_transform is "ImpellerMatrix *"
 
 /*
 Reset the transformation on top of the transformation stack to
@@ -1472,11 +1472,11 @@ func DisplayListBuilderRestoreToCount(builder DisplayListBuilder, count uint32) 
 	}
 }
 
-// UNSUPPORTED :: DisplayListBuilderClipRect  param count = 3
+// UNSUPPORTED DisplayListBuilderClipRect : param rect is "const ImpellerRect *"
 
-// UNSUPPORTED :: DisplayListBuilderClipOval  param count = 3
+// UNSUPPORTED DisplayListBuilderClipOval : param oval_bounds is "const ImpellerRect *"
 
-// UNSUPPORTED :: DisplayListBuilderClipRoundedRect  param count = 4
+// UNSUPPORTED DisplayListBuilderClipRoundedRect : param rect is "const ImpellerRect *"
 
 /*
 Reduces the clip region to the intersection of the current clip
@@ -1523,17 +1523,17 @@ func DisplayListBuilderDrawPaint(builder DisplayListBuilder, paint Paint) {
 	}
 }
 
-// UNSUPPORTED :: DisplayListBuilderDrawLine  param count = 4
+// UNSUPPORTED DisplayListBuilderDrawLine : param from is "const ImpellerPoint *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawDashedLine  param count = 6
+// UNSUPPORTED DisplayListBuilderDrawDashedLine : param from is "const ImpellerPoint *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawRect  param count = 3
+// UNSUPPORTED DisplayListBuilderDrawRect : param rect is "const ImpellerRect *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawOval  param count = 3
+// UNSUPPORTED DisplayListBuilderDrawOval : param oval_bounds is "const ImpellerRect *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawRoundedRect  param count = 4
+// UNSUPPORTED DisplayListBuilderDrawRoundedRect : param rect is "const ImpellerRect *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawRoundedRectDifference  param count = 6
+// UNSUPPORTED DisplayListBuilderDrawRoundedRectDifference : param outer_rect is "const ImpellerRect *"
 
 /*
 Draws the specified shape.
@@ -1582,13 +1582,13 @@ func DisplayListBuilderDrawDisplayList(builder DisplayListBuilder, display_list 
 	}
 }
 
-// UNSUPPORTED :: DisplayListBuilderDrawParagraph  param count = 3
+// UNSUPPORTED DisplayListBuilderDrawParagraph : param point is "const ImpellerPoint *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawShadow  param count = 6
+// UNSUPPORTED DisplayListBuilderDrawShadow : param color is "const ImpellerColor *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawTexture  param count = 5
+// UNSUPPORTED DisplayListBuilderDrawTexture : param point is "const ImpellerPoint *"
 
-// UNSUPPORTED :: DisplayListBuilderDrawTextureRect  param count = 6
+// UNSUPPORTED DisplayListBuilderDrawTextureRect : param src_rect is "const ImpellerRect *"
 
 /*
 Create a new typography contents.
@@ -1649,7 +1649,7 @@ func TypographyContextRelease(context TypographyContext) {
 	}
 }
 
-// UNSUPPORTED :: TypographyContextRegisterFont  param count = 4
+// UNSUPPORTED TypographyContextRegisterFont : param contents is "const ImpellerMapping *"
 
 /*
 Create a new paragraph style.
@@ -1794,7 +1794,7 @@ func ParagraphStyleSetFontStyle(paragraph_style ParagraphStyle, style FontStyle)
 	}
 }
 
-// UNSUPPORTED :: ParagraphStyleSetFontFamily  param count = 2
+// UNSUPPORTED ParagraphStyleSetFontFamily : param family_name is "const char *"
 
 /*
 Set the font size.
@@ -1885,7 +1885,7 @@ func ParagraphStyleSetTextDirection(paragraph_style ParagraphStyle, direction Te
 	}
 }
 
-// UNSUPPORTED :: ParagraphStyleSetTextDecoration  param count = 2
+// UNSUPPORTED ParagraphStyleSetTextDecoration : param decoration is "const ImpellerTextDecoration *"
 
 /*
 Set the maximum line count within the paragraph.
@@ -1908,9 +1908,9 @@ func ParagraphStyleSetMaxLines(paragraph_style ParagraphStyle, max_lines uint32)
 	}
 }
 
-// UNSUPPORTED :: ParagraphStyleSetLocale  param count = 2
+// UNSUPPORTED ParagraphStyleSetLocale : param locale is "const char *"
 
-// UNSUPPORTED :: ParagraphStyleSetEllipsis  param count = 2
+// UNSUPPORTED ParagraphStyleSetEllipsis : param ellipsis is "const char *"
 
 /*
 Create a new paragraph builder.
@@ -2029,7 +2029,7 @@ func ParagraphBuilderPopStyle(paragraph_builder ParagraphBuilder) {
 	}
 }
 
-// UNSUPPORTED :: ParagraphBuilderAddText  param count = 3
+// UNSUPPORTED ParagraphBuilderAddText : param data is "const uint8_t *"
 
 /*
 Layout and build a new paragraph using the specified width. The
@@ -2285,7 +2285,7 @@ func ParagraphGetLineCount(paragraph Paragraph) uint32 {
 	return result
 }
 
-// UNSUPPORTED :: ParagraphGetWordBoundary  param count = 3
+// UNSUPPORTED ParagraphGetWordBoundary : param out_range is "ImpellerRange *"
 
 /*
 Get the line metrics of this laid out paragraph. Calculating the
@@ -2340,7 +2340,7 @@ func ParagraphCreateGlyphInfoAtCodeUnitIndexNew(paragraph Paragraph, code_unit_i
 	return result
 }
 
-// UNSUPPORTED :: ParagraphCreateGlyphInfoAtParagraphCoordinatesNew  param count = 3
+// UNSUPPORTED ParagraphCreateGlyphInfoAtParagraphCoordinatesNew : param x is "double"
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -2382,13 +2382,13 @@ func LineMetricsRelease(line_metrics LineMetrics) {
 	}
 }
 
-// UNSUPPORTED :: LineMetricsGetUnscaledAscent  param count = 2
+// UNSUPPORTED LineMetricsGetUnscaledAscent : result type is "double"
 
-// UNSUPPORTED :: LineMetricsGetAscent  param count = 2
+// UNSUPPORTED LineMetricsGetAscent : result type is "double"
 
-// UNSUPPORTED :: LineMetricsGetDescent  param count = 2
+// UNSUPPORTED LineMetricsGetDescent : result type is "double"
 
-// UNSUPPORTED :: LineMetricsGetBaseline  param count = 2
+// UNSUPPORTED LineMetricsGetBaseline : result type is "double"
 
 /*
 Used to determine if this line ends with an explicit line break
@@ -2416,11 +2416,11 @@ func LineMetricsIsHardbreak(metrics LineMetrics, line uint64) Bool {
 	return result
 }
 
-// UNSUPPORTED :: LineMetricsGetWidth  param count = 2
+// UNSUPPORTED LineMetricsGetWidth : result type is "double"
 
-// UNSUPPORTED :: LineMetricsGetHeight  param count = 2
+// UNSUPPORTED LineMetricsGetHeight : result type is "double"
 
-// UNSUPPORTED :: LineMetricsGetLeft  param count = 2
+// UNSUPPORTED LineMetricsGetLeft : result type is "double"
 
 /*
 Fetch the start index in the buffer of UTF-16 code units used to
@@ -2614,7 +2614,7 @@ func GlyphInfoGetGraphemeClusterCodeUnitRangeEnd(glyph_info GlyphInfo) uint64 {
 	return result
 }
 
-// UNSUPPORTED :: GlyphInfoGetGraphemeClusterBounds  param count = 2
+// UNSUPPORTED GlyphInfoGetGraphemeClusterBounds : param out_bounds is "ImpellerRect *"
 
 /*
 @param[in]  glyph_info  The glyph information.
@@ -2637,4 +2637,4 @@ func GlyphInfoIsEllipsis(glyph_info GlyphInfo) Bool {
 	return result
 }
 
-// UNSUPPORTED :: GlyphInfoGetTextDirection  param count = 1
+// UNSUPPORTED GlyphInfoGetTextDirection : result type is "ImpellerTextDirection"

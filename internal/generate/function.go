@@ -31,8 +31,8 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 }
 
 func (fn function) generate(file file) {
-	if !fn.supported() {
-		file.Commentf("UNSUPPORTED :: %s  param count = %d", fn.name, fn.cursor.NumArguments())
+	if supported, reason := fn.supported(); !supported {
+		file.Commentf("UNSUPPORTED %s : %s", fn.name, reason)
 		return
 	}
 
@@ -71,9 +71,9 @@ func (fn function) generate(file file) {
 		})
 }
 
-func (fn function) supported() bool {
-	if !fn.result.supported() {
-		return false
+func (fn function) supported() (bool, string) {
+	if supported, reason := fn.result.supported(); !supported {
+		return supported, reason
 	}
 	return fn.params.supported()
 }

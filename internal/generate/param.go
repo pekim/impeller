@@ -1,6 +1,8 @@
 package generate
 
 import (
+	"fmt"
+
 	"github.com/dave/jennifer/jen"
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -19,18 +21,18 @@ func newParam(gen *gen, cursor clang.Cursor) param {
 	return param
 }
 
-func (param param) supported() bool {
+func (param param) supported() (bool, string) {
 	if param.isEnum {
-		return true
+		return true, ""
 	}
 	if param.isScalar {
-		return true
+		return true, ""
 	}
 	if param.isStruct && param.struct_.handle {
-		return true
+		return true, ""
 	}
 
-	return false
+	return false, fmt.Sprintf("param %s is %q", param.name, param.typ.typ.Spelling())
 }
 
 func (param param) goDecl(g *jen.Group) {
@@ -61,14 +63,14 @@ func newParams(gen *gen, cursor clang.Cursor) params {
 	return params
 }
 
-func (params params) supported() bool {
+func (params params) supported() (bool, string) {
 	for _, param := range params {
-		if !param.supported() {
-			return false
+		if supported, reason := param.supported(); !supported {
+			return supported, reason
 		}
 	}
 
-	return true
+	return true, ""
 }
 
 func (params params) goDecl(g *jen.Group) {

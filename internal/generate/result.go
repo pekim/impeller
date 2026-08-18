@@ -1,6 +1,8 @@
 package generate
 
 import (
+	"fmt"
+
 	"github.com/dave/jennifer/jen"
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -15,18 +17,18 @@ func newResult(gen *gen, typ clang.Type) result {
 	}
 }
 
-func (result result) supported() bool {
+func (result result) supported() (bool, string) {
 	if result.isVoid {
-		return true
+		return true, ""
 	}
 	if result.isScalar {
-		return true
+		return true, ""
 	}
 	if result.isStruct && result.struct_.handle {
-		return true
+		return true, ""
 	}
 
-	return false
+	return false, fmt.Sprintf("result type is %q", result.typ.typ.Spelling())
 }
 
 func (result result) returnVar(g *jen.Group) {
