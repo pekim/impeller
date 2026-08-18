@@ -17,27 +17,21 @@ type struct_ struct {
 }
 
 func (struct_ struct_) generate(file file) {
-	pointer := jen.Null()
-	if struct_.handle {
-		pointer = jen.Op("*")
-	}
-
 	file.Comment(struct_.comment)
-	file.Type().Id(struct_.name).Add(pointer).StructFunc(func(g *jen.Group) {
-		if struct_.handle {
-			return
-		}
-
+	file.Type().Id(struct_.name).StructFunc(func(g *jen.Group) {
 		g.Id("_").Qual("structs", "HostLayout")
-		g.Line()
 
-		struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
-			if cursor.Kind() == clang.Cursor_FieldDecl {
-				struct_.generateField(g, cursor)
-			}
+		if struct_.handle {
+			g.Id("handle").Qual("unsafe", "Pointer")
+		} else {
+			struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+				if cursor.Kind() == clang.Cursor_FieldDecl {
+					struct_.generateField(g, cursor)
+				}
 
-			return clang.ChildVisit_Continue
-		})
+				return clang.ChildVisit_Continue
+			})
+		}
 	})
 }
 

@@ -97,7 +97,7 @@ in which case this method is a no-op.
 
 @param[in]  context  The context.
 */
-func ContextRetain(context Context) {
+func (context Context) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerContextRetain,
 		funcImpellerContextRetain,
@@ -117,7 +117,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  context  The context.
 */
-func ContextRelease(context Context) {
+func (context Context) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerContextRelease,
 		funcImpellerContextRelease,
@@ -145,7 +145,7 @@ the [out] argument unaffected.
 
 @return     If the Vulkan info could be fetched from the context.
 */
-func ContextGetVulkanInfo(context Context, out_vulkan_info *ContextVulkanInfo) Bool {
+func (context Context) GetVulkanInfo(out_vulkan_info *ContextVulkanInfo) Bool {
 	var result Bool
 	_, err := ffi.CallFunction(
 		cifImpellerContextGetVulkanInfo,
@@ -175,7 +175,7 @@ surface passed into the next argument.
 
 @return     The vulkan swapchain.
 */
-func VulkanSwapchainCreateNew(context Context, vulkan_surface_khr unsafe.Pointer) VulkanSwapchain {
+func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr unsafe.Pointer) VulkanSwapchain {
 	var result VulkanSwapchain
 	_, err := ffi.CallFunction(
 		cifImpellerVulkanSwapchainCreateNew,
@@ -198,7 +198,7 @@ in which case this method is a no-op.
 
 @param[in]  swapchain  The swapchain.
 */
-func VulkanSwapchainRetain(swapchain VulkanSwapchain) {
+func (swapchain VulkanSwapchain) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerVulkanSwapchainRetain,
 		funcImpellerVulkanSwapchainRetain,
@@ -218,7 +218,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  swapchain  The swapchain.
 */
-func VulkanSwapchainRelease(swapchain VulkanSwapchain) {
+func (swapchain VulkanSwapchain) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerVulkanSwapchainRelease,
 		funcImpellerVulkanSwapchainRelease,
@@ -242,7 +242,7 @@ CPU.
 
 @return     The surface if one could be obtained, NULL otherwise.
 */
-func VulkanSwapchainAcquireNextSurfaceNew(swapchain VulkanSwapchain) Surface {
+func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 	var result Surface
 	_, err := ffi.CallFunction(
 		cifImpellerVulkanSwapchainAcquireNextSurfaceNew,
@@ -272,7 +272,7 @@ collected.
 
 @return     The surface if once can be created, NULL otherwise.
 */
-func SurfaceCreateWrappedFBONew(context Context, fbo uint64, format PixelFormat, size *ISize) Surface {
+func (context Context) SurfaceCreateWrappedFBONew(fbo uint64, format PixelFormat, size *ISize) Surface {
 	var result Surface
 	_, err := ffi.CallFunction(
 		cifImpellerSurfaceCreateWrappedFBONew,
@@ -306,7 +306,7 @@ drawable that is being wrapped.
 
 @return     The surface if one could be wrapped, NULL otherwise.
 */
-func SurfaceCreateWrappedMetalDrawableNew(context Context, metal_drawable unsafe.Pointer) Surface {
+func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable unsafe.Pointer) Surface {
 	var result Surface
 	_, err := ffi.CallFunction(
 		cifImpellerSurfaceCreateWrappedMetalDrawableNew,
@@ -329,7 +329,7 @@ in which case this method is a no-op.
 
 @param[in]  surface  The surface.
 */
-func SurfaceRetain(surface Surface) {
+func (surface Surface) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerSurfaceRetain,
 		funcImpellerSurfaceRetain,
@@ -349,7 +349,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  surface  The surface.
 */
-func SurfaceRelease(surface Surface) {
+func (surface Surface) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerSurfaceRelease,
 		funcImpellerSurfaceRelease,
@@ -380,7 +380,7 @@ buffer) bindings, etc...
 
 @return     If the display list could be drawn onto the surface.
 */
-func SurfaceDrawDisplayList(surface Surface, display_list DisplayList) Bool {
+func (surface Surface) DrawDisplayList(display_list DisplayList) Bool {
 	var result Bool
 	_, err := ffi.CallFunction(
 		cifImpellerSurfaceDrawDisplayList,
@@ -404,7 +404,7 @@ Present the surface to the underlying window system.
 
 @return     True if the surface could be presented.
 */
-func SurfacePresent(surface Surface) Bool {
+func (surface Surface) Present() Bool {
 	var result Bool
 	_, err := ffi.CallFunction(
 		cifImpellerSurfacePresent,
@@ -426,7 +426,7 @@ in which case this method is a no-op.
 
 @param[in]  path  The path.
 */
-func PathRetain(path Path) {
+func (path Path) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerPathRetain,
 		funcImpellerPathRetain,
@@ -446,7 +446,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  path  The path.
 */
-func PathRelease(path Path) {
+func (path Path) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerPathRelease,
 		funcImpellerPathRelease,
@@ -470,7 +470,7 @@ points and isolated calls to move the cursor.
 @param[in]  path        The path
 @param[out] out_bounds  The conservative bounds of the path.
 */
-func PathGetBounds(path Path, out_bounds *Rect) {
+func (path Path) GetBounds(out_bounds *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathGetBounds,
 		funcImpellerPathGetBounds,
@@ -511,7 +511,7 @@ in which case this method is a no-op.
 
 @param[in]  builder  The builder.
 */
-func PathBuilderRetain(builder PathBuilder) {
+func (builder PathBuilder) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderRetain,
 		funcImpellerPathBuilderRetain,
@@ -531,7 +531,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  builder  The builder.
 */
-func PathBuilderRelease(builder PathBuilder) {
+func (builder PathBuilder) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderRelease,
 		funcImpellerPathBuilderRelease,
@@ -551,7 +551,7 @@ Move the cursor to the specified location.
 @param[in]  builder   The builder.
 @param[in]  location  The location.
 */
-func PathBuilderMoveTo(builder PathBuilder, location *Point) {
+func (builder PathBuilder) MoveTo(location *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderMoveTo,
 		funcImpellerPathBuilderMoveTo,
@@ -573,7 +573,7 @@ location. The cursor location is updated to be at the endpoint.
 @param[in]  builder   The builder.
 @param[in]  location  The location.
 */
-func PathBuilderLineTo(builder PathBuilder, location *Point) {
+func (builder PathBuilder) LineTo(location *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderLineTo,
 		funcImpellerPathBuilderLineTo,
@@ -598,7 +598,7 @@ The new location of the cursor after this call is the end point.
 @param[in]  control_point  The control point.
 @param[in]  end_point      The end point.
 */
-func PathBuilderQuadraticCurveTo(builder PathBuilder, control_point *Point, end_point *Point) {
+func (builder PathBuilder) QuadraticCurveTo(control_point *Point, end_point *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderQuadraticCurveTo,
 		funcImpellerPathBuilderQuadraticCurveTo,
@@ -627,7 +627,7 @@ supplied.
 @param[in]  control_point_2  The control point 2
 @param[in]  end_point        The end point
 */
-func PathBuilderCubicCurveTo(builder PathBuilder, control_point_1 *Point, control_point_2 *Point, end_point *Point) {
+func (builder PathBuilder) CubicCurveTo(control_point_1 *Point, control_point_2 *Point, end_point *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderCubicCurveTo,
 		funcImpellerPathBuilderCubicCurveTo,
@@ -650,7 +650,7 @@ Adds a rectangle to the path.
 @param[in]  builder  The builder.
 @param[in]  rect     The rectangle.
 */
-func PathBuilderAddRect(builder PathBuilder, rect *Rect) {
+func (builder PathBuilder) AddRect(rect *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddRect,
 		funcImpellerPathBuilderAddRect,
@@ -673,7 +673,7 @@ Add an arc to the path.
 @param[in]  start_angle_degrees  The start angle in degrees.
 @param[in]  end_angle_degrees    The end angle in degrees.
 */
-func PathBuilderAddArc(builder PathBuilder, oval_bounds *Rect, start_angle_degrees float32, end_angle_degrees float32) {
+func (builder PathBuilder) AddArc(oval_bounds *Rect, start_angle_degrees float32, end_angle_degrees float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddArc,
 		funcImpellerPathBuilderAddArc,
@@ -696,7 +696,7 @@ Add an oval to the path.
 @param[in]  builder      The builder.
 @param[in]  oval_bounds  The oval bounds.
 */
-func PathBuilderAddOval(builder PathBuilder, oval_bounds *Rect) {
+func (builder PathBuilder) AddOval(oval_bounds *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddOval,
 		funcImpellerPathBuilderAddOval,
@@ -719,7 +719,7 @@ path.
 @param[in]  rect            The rectangle.
 @param[in]  rounding_radii  The rounding radii.
 */
-func PathBuilderAddRoundedRect(builder PathBuilder, rect *Rect, rounding_radii *RoundingRadii) {
+func (builder PathBuilder) AddRoundedRect(rect *Rect, rounding_radii *RoundingRadii) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddRoundedRect,
 		funcImpellerPathBuilderAddRoundedRect,
@@ -740,7 +740,7 @@ Close the path.
 
 @param[in]  builder  The builder.
 */
-func PathBuilderClose(builder PathBuilder) {
+func (builder PathBuilder) Close() {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderClose,
 		funcImpellerPathBuilderClose,
@@ -763,7 +763,7 @@ existing path can continue being added to.
 
 @return     The impeller path.
 */
-func PathBuilderCopyPathNew(builder PathBuilder, fill FillType) Path {
+func (builder PathBuilder) CopyPathNew(fill FillType) Path {
 	var result Path
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderCopyPathNew,
@@ -789,7 +789,7 @@ path builder now contains an empty path.
 
 @return     The impeller path.
 */
-func PathBuilderTakePathNew(builder PathBuilder, fill FillType) Path {
+func (builder PathBuilder) TakePathNew(fill FillType) Path {
 	var result Path
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderTakePathNew,
@@ -831,7 +831,7 @@ in which case this method is a no-op.
 
 @param[in]  paint  The paint.
 */
-func PaintRetain(paint Paint) {
+func (paint Paint) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintRetain,
 		funcImpellerPaintRetain,
@@ -851,7 +851,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  paint  The paint.
 */
-func PaintRelease(paint Paint) {
+func (paint Paint) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintRelease,
 		funcImpellerPaintRelease,
@@ -871,7 +871,7 @@ Set the paint color.
 @param[in]  paint  The paint.
 @param[in]  color  The color.
 */
-func PaintSetColor(paint Paint, color *Color) {
+func (paint Paint) SetColor(color *Color) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetColor,
 		funcImpellerPaintSetColor,
@@ -894,7 +894,7 @@ previous draw calls.
 @param[in]  paint  The paint.
 @param[in]  mode   The mode.
 */
-func PaintSetBlendMode(paint Paint, mode BlendMode) {
+func (paint Paint) SetBlendMode(mode BlendMode) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetBlendMode,
 		funcImpellerPaintSetBlendMode,
@@ -916,7 +916,7 @@ shapes are filled and/or stroked.
 @param[in]  paint  The paint.
 @param[in]  style  The style.
 */
-func PaintSetDrawStyle(paint Paint, style DrawStyle) {
+func (paint Paint) SetDrawStyle(style DrawStyle) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetDrawStyle,
 		funcImpellerPaintSetDrawStyle,
@@ -937,7 +937,7 @@ Sets how strokes rendered using this paint are capped.
 @param[in]  paint  The paint.
 @param[in]  cap    The stroke cap style.
 */
-func PaintSetStrokeCap(paint Paint, cap StrokeCap) {
+func (paint Paint) SetStrokeCap(cap StrokeCap) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetStrokeCap,
 		funcImpellerPaintSetStrokeCap,
@@ -958,7 +958,7 @@ Sets how strokes rendered using this paint are joined.
 @param[in]  paint  The paint.
 @param[in]  join   The join.
 */
-func PaintSetStrokeJoin(paint Paint, join StrokeJoin) {
+func (paint Paint) SetStrokeJoin(join StrokeJoin) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetStrokeJoin,
 		funcImpellerPaintSetStrokeJoin,
@@ -979,7 +979,7 @@ Set the width of the strokes rendered using this paint.
 @param[in]  paint  The paint.
 @param[in]  width  The width.
 */
-func PaintSetStrokeWidth(paint Paint, width float32) {
+func (paint Paint) SetStrokeWidth(width float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetStrokeWidth,
 		funcImpellerPaintSetStrokeWidth,
@@ -1000,7 +1000,7 @@ Set the miter limit of the strokes rendered using this paint.
 @param[in]  paint  The paint.
 @param[in]  miter  The miter limit.
 */
-func PaintSetStrokeMiter(paint Paint, miter float32) {
+func (paint Paint) SetStrokeMiter(miter float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetStrokeMiter,
 		funcImpellerPaintSetStrokeMiter,
@@ -1025,7 +1025,7 @@ the destination during blending.
 @param[in]  paint         The paint.
 @param[in]  color_filter  The color filter.
 */
-func PaintSetColorFilter(paint Paint, color_filter ColorFilter) {
+func (paint Paint) SetColorFilter(color_filter ColorFilter) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetColorFilter,
 		funcImpellerPaintSetColorFilter,
@@ -1049,7 +1049,7 @@ texture element covered by a draw call.
 @param[in]  paint         The paint.
 @param[in]  color_source  The color source.
 */
-func PaintSetColorSource(paint Paint, color_source ColorSource) {
+func (paint Paint) SetColorSource(color_source ColorSource) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetColorSource,
 		funcImpellerPaintSetColorSource,
@@ -1073,7 +1073,7 @@ texture to produce a single color.
 @param[in]  paint         The paint.
 @param[in]  image_filter  The image filter.
 */
-func PaintSetImageFilter(paint Paint, image_filter ImageFilter) {
+func (paint Paint) SetImageFilter(image_filter ImageFilter) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetImageFilter,
 		funcImpellerPaintSetImageFilter,
@@ -1094,7 +1094,7 @@ Set the mask filter of a paint.
 @param[in]  paint        The paint.
 @param[in]  mask_filter  The mask filter.
 */
-func PaintSetMaskFilter(paint Paint, mask_filter MaskFilter) {
+func (paint Paint) SetMaskFilter(mask_filter MaskFilter) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetMaskFilter,
 		funcImpellerPaintSetMaskFilter,
@@ -1142,7 +1142,7 @@ release callback if one exists.
 @return     The texture if one can be created using the provided data, NULL
 otherwise.
 */
-func TextureCreateWithContentsNew(context Context, descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data unsafe.Pointer) Texture {
+func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data unsafe.Pointer) Texture {
 	var result Texture
 	_, err := ffi.CallFunction(
 		cifImpellerTextureCreateWithContentsNew,
@@ -1185,7 +1185,7 @@ fail.
 @return     The texture if one could be created by adopting the supplied
 texture handle, NULL otherwise.
 */
-func TextureCreateWithOpenGLTextureHandleNew(context Context, descriptor *TextureDescriptor, handle uint64) Texture {
+func (context Context) TextureCreateWithOpenGLTextureHandleNew(descriptor *TextureDescriptor, handle uint64) Texture {
 	var result Texture
 	_, err := ffi.CallFunction(
 		cifImpellerTextureCreateWithOpenGLTextureHandleNew,
@@ -1209,7 +1209,7 @@ in which case this method is a no-op.
 
 @param[in]  texture  The texture.
 */
-func TextureRetain(texture Texture) {
+func (texture Texture) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerTextureRetain,
 		funcImpellerTextureRetain,
@@ -1229,7 +1229,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  texture  The texture.
 */
-func TextureRelease(texture Texture) {
+func (texture Texture) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerTextureRelease,
 		funcImpellerTextureRelease,
@@ -1256,7 +1256,7 @@ where Impeller knows there is an OpenGL context available.
 
 @return     The OpenGL handle if one is available, GL_NONE otherwise.
 */
-func TextureGetOpenGLHandle(texture Texture) uint64 {
+func (texture Texture) GetOpenGLHandle() uint64 {
 	var result uint64
 	_, err := ffi.CallFunction(
 		cifImpellerTextureGetOpenGLHandle,
@@ -1311,7 +1311,7 @@ in which case this method is a no-op.
 
 @param[in]  fragment_program  The fragment program.
 */
-func FragmentProgramRetain(fragment_program FragmentProgram) {
+func (fragment_program FragmentProgram) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerFragmentProgramRetain,
 		funcImpellerFragmentProgramRetain,
@@ -1331,7 +1331,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  fragment_program  The fragment program.
 */
-func FragmentProgramRelease(fragment_program FragmentProgram) {
+func (fragment_program FragmentProgram) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerFragmentProgramRelease,
 		funcImpellerFragmentProgramRelease,
@@ -1351,7 +1351,7 @@ in which case this method is a no-op.
 
 @param[in]  color_source  The color source.
 */
-func ColorSourceRetain(color_source ColorSource) {
+func (color_source ColorSource) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerColorSourceRetain,
 		funcImpellerColorSourceRetain,
@@ -1371,7 +1371,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  color_source  The color source.
 */
-func ColorSourceRelease(color_source ColorSource) {
+func (color_source ColorSource) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerColorSourceRelease,
 		funcImpellerColorSourceRelease,
@@ -1542,7 +1542,7 @@ Create a color source that samples from an image.
 
 @return     The color source.
 */
-func ColorSourceCreateImageNew(image Texture, horizontal_tile_mode TileMode, vertical_tile_mode TileMode, sampling TextureSampling, transformation *Matrix) ColorSource {
+func (image Texture) ColorSourceCreateImageNew(horizontal_tile_mode TileMode, vertical_tile_mode TileMode, sampling TextureSampling, transformation *Matrix) ColorSource {
 	var result ColorSource
 	_, err := ffi.CallFunction(
 		cifImpellerColorSourceCreateImageNew,
@@ -1577,7 +1577,7 @@ program.
 
 @return     The color source.
 */
-func ColorSourceCreateFragmentProgramNew(context Context, fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ColorSource {
+func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ColorSource {
 	var result ColorSource
 	c_data := cString(data)
 	_, err := ffi.CallFunction(
@@ -1605,7 +1605,7 @@ in which case this method is a no-op.
 
 @param[in]  color_filter  The color filter.
 */
-func ColorFilterRetain(color_filter ColorFilter) {
+func (color_filter ColorFilter) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerColorFilterRetain,
 		funcImpellerColorFilterRetain,
@@ -1625,7 +1625,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  color_filter  The color filter.
 */
-func ColorFilterRelease(color_filter ColorFilter) {
+func (color_filter ColorFilter) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerColorFilterRelease,
 		funcImpellerColorFilterRelease,
@@ -1695,7 +1695,7 @@ in which case this method is a no-op.
 
 @param[in]  mask_filter  The mask filter.
 */
-func MaskFilterRetain(mask_filter MaskFilter) {
+func (mask_filter MaskFilter) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerMaskFilterRetain,
 		funcImpellerMaskFilterRetain,
@@ -1715,7 +1715,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  mask_filter  The mask filter.
 */
-func MaskFilterRelease(mask_filter MaskFilter) {
+func (mask_filter MaskFilter) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerMaskFilterRelease,
 		funcImpellerMaskFilterRelease,
@@ -1760,7 +1760,7 @@ in which case this method is a no-op.
 
 @param[in]  image_filter  The image filter.
 */
-func ImageFilterRetain(image_filter ImageFilter) {
+func (image_filter ImageFilter) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerImageFilterRetain,
 		funcImpellerImageFilterRetain,
@@ -1780,7 +1780,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  image_filter  The image filter.
 */
-func ImageFilterRelease(image_filter ImageFilter) {
+func (image_filter ImageFilter) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerImageFilterRelease,
 		funcImpellerImageFilterRelease,
@@ -1917,7 +1917,7 @@ program.
 
 @return     The image filter.
 */
-func ImageFilterCreateFragmentProgramNew(context Context, fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ImageFilter {
+func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ImageFilter {
 	var result ImageFilter
 	c_data := cString(data)
 	_, err := ffi.CallFunction(
@@ -1950,7 +1950,7 @@ subsequently applying the inner and then the outer filters.
 
 @return     The combined image filter.
 */
-func ImageFilterCreateComposeNew(outer ImageFilter, inner ImageFilter) ImageFilter {
+func (outer ImageFilter) CreateComposeNew(inner ImageFilter) ImageFilter {
 	var result ImageFilter
 	_, err := ffi.CallFunction(
 		cifImpellerImageFilterCreateComposeNew,
@@ -1973,7 +1973,7 @@ in which case this method is a no-op.
 
 @param[in]  display_list  The display list.
 */
-func DisplayListRetain(display_list DisplayList) {
+func (display_list DisplayList) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListRetain,
 		funcImpellerDisplayListRetain,
@@ -1993,7 +1993,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  display_list  The display list.
 */
-func DisplayListRelease(display_list DisplayList) {
+func (display_list DisplayList) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListRelease,
 		funcImpellerDisplayListRelease,
@@ -2040,7 +2040,7 @@ in which case this method is a no-op.
 
 @param[in]  builder  The display list builder.
 */
-func DisplayListBuilderRetain(builder DisplayListBuilder) {
+func (builder DisplayListBuilder) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderRetain,
 		funcImpellerDisplayListBuilderRetain,
@@ -2060,7 +2060,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  builder  The display list builder.
 */
-func DisplayListBuilderRelease(builder DisplayListBuilder) {
+func (builder DisplayListBuilder) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderRelease,
 		funcImpellerDisplayListBuilderRelease,
@@ -2082,7 +2082,7 @@ encoded in the builder. The builder is reset after this call.
 
 @return     The display list.
 */
-func DisplayListBuilderCreateDisplayListNew(builder DisplayListBuilder) DisplayList {
+func (builder DisplayListBuilder) CreateDisplayListNew() DisplayList {
 	var result DisplayList
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderCreateDisplayListNew,
@@ -2104,7 +2104,7 @@ stack.
 
 @param[in]  builder  The builder.
 */
-func DisplayListBuilderSave(builder DisplayListBuilder) {
+func (builder DisplayListBuilder) Save() {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderSave,
 		funcImpellerDisplayListBuilderSave,
@@ -2132,7 +2132,7 @@ back onto the display display list.
 @param[in]  paint     The paint.
 @param[in]  backdrop  The backdrop.
 */
-func DisplayListBuilderSaveLayer(builder DisplayListBuilder, bounds *Rect, paint Paint, backdrop ImageFilter) {
+func (builder DisplayListBuilder) SaveLayer(bounds *Rect, paint Paint, backdrop ImageFilter) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderSaveLayer,
 		funcImpellerDisplayListBuilderSaveLayer,
@@ -2156,7 +2156,7 @@ Pops the last entry pushed onto the save stack using a call to
 
 @param[in]  builder  The builder.
 */
-func DisplayListBuilderRestore(builder DisplayListBuilder) {
+func (builder DisplayListBuilder) Restore() {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderRestore,
 		funcImpellerDisplayListBuilderRestore,
@@ -2178,7 +2178,7 @@ the save stack.
 @param[in]  x_scale  The x scale.
 @param[in]  y_scale  The y scale.
 */
-func DisplayListBuilderScale(builder DisplayListBuilder, x_scale float32, y_scale float32) {
+func (builder DisplayListBuilder) Scale(x_scale float32, y_scale float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderScale,
 		funcImpellerDisplayListBuilderScale,
@@ -2201,7 +2201,7 @@ currently on top of the save stack.
 @param[in]  builder        The builder.
 @param[in]  angle_degrees  The angle in degrees.
 */
-func DisplayListBuilderRotate(builder DisplayListBuilder, angle_degrees float32) {
+func (builder DisplayListBuilder) Rotate(angle_degrees float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderRotate,
 		funcImpellerDisplayListBuilderRotate,
@@ -2224,7 +2224,7 @@ top of the save stack.
 @param[in]  x_translation  The x translation.
 @param[in]  y_translation  The y translation.
 */
-func DisplayListBuilderTranslate(builder DisplayListBuilder, x_translation float32, y_translation float32) {
+func (builder DisplayListBuilder) Translate(x_translation float32, y_translation float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderTranslate,
 		funcImpellerDisplayListBuilderTranslate,
@@ -2247,7 +2247,7 @@ already on the save stack.
 @param[in]  builder    The builder.
 @param[in]  transform  The transform to append.
 */
-func DisplayListBuilderTransform(builder DisplayListBuilder, transform *Matrix) {
+func (builder DisplayListBuilder) Transform(transform *Matrix) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderTransform,
 		funcImpellerDisplayListBuilderTransform,
@@ -2269,7 +2269,7 @@ with a new value.
 @param[in]  builder    The builder.
 @param[in]  transform  The new transform.
 */
-func DisplayListBuilderSetTransform(builder DisplayListBuilder, transform *Matrix) {
+func (builder DisplayListBuilder) SetTransform(transform *Matrix) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderSetTransform,
 		funcImpellerDisplayListBuilderSetTransform,
@@ -2291,7 +2291,7 @@ transformation stack.
 @param[in]  builder        The builder.
 @param[out] out_transform  The transform.
 */
-func DisplayListBuilderGetTransform(builder DisplayListBuilder, out_transform *Matrix) {
+func (builder DisplayListBuilder) GetTransform(out_transform *Matrix) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderGetTransform,
 		funcImpellerDisplayListBuilderGetTransform,
@@ -2312,7 +2312,7 @@ identity.
 
 @param[in]  builder  The builder.
 */
-func DisplayListBuilderResetTransform(builder DisplayListBuilder) {
+func (builder DisplayListBuilder) ResetTransform() {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderResetTransform,
 		funcImpellerDisplayListBuilderResetTransform,
@@ -2333,7 +2333,7 @@ Get the current size of the save stack.
 
 @return     The save stack size.
 */
-func DisplayListBuilderGetSaveCount(builder DisplayListBuilder) uint32 {
+func (builder DisplayListBuilder) GetSaveCount() uint32 {
 	var result uint32
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderGetSaveCount,
@@ -2356,7 +2356,7 @@ size of the save stack becomes a specified count.
 @param[in]  builder  The builder.
 @param[in]  count    The count.
 */
-func DisplayListBuilderRestoreToCount(builder DisplayListBuilder, count uint32) {
+func (builder DisplayListBuilder) RestoreToCount(count uint32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderRestoreToCount,
 		funcImpellerDisplayListBuilderRestoreToCount,
@@ -2379,7 +2379,7 @@ and the given rectangle taking into account the clip operation.
 @param[in]  rect     The rectangle.
 @param[in]  op       The operation.
 */
-func DisplayListBuilderClipRect(builder DisplayListBuilder, rect *Rect, op ClipOperation) {
+func (builder DisplayListBuilder) ClipRect(rect *Rect, op ClipOperation) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderClipRect,
 		funcImpellerDisplayListBuilderClipRect,
@@ -2403,7 +2403,7 @@ and the given oval taking into account the clip operation.
 @param[in]  oval_bounds  The oval bounds.
 @param[in]  op           The operation.
 */
-func DisplayListBuilderClipOval(builder DisplayListBuilder, oval_bounds *Rect, op ClipOperation) {
+func (builder DisplayListBuilder) ClipOval(oval_bounds *Rect, op ClipOperation) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderClipOval,
 		funcImpellerDisplayListBuilderClipOval,
@@ -2429,7 +2429,7 @@ operation.
 @param[in]  radii    The radii.
 @param[in]  op       The operation.
 */
-func DisplayListBuilderClipRoundedRect(builder DisplayListBuilder, rect *Rect, radii *RoundingRadii, op ClipOperation) {
+func (builder DisplayListBuilder) ClipRoundedRect(rect *Rect, radii *RoundingRadii, op ClipOperation) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderClipRoundedRect,
 		funcImpellerDisplayListBuilderClipRoundedRect,
@@ -2454,7 +2454,7 @@ and the given path taking into account the clip operation.
 @param[in]  path     The path.
 @param[in]  op       The operation.
 */
-func DisplayListBuilderClipPath(builder DisplayListBuilder, path Path, op ClipOperation) {
+func (builder DisplayListBuilder) ClipPath(path Path, op ClipOperation) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderClipPath,
 		funcImpellerDisplayListBuilderClipPath,
@@ -2476,7 +2476,7 @@ Fills the current clip with the specified paint.
 @param[in]  builder  The builder.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawPaint(builder DisplayListBuilder, paint Paint) {
+func (builder DisplayListBuilder) DrawPaint(paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawPaint,
 		funcImpellerDisplayListBuilderDrawPaint,
@@ -2499,7 +2499,7 @@ Draws a line segment.
 @param[in]  to       The end point of the line.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawLine(builder DisplayListBuilder, from *Point, to *Point, paint Paint) {
+func (builder DisplayListBuilder) DrawLine(from *Point, to *Point, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawLine,
 		funcImpellerDisplayListBuilderDrawLine,
@@ -2526,7 +2526,7 @@ Draws a dash line segment.
 @param[in]  off_length  Off length.
 @param[in]  paint       The paint.
 */
-func DisplayListBuilderDrawDashedLine(builder DisplayListBuilder, from *Point, to *Point, on_length float32, off_length float32, paint Paint) {
+func (builder DisplayListBuilder) DrawDashedLine(from *Point, to *Point, on_length float32, off_length float32, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawDashedLine,
 		funcImpellerDisplayListBuilderDrawDashedLine,
@@ -2552,7 +2552,7 @@ Draws a rectangle.
 @param[in]  rect     The rectangle.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawRect(builder DisplayListBuilder, rect *Rect, paint Paint) {
+func (builder DisplayListBuilder) DrawRect(rect *Rect, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawRect,
 		funcImpellerDisplayListBuilderDrawRect,
@@ -2575,7 +2575,7 @@ Draws an oval.
 @param[in]  oval_bounds  The oval bounds.
 @param[in]  paint        The paint.
 */
-func DisplayListBuilderDrawOval(builder DisplayListBuilder, oval_bounds *Rect, paint Paint) {
+func (builder DisplayListBuilder) DrawOval(oval_bounds *Rect, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawOval,
 		funcImpellerDisplayListBuilderDrawOval,
@@ -2599,7 +2599,7 @@ Draws a rounded rect.
 @param[in]  radii    The radii.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawRoundedRect(builder DisplayListBuilder, rect *Rect, radii *RoundingRadii, paint Paint) {
+func (builder DisplayListBuilder) DrawRoundedRect(rect *Rect, radii *RoundingRadii, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawRoundedRect,
 		funcImpellerDisplayListBuilderDrawRoundedRect,
@@ -2627,7 +2627,7 @@ rectangles (each with configurable corner radii).
 @param[in]  inner_radii  The inner radii.
 @param[in]  paint        The paint.
 */
-func DisplayListBuilderDrawRoundedRectDifference(builder DisplayListBuilder, outer_rect *Rect, outer_radii *RoundingRadii, inner_rect *Rect, inner_radii *RoundingRadii, paint Paint) {
+func (builder DisplayListBuilder) DrawRoundedRectDifference(outer_rect *Rect, outer_radii *RoundingRadii, inner_rect *Rect, inner_radii *RoundingRadii, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawRoundedRectDifference,
 		funcImpellerDisplayListBuilderDrawRoundedRectDifference,
@@ -2653,7 +2653,7 @@ Draws the specified shape.
 @param[in]  path     The path.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawPath(builder DisplayListBuilder, path Path, paint Paint) {
+func (builder DisplayListBuilder) DrawPath(path Path, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawPath,
 		funcImpellerDisplayListBuilderDrawPath,
@@ -2677,7 +2677,7 @@ currently being built.
 @param[in]  display_list  The display list.
 @param[in]  opacity       The opacity.
 */
-func DisplayListBuilderDrawDisplayList(builder DisplayListBuilder, display_list DisplayList, opacity float32) {
+func (builder DisplayListBuilder) DrawDisplayList(display_list DisplayList, opacity float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawDisplayList,
 		funcImpellerDisplayListBuilderDrawDisplayList,
@@ -2700,7 +2700,7 @@ Draw a paragraph at the specified point.
 @param[in]  paragraph  The paragraph.
 @param[in]  point      The point.
 */
-func DisplayListBuilderDrawParagraph(builder DisplayListBuilder, paragraph Paragraph, point *Point) {
+func (builder DisplayListBuilder) DrawParagraph(paragraph Paragraph, point *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawParagraph,
 		funcImpellerDisplayListBuilderDrawParagraph,
@@ -2731,7 +2731,7 @@ If the object casting the shadow is transparent.
 @param[in]  device_pixel_ratio
 The device pixel ratio.
 */
-func DisplayListBuilderDrawShadow(builder DisplayListBuilder, path Path, color *Color, elevation float32, occluder_is_transparent Bool, device_pixel_ratio float32) {
+func (builder DisplayListBuilder) DrawShadow(path Path, color *Color, elevation float32, occluder_is_transparent Bool, device_pixel_ratio float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawShadow,
 		funcImpellerDisplayListBuilderDrawShadow,
@@ -2759,7 +2759,7 @@ Draw a texture at the specified point.
 @param[in]  sampling  The sampling.
 @param[in]  paint     The paint.
 */
-func DisplayListBuilderDrawTexture(builder DisplayListBuilder, texture Texture, point *Point, sampling TextureSampling, paint Paint) {
+func (builder DisplayListBuilder) DrawTexture(texture Texture, point *Point, sampling TextureSampling, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawTexture,
 		funcImpellerDisplayListBuilderDrawTexture,
@@ -2787,7 +2787,7 @@ Draw a portion of texture at the specified location.
 @param[in]  sampling  The sampling.
 @param[in]  paint     The paint.
 */
-func DisplayListBuilderDrawTextureRect(builder DisplayListBuilder, texture Texture, src_rect *Rect, dst_rect *Rect, sampling TextureSampling, paint Paint) {
+func (builder DisplayListBuilder) DrawTextureRect(texture Texture, src_rect *Rect, dst_rect *Rect, sampling TextureSampling, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawTextureRect,
 		funcImpellerDisplayListBuilderDrawTextureRect,
@@ -2831,7 +2831,7 @@ in which case this method is a no-op.
 
 @param[in]  context  The typography context.
 */
-func TypographyContextRetain(context TypographyContext) {
+func (context TypographyContext) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerTypographyContextRetain,
 		funcImpellerTypographyContextRetain,
@@ -2851,7 +2851,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  context  The typography context.
 */
-func TypographyContextRelease(context TypographyContext) {
+func (context TypographyContext) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerTypographyContextRelease,
 		funcImpellerTypographyContextRelease,
@@ -2905,7 +2905,7 @@ data is to be used.
 
 @return     If the font could be successfully registered.
 */
-func TypographyContextRegisterFont(context TypographyContext, contents *Mapping, contents_on_release_user_data unsafe.Pointer, family_name_alias string) Bool {
+func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_release_user_data unsafe.Pointer, family_name_alias string) Bool {
 	var result Bool
 	c_family_name_alias := cString(family_name_alias)
 	_, err := ffi.CallFunction(
@@ -2950,7 +2950,7 @@ in which case this method is a no-op.
 
 @param[in]  paragraph_style  The paragraph style.
 */
-func ParagraphStyleRetain(paragraph_style ParagraphStyle) {
+func (paragraph_style ParagraphStyle) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleRetain,
 		funcImpellerParagraphStyleRetain,
@@ -2970,7 +2970,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  paragraph_style  The paragraph style.
 */
-func ParagraphStyleRelease(paragraph_style ParagraphStyle) {
+func (paragraph_style ParagraphStyle) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleRelease,
 		funcImpellerParagraphStyleRelease,
@@ -2990,7 +2990,7 @@ Set the paint used to render the text glyph contents.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  paint            The paint.
 */
-func ParagraphStyleSetForeground(paragraph_style ParagraphStyle, paint Paint) {
+func (paragraph_style ParagraphStyle) SetForeground(paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetForeground,
 		funcImpellerParagraphStyleSetForeground,
@@ -3011,7 +3011,7 @@ Set the paint used to render the background of the text glyphs.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  paint            The paint.
 */
-func ParagraphStyleSetBackground(paragraph_style ParagraphStyle, paint Paint) {
+func (paragraph_style ParagraphStyle) SetBackground(paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetBackground,
 		funcImpellerParagraphStyleSetBackground,
@@ -3032,7 +3032,7 @@ Set the weight of the font to select when rendering glyphs.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  weight           The weight.
 */
-func ParagraphStyleSetFontWeight(paragraph_style ParagraphStyle, weight FontWeight) {
+func (paragraph_style ParagraphStyle) SetFontWeight(weight FontWeight) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetFontWeight,
 		funcImpellerParagraphStyleSetFontWeight,
@@ -3053,7 +3053,7 @@ Set whether the glyphs should be bolded or italicized.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  style            The style.
 */
-func ParagraphStyleSetFontStyle(paragraph_style ParagraphStyle, style FontStyle) {
+func (paragraph_style ParagraphStyle) SetFontStyle(style FontStyle) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetFontStyle,
 		funcImpellerParagraphStyleSetFontStyle,
@@ -3074,7 +3074,7 @@ Set the font family.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  family_name      The family name.
 */
-func ParagraphStyleSetFontFamily(paragraph_style ParagraphStyle, family_name string) {
+func (paragraph_style ParagraphStyle) SetFontFamily(family_name string) {
 	c_family_name := cString(family_name)
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetFontFamily,
@@ -3096,7 +3096,7 @@ Set the font size.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  size             The size.
 */
-func ParagraphStyleSetFontSize(paragraph_style ParagraphStyle, size float32) {
+func (paragraph_style ParagraphStyle) SetFontSize(size float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetFontSize,
 		funcImpellerParagraphStyleSetFontSize,
@@ -3122,7 +3122,7 @@ size, and be exactly fontSize * height logical pixels tall.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  height           The height.
 */
-func ParagraphStyleSetHeight(paragraph_style ParagraphStyle, height float32) {
+func (paragraph_style ParagraphStyle) SetHeight(height float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetHeight,
 		funcImpellerParagraphStyleSetHeight,
@@ -3143,7 +3143,7 @@ Set the alignment of text within the paragraph.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  align            The align.
 */
-func ParagraphStyleSetTextAlignment(paragraph_style ParagraphStyle, align TextAlignment) {
+func (paragraph_style ParagraphStyle) SetTextAlignment(align TextAlignment) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetTextAlignment,
 		funcImpellerParagraphStyleSetTextAlignment,
@@ -3164,7 +3164,7 @@ Set the directionality of the text within the paragraph.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  direction        The direction.
 */
-func ParagraphStyleSetTextDirection(paragraph_style ParagraphStyle, direction TextDirection) {
+func (paragraph_style ParagraphStyle) SetTextDirection(direction TextDirection) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetTextDirection,
 		funcImpellerParagraphStyleSetTextDirection,
@@ -3187,7 +3187,7 @@ decorations can be set as well (dashed, dotted, wavy, etc..)
 @param[in]  ImpellerParagraphStyle  The paragraph style.
 @param[in]  decoration              The text decoration.
 */
-func ParagraphStyleSetTextDecoration(paragraph_style ParagraphStyle, decoration *TextDecoration) {
+func (paragraph_style ParagraphStyle) SetTextDecoration(decoration *TextDecoration) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetTextDecoration,
 		funcImpellerParagraphStyleSetTextDecoration,
@@ -3208,7 +3208,7 @@ Set the maximum line count within the paragraph.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  max_lines        The maximum lines.
 */
-func ParagraphStyleSetMaxLines(paragraph_style ParagraphStyle, max_lines uint32) {
+func (paragraph_style ParagraphStyle) SetMaxLines(max_lines uint32) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetMaxLines,
 		funcImpellerParagraphStyleSetMaxLines,
@@ -3229,7 +3229,7 @@ Set the paragraph locale.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  locale           The locale.
 */
-func ParagraphStyleSetLocale(paragraph_style ParagraphStyle, locale string) {
+func (paragraph_style ParagraphStyle) SetLocale(locale string) {
 	c_locale := cString(locale)
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetLocale,
@@ -3252,7 +3252,7 @@ clear the setting to default.
 @param[in]  paragraph_style  The paragraph style.
 @param[in]  data             The ellipsis string UTF-8 data, or null.
 */
-func ParagraphStyleSetEllipsis(paragraph_style ParagraphStyle, ellipsis string) {
+func (paragraph_style ParagraphStyle) SetEllipsis(ellipsis string) {
 	c_ellipsis := cString(ellipsis)
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetEllipsis,
@@ -3275,7 +3275,7 @@ Create a new paragraph builder.
 
 @return     The paragraph builder.
 */
-func ParagraphBuilderNew(context TypographyContext) ParagraphBuilder {
+func (context TypographyContext) ParagraphBuilderNew() ParagraphBuilder {
 	var result ParagraphBuilder
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderNew,
@@ -3297,7 +3297,7 @@ in which case this method is a no-op.
 
 @param[in]  paragraph_builder  The paragraph builder.
 */
-func ParagraphBuilderRetain(paragraph_builder ParagraphBuilder) {
+func (paragraph_builder ParagraphBuilder) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderRetain,
 		funcImpellerParagraphBuilderRetain,
@@ -3317,7 +3317,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  paragraph_builder  The paragraph_builder.
 */
-func ParagraphBuilderRelease(paragraph_builder ParagraphBuilder) {
+func (paragraph_builder ParagraphBuilder) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderRelease,
 		funcImpellerParagraphBuilderRelease,
@@ -3350,7 +3350,7 @@ the addition of any text.
 @param[in]  paragraph_builder  The paragraph builder.
 @param[in]  style              The style.
 */
-func ParagraphBuilderPushStyle(paragraph_builder ParagraphBuilder, style ParagraphStyle) {
+func (paragraph_builder ParagraphBuilder) PushStyle(style ParagraphStyle) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderPushStyle,
 		funcImpellerParagraphBuilderPushStyle,
@@ -3371,7 +3371,7 @@ stack.
 
 @param[in]  paragraph_builder  The paragraph builder.
 */
-func ParagraphBuilderPopStyle(paragraph_builder ParagraphBuilder) {
+func (paragraph_builder ParagraphBuilder) PopStyle() {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderPopStyle,
 		funcImpellerParagraphBuilderPopStyle,
@@ -3394,7 +3394,7 @@ style stack.
 @param[in]  data               The data.
 @param[in]  length             The length.
 */
-func ParagraphBuilderAddText(paragraph_builder ParagraphBuilder, data string, length uint32) {
+func (paragraph_builder ParagraphBuilder) AddText(data string, length uint32) {
 	c_data := cString(data)
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderAddText,
@@ -3421,7 +3421,7 @@ discarded and a new one created to build more paragraphs.
 
 @return     The paragraph if one can be created, NULL otherwise.
 */
-func ParagraphBuilderBuildParagraphNew(paragraph_builder ParagraphBuilder, width float32) Paragraph {
+func (paragraph_builder ParagraphBuilder) BuildParagraphNew(width float32) Paragraph {
 	var result Paragraph
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderBuildParagraphNew,
@@ -3444,7 +3444,7 @@ in which case this method is a no-op.
 
 @param[in]  paragraph  The paragraph.
 */
-func ParagraphRetain(paragraph Paragraph) {
+func (paragraph Paragraph) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphRetain,
 		funcImpellerParagraphRetain,
@@ -3464,7 +3464,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  paragraph  The paragraph.
 */
-func ParagraphRelease(paragraph Paragraph) {
+func (paragraph Paragraph) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphRelease,
 		funcImpellerParagraphRelease,
@@ -3488,7 +3488,7 @@ layout. This is the maximum width any line in the laid out
 paragraph can occupy. But, it is not necessarily the actual
 width of the paragraph after layout.
 */
-func ParagraphGetMaxWidth(paragraph Paragraph) float32 {
+func (paragraph Paragraph) GetMaxWidth() float32 {
 	var result float32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetMaxWidth,
@@ -3511,7 +3511,7 @@ func ParagraphGetMaxWidth(paragraph Paragraph) float32 {
 bounding box and some glyphs may not reach the minimum location
 they are allowed to reach.
 */
-func ParagraphGetHeight(paragraph Paragraph) float32 {
+func (paragraph Paragraph) GetHeight() float32 {
 	var result float32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetHeight,
@@ -3535,7 +3535,7 @@ horizontal distance between the left edge of the leftmost glyph
 and the right edge of the rightmost glyph, in the longest line
 in the paragraph.
 */
-func ParagraphGetLongestLineWidth(paragraph Paragraph) float32 {
+func (paragraph Paragraph) GetLongestLineWidth() float32 {
 	var result float32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetLongestLineWidth,
@@ -3560,7 +3560,7 @@ func ParagraphGetLongestLineWidth(paragraph Paragraph) float32 {
 layout. This is expected to be less than or equal to
 `ImpellerParagraphGetMaxWidth`.
 */
-func ParagraphGetMinIntrinsicWidth(paragraph Paragraph) float32 {
+func (paragraph Paragraph) GetMinIntrinsicWidth() float32 {
 	var result float32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetMinIntrinsicWidth,
@@ -3581,7 +3581,7 @@ func ParagraphGetMinIntrinsicWidth(paragraph Paragraph) float32 {
 
 @return     The width of the paragraph without line breaking.
 */
-func ParagraphGetMaxIntrinsicWidth(paragraph Paragraph) float32 {
+func (paragraph Paragraph) GetMaxIntrinsicWidth() float32 {
 	var result float32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetMaxIntrinsicWidth,
@@ -3604,7 +3604,7 @@ func ParagraphGetMaxIntrinsicWidth(paragraph Paragraph) float32 {
 baseline of the first line when using ideographic fonts
 (Japanese, Korean, etc...).
 */
-func ParagraphGetIdeographicBaseline(paragraph Paragraph) float32 {
+func (paragraph Paragraph) GetIdeographicBaseline() float32 {
 	var result float32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetIdeographicBaseline,
@@ -3627,7 +3627,7 @@ func ParagraphGetIdeographicBaseline(paragraph Paragraph) float32 {
 baseline of the first line when using alphabetic fonts (A-Z,
 a-z, Greek, etc...).
 */
-func ParagraphGetAlphabeticBaseline(paragraph Paragraph) float32 {
+func (paragraph Paragraph) GetAlphabeticBaseline() float32 {
 	var result float32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetAlphabeticBaseline,
@@ -3649,7 +3649,7 @@ func ParagraphGetAlphabeticBaseline(paragraph Paragraph) float32 {
 @return     The number of lines visible in the paragraph after line
 breaking.
 */
-func ParagraphGetLineCount(paragraph Paragraph) uint32 {
+func (paragraph Paragraph) GetLineCount() uint32 {
 	var result uint32
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetLineCount,
@@ -3676,7 +3676,7 @@ Annex #29](http://www.unicode.org/reports/tr29/#Word_Boundaries)
 @param[in]  code_unit_index  The code unit index
 @param[out]  code_unit_index The range.
 */
-func ParagraphGetWordBoundary(paragraph Paragraph, code_unit_index uint64, out_range *Range) {
+func (paragraph Paragraph) GetWordBoundary(code_unit_index uint64, out_range *Range) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetWordBoundary,
 		funcImpellerParagraphGetWordBoundary,
@@ -3702,7 +3702,7 @@ is immutable).
 
 @return     The line metrics.
 */
-func ParagraphGetLineMetrics(paragraph Paragraph) LineMetrics {
+func (paragraph Paragraph) GetLineMetrics() LineMetrics {
 	var result LineMetrics
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetLineMetrics,
@@ -3728,7 +3728,7 @@ The instance must be freed using `ImpellerGlyphInfoRelease`.
 
 @return     The glyph information.
 */
-func ParagraphCreateGlyphInfoAtCodeUnitIndexNew(paragraph Paragraph, code_unit_index uint64) GlyphInfo {
+func (paragraph Paragraph) CreateGlyphInfoAtCodeUnitIndexNew(code_unit_index uint64) GlyphInfo {
 	var result GlyphInfo
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphCreateGlyphInfoAtCodeUnitIndexNew,
@@ -3757,7 +3757,7 @@ freed using `ImpellerGlyphInfoRelease`.
 
 @return     The glyph information.
 */
-func ParagraphCreateGlyphInfoAtParagraphCoordinatesNew(paragraph Paragraph, x float64, y float64) GlyphInfo {
+func (paragraph Paragraph) CreateGlyphInfoAtParagraphCoordinatesNew(x float64, y float64) GlyphInfo {
 	var result GlyphInfo
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew,
@@ -3781,7 +3781,7 @@ in which case this method is a no-op.
 
 @param[in]  line_metrics  The line metrics.
 */
-func LineMetricsRetain(line_metrics LineMetrics) {
+func (line_metrics LineMetrics) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsRetain,
 		funcImpellerLineMetricsRetain,
@@ -3801,7 +3801,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  line_metrics  The line metrics.
 */
-func LineMetricsRelease(line_metrics LineMetrics) {
+func (line_metrics LineMetrics) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsRelease,
 		funcImpellerLineMetricsRelease,
@@ -3824,7 +3824,7 @@ for this line ignoring the height from the text style.
 
 @return     The unscaled ascent.
 */
-func LineMetricsGetUnscaledAscent(metrics LineMetrics, line uint64) float64 {
+func (metrics LineMetrics) GetUnscaledAscent(line uint64) float64 {
 	var result float64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetUnscaledAscent,
@@ -3850,7 +3850,7 @@ for this line.
 
 @return     The ascent.
 */
-func LineMetricsGetAscent(metrics LineMetrics, line uint64) float64 {
+func (metrics LineMetrics) GetAscent(line uint64) float64 {
 	var result float64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetAscent,
@@ -3876,7 +3876,7 @@ for this line.
 
 @return     The descent.
 */
-func LineMetricsGetDescent(metrics LineMetrics, line uint64) float64 {
+func (metrics LineMetrics) GetDescent(line uint64) float64 {
 	var result float64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetDescent,
@@ -3902,7 +3902,7 @@ the paragraph.
 
 @return     The baseline.
 */
-func LineMetricsGetBaseline(metrics LineMetrics, line uint64) float64 {
+func (metrics LineMetrics) GetBaseline(line uint64) float64 {
 	var result float64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetBaseline,
@@ -3928,7 +3928,7 @@ Used to determine if this line ends with an explicit line break
 
 @return     True if the line is a hard break.
 */
-func LineMetricsIsHardbreak(metrics LineMetrics, line uint64) Bool {
+func (metrics LineMetrics) IsHardbreak(line uint64) Bool {
 	var result Bool
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsIsHardbreak,
@@ -3954,7 +3954,7 @@ the right edge of the rightmost glyph.
 
 @return     The width.
 */
-func LineMetricsGetWidth(metrics LineMetrics, line uint64) float64 {
+func (metrics LineMetrics) GetWidth(line uint64) float64 {
 	var result float64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetWidth,
@@ -3979,7 +3979,7 @@ Total height of the line from the top edge to the bottom edge.
 
 @return     The height.
 */
-func LineMetricsGetHeight(metrics LineMetrics, line uint64) float64 {
+func (metrics LineMetrics) GetHeight(line uint64) float64 {
 	var result float64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetHeight,
@@ -4004,7 +4004,7 @@ The x coordinate of left edge of the line.
 
 @return     The left edge coordinate.
 */
-func LineMetricsGetLeft(metrics LineMetrics, line uint64) float64 {
+func (metrics LineMetrics) GetLeft(line uint64) float64 {
 	var result float64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetLeft,
@@ -4030,7 +4030,7 @@ represent the paragraph line.
 
 @return     The UTF-16 code units start index.
 */
-func LineMetricsGetCodeUnitStartIndex(metrics LineMetrics, line uint64) uint64 {
+func (metrics LineMetrics) GetCodeUnitStartIndex(line uint64) uint64 {
 	var result uint64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetCodeUnitStartIndex,
@@ -4056,7 +4056,7 @@ represent the paragraph line.
 
 @return     The UTF-16 code units end index.
 */
-func LineMetricsGetCodeUnitEndIndex(metrics LineMetrics, line uint64) uint64 {
+func (metrics LineMetrics) GetCodeUnitEndIndex(line uint64) uint64 {
 	var result uint64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetCodeUnitEndIndex,
@@ -4082,7 +4082,7 @@ UTF-16 code units used to represent the paragraph line.
 
 @return     The UTF-16 code units end index excluding whitespace.
 */
-func LineMetricsGetCodeUnitEndIndexExcludingWhitespace(metrics LineMetrics, line uint64) uint64 {
+func (metrics LineMetrics) GetCodeUnitEndIndexExcludingWhitespace(line uint64) uint64 {
 	var result uint64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetCodeUnitEndIndexExcludingWhitespace,
@@ -4108,7 +4108,7 @@ code units used to represent the paragraph line.
 
 @return     The UTF-16 code units end index including newlines.
 */
-func LineMetricsGetCodeUnitEndIndexIncludingNewline(metrics LineMetrics, line uint64) uint64 {
+func (metrics LineMetrics) GetCodeUnitEndIndexIncludingNewline(line uint64) uint64 {
 	var result uint64
 	_, err := ffi.CallFunction(
 		cifImpellerLineMetricsGetCodeUnitEndIndexIncludingNewline,
@@ -4131,7 +4131,7 @@ in which case this method is a no-op.
 
 @param[in]  glyph_info  The glyph information.
 */
-func GlyphInfoRetain(glyph_info GlyphInfo) {
+func (glyph_info GlyphInfo) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoRetain,
 		funcImpellerGlyphInfoRetain,
@@ -4151,7 +4151,7 @@ object can be NULL in which case this method is a no-op.
 
 @param[in]  glyph_info  The glyph information.
 */
-func GlyphInfoRelease(glyph_info GlyphInfo) {
+func (glyph_info GlyphInfo) Release() {
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoRelease,
 		funcImpellerGlyphInfoRelease,
@@ -4173,7 +4173,7 @@ represent the grapheme cluster for a glyph.
 
 @return     The UTF-16 code units start index.
 */
-func GlyphInfoGetGraphemeClusterCodeUnitRangeBegin(glyph_info GlyphInfo) uint64 {
+func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeBegin() uint64 {
 	var result uint64
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoGetGraphemeClusterCodeUnitRangeBegin,
@@ -4197,7 +4197,7 @@ represent the grapheme cluster for a glyph.
 
 @return     The UTF-16 code units end index.
 */
-func GlyphInfoGetGraphemeClusterCodeUnitRangeEnd(glyph_info GlyphInfo) uint64 {
+func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeEnd() uint64 {
 	var result uint64
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoGetGraphemeClusterCodeUnitRangeEnd,
@@ -4220,7 +4220,7 @@ coordinate space of the paragraph.
 @param[in]  glyph_info  The glyph information.
 @param[out] out_bounds  The grapheme cluster bounds.
 */
-func GlyphInfoGetGraphemeClusterBounds(glyph_info GlyphInfo, out_bounds *Rect) {
+func (glyph_info GlyphInfo) GetGraphemeClusterBounds(out_bounds *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoGetGraphemeClusterBounds,
 		funcImpellerGlyphInfoGetGraphemeClusterBounds,
@@ -4240,7 +4240,7 @@ func GlyphInfoGetGraphemeClusterBounds(glyph_info GlyphInfo, out_bounds *Rect) {
 
 @return     True if the glyph represents an ellipsis. False otherwise.
 */
-func GlyphInfoIsEllipsis(glyph_info GlyphInfo) Bool {
+func (glyph_info GlyphInfo) IsEllipsis() Bool {
 	var result Bool
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoIsEllipsis,
@@ -4261,7 +4261,7 @@ func GlyphInfoIsEllipsis(glyph_info GlyphInfo) Bool {
 
 @return     The direction of the run that contains the glyph.
 */
-func GlyphInfoGetTextDirection(glyph_info GlyphInfo) TextDirection {
+func (glyph_info GlyphInfo) GetTextDirection() TextDirection {
 	var result TextDirection
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoGetTextDirection,

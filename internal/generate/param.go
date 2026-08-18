@@ -44,8 +44,8 @@ func (param param) supported() (bool, string) {
 	return false, fmt.Sprintf("param %s is %q", param.name, param.typ.typ.Spelling())
 }
 
-func (param param) goDecl(g *jen.Group) {
-	g.Id(param.name).Add(param.typ.goDecl())
+func (param param) goDecl() jen.Code {
+	return jen.Id(param.name).Add(param.typ.goDecl())
 }
 
 func (param param) cArgVar(g *jen.Group) {
@@ -96,7 +96,7 @@ func (params params) supported() (bool, string) {
 
 func (params params) goDecl(g *jen.Group) {
 	for _, param := range params {
-		param.goDecl(g)
+		g.Add(param.goDecl())
 	}
 }
 

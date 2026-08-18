@@ -1,6 +1,8 @@
 package generate
 
 import (
+	"strings"
+
 	"github.com/dave/jennifer/jen"
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -18,7 +20,7 @@ type function struct {
 
 func newFunction(gen *gen, cursor clang.Cursor) function {
 	cName := cursor.Spelling()
-	return function{
+	fn := function{
 		gen:        gen,
 		cursor:     cursor,
 		cName:      cName,
@@ -28,6 +30,12 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 		varName:    "func" + cName,
 		cifVarName: "cif" + cName,
 	}
+
+	if fn.method() {
+		fn.name = strings.TrimPrefix(fn.name, fn.params[0].struct_.name)
+	}
+
+	return fn
 }
 
 func (fn function) generate(file file) {
@@ -40,9 +48,20 @@ func (fn function) generate(file file) {
 
 	file.
 		Func().
+		Do(func(s *jen.Statement) { // receiver
+			if fn.method() {
+				s.Parens(jen.Add(fn.params[0].goDecl()))
+			}
+		}).
 		Id(fn.name).
-		ParamsFunc(fn.params.goDecl).
-		Add(fn.result.goDecl()).
+		ParamsFunc(func(g *jen.Group) {
+			if fn.method() {
+				fn.params[1:].goDecl(g)
+			} else {
+				fn.params.goDecl(g)
+			}
+		}).
+		Add(fn.result.goDecl()). // result type
 		BlockFunc(func(g *jen.Group) {
 			fn.result.resultVar(g)
 			fn.params.cArgVars(g)
@@ -70,6 +89,10 @@ func (fn function) generate(file file) {
 
 			fn.result.returnVar(g)
 		})
+}
+
+func (fn function) method() bool {
+	return len(fn.params) > 0 && fn.params[0].isStruct && fn.params[0].struct_.handle
 }
 
 func (fn function) supported() (bool, string) {

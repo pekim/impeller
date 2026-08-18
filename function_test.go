@@ -13,12 +13,12 @@ func TestGetVersion(t *testing.T) {
 
 func TestNoArgsConstructor(t *testing.T) {
 	assert.NoError(t, Init())
-	assert.NotNil(t, ParagraphStyleNew())
+	assert.NotNil(t, ParagraphStyleNew().handle)
 }
 
 func TestFloatArg(t *testing.T) {
 	assert.NoError(t, Init())
-	assert.NotNil(t, ImageFilterCreateDilateNew(5, 10))
+	assert.NotNil(t, ImageFilterCreateDilateNew(5, 10).handle)
 }
 
 func TestHandleArg(t *testing.T) {
@@ -26,5 +26,5 @@ func TestHandleArg(t *testing.T) {
 
 	paint := PaintNew()
 	assert.NotNil(t, paint)
-	PaintSetStrokeMiter(paint, 4)
+	Paint.SetStrokeMiter(paint, 4)
 }

@@ -21,7 +21,10 @@ worker threads, etc...
 The general guidance is to create as few contexts as possible (typically
 just one) and share them as much as possible.
 */
-type Context *struct{}
+type Context struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Display lists represent encoded rendering intent. These objects are
@@ -31,28 +34,40 @@ While it is perfectly fine to create new display lists per frame, there may
 be opportunities for optimization when display lists are reused multiple
 times.
 */
-type DisplayList *struct{}
+type DisplayList struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Display list builders allow for the incremental creation of display lists.
 
 Display list builders are context-agnostic.
 */
-type DisplayListBuilder *struct{}
+type DisplayListBuilder struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Paints control the behavior of draw calls encoded in a display list.
 
 Like display lists, paints are context-agnostic.
 */
-type Paint *struct{}
+type Paint struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Color filters are functions that take two colors and mix them to produce a
 single color. This color is then merged with the destination during
 blending.
 */
-type ColorFilter *struct{}
+type ColorFilter struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Color sources are functions that generate colors for each texture element
@@ -60,7 +75,10 @@ covered by a draw call. The colors for each element can be generated using a
 mathematical function (to produce gradients for example) or sampled from a
 texture.
 */
-type ColorSource *struct{}
+type ColorSource struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Image filters are functions that are applied regions of a texture to produce
@@ -68,13 +86,19 @@ a single color. Contrast this with color filters that operate independently
 on a per-pixel basis. The generated color is then merged with the
 destination during blending.
 */
-type ImageFilter *struct{}
+type ImageFilter struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Mask filters are functions that are applied over a shape after it has been
 drawn but before it has been blended into the final image.
 */
-type MaskFilter *struct{}
+type MaskFilter struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Typography contexts allow for the layout and rendering of text.
@@ -85,10 +109,16 @@ to create a single one of these during their lifetimes.
 Unlike graphics context, typograhy contexts are not thread-safe. These must
 be created, used, and collected on a single thread.
 */
-type TypographyContext *struct{}
+type TypographyContext struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 // An immutable, fully laid out paragraph.
-type Paragraph *struct{}
+type Paragraph struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Paragraph builders allow for the creation of fully laid out paragraphs
@@ -100,14 +130,20 @@ the text is added are used to layout and shape that subset of the paragraph.
 
 @see      `ImpellerParagraphStyle`
 */
-type ParagraphBuilder *struct{}
+type ParagraphBuilder struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Specified when building a paragraph, paragraph styles are managed in a stack
 with specify text properties to apply to text that is added to the paragraph
 builder.
 */
-type ParagraphStyle *struct{}
+type ParagraphStyle struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Describes the metrics of lines in a fully laid out paragraph.
@@ -116,10 +152,16 @@ Regardless of how the string of text is specified to the paragraph builder,
 offsets into buffers that are returned by line metrics are always assumed to
 be into buffers of UTF-16 code units.
 */
-type LineMetrics *struct{}
+type LineMetrics struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 // Describes the metrics of glyphs in a paragraph line.
-type GlyphInfo *struct{}
+type GlyphInfo struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 Represents a two-dimensional path that is immutable and graphics context
@@ -132,10 +174,16 @@ building blocks.
 Paths are created using path builder that allow for the configuration of the
 path segments, how they are filled, and/or stroked.
 */
-type Path *struct{}
+type Path struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 // Path builders allow for the incremental building up of paths.
-type PathBuilder *struct{}
+type PathBuilder struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 A surface represents a render target for Impeller to direct the rendering
@@ -147,7 +195,10 @@ these surfaces to present content.
 
 Creating surfaces is typically platform and client-rendering-API specific.
 */
-type Surface *struct{}
+type Surface struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 A reference to a texture whose data is resident on the GPU. These can be
@@ -161,7 +212,10 @@ should be created on background threads.
 (like OpenGL) may need extra configuration to be able to operate
 from multiple threads.
 */
-type Texture *struct{}
+type Texture struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 The primary form of WSI when using a Vulkan context, these swapchains use
@@ -173,7 +227,10 @@ application startup and re-used throughout the application lifecycle.
 Swapchains are resilient to the underlying surfaces being resized. The
 swapchain images will be re-created as necessary on-demand.
 */
-type VulkanSwapchain *struct{}
+type VulkanSwapchain struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 /*
 A fragment shader is a small program that is authored in GLSL and compiled
@@ -182,11 +239,13 @@ the user to configure how it is shaded.
 
 @see https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 */
-type FragmentProgram *struct{}
+type FragmentProgram struct {
+	_      structs.HostLayout
+	handle unsafe.Pointer
+}
 
 type Rect struct {
-	_ structs.HostLayout
-
+	_      structs.HostLayout
 	X      float32
 	Y      float32
 	Width  float32
@@ -195,28 +254,24 @@ type Rect struct {
 
 type Point struct {
 	_ structs.HostLayout
-
 	X float32
 	Y float32
 }
 
 type Size struct {
-	_ structs.HostLayout
-
+	_      structs.HostLayout
 	Width  float32
 	Height float32
 }
 
 type ISize struct {
-	_ structs.HostLayout
-
+	_      structs.HostLayout
 	Width  int64
 	Height int64
 }
 
 type Range struct {
-	_ structs.HostLayout
-
+	_     structs.HostLayout
 	Start uint64
 	End   uint64
 }
@@ -231,7 +286,6 @@ A 4x4 transformation matrix using column-major storage.
 */
 type Matrix struct {
 	_ structs.HostLayout
-
 	M [16]float32
 }
 
@@ -285,13 +339,11 @@ To apply a grayscale conversion filter:
 */
 type ColorMatrix struct {
 	_ structs.HostLayout
-
 	M [20]float32
 }
 
 type RoundingRadii struct {
-	_ structs.HostLayout
-
+	_           structs.HostLayout
 	TopLeft     Point
 	BottomLeft  Point
 	TopRight    Point
@@ -299,8 +351,7 @@ type RoundingRadii struct {
 }
 
 type Color struct {
-	_ structs.HostLayout
-
+	_          structs.HostLayout
 	Red        float32
 	Green      float32
 	Blue       float32
@@ -309,32 +360,28 @@ type Color struct {
 }
 
 type TextureDescriptor struct {
-	_ structs.HostLayout
-
+	_           structs.HostLayout
 	PixelFormat PixelFormat
 	Size        ISize
 	MipCount    uint32
 }
 
 type Mapping struct {
-	_ structs.HostLayout
-
+	_         structs.HostLayout
 	Data      unsafe.Pointer
 	Length    uint64
 	OnRelease Callback
 }
 
 type ContextVulkanSettings struct {
-	_ structs.HostLayout
-
+	_                      structs.HostLayout
 	UserData               unsafe.Pointer
 	ProcAddressCallback    VulkanProcAddressCallback
 	EnableVulkanValidation Bool
 }
 
 type ContextVulkanInfo struct {
-	_ structs.HostLayout
-
+	_                        structs.HostLayout
 	VkInstance               unsafe.Pointer
 	VkPhysicalDevice         unsafe.Pointer
 	VkLogicalDevice          unsafe.Pointer
@@ -344,7 +391,6 @@ type ContextVulkanInfo struct {
 
 type TextDecoration struct {
 	_ structs.HostLayout
-
 	// A mask of `ImpellerTextDecorationType`s to enable.
 	Types int32
 	// The decoration color.
