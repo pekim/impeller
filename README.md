@@ -25,6 +25,9 @@ No AI was used in the creation of this library.
 
 ### pre-commit hook
 
+There are configuration files for linting and other checks.
+To use a git pre-commit hook for the checks
+
 - install `goimports` if not already installed
   - https://pkg.go.dev/golang.org/x/tools/cmd/goimports
 - install `golangci-lint` (v2.x) if not already installed
