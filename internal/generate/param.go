@@ -6,16 +6,14 @@ import (
 )
 
 type param struct {
-	cursor clang.Cursor
-	name   string
+	name string
 	typ
 }
 
 func newParam(gen *gen, cursor clang.Cursor) param {
 	param := param{
-		cursor: cursor,
-		name:   cursor.Spelling(),
-		typ:    newTyp(gen, cursor.Type()),
+		name: cursor.Spelling(),
+		typ:  newTyp(gen, cursor.Type()),
 	}
 
 	return param
