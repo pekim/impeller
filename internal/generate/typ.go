@@ -74,14 +74,16 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 
 	typ.isPointer = typ.typ.Kind() == clang.Type_Pointer
 	if typ.isPointer {
-		possibleStructName := typ.typ.PointeeType().Spelling()
+		pointeeType := typ.typ.PointeeType()
+		pointeeKind := pointeeType.CanonicalType().Kind()
+
+		possibleStructName := pointeeType.Spelling()
 		possibleStructName = strings.TrimPrefix(possibleStructName, "const ")
+
 		typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(possibleStructName))
-
-		typ.scalar, typ.isScalar = scalars[clang.CursorKind(typ.typ.PointeeType().Kind())]
-
-		pointeeKind := typ.typ.PointeeType().CanonicalType().Kind()
+		typ.scalar, typ.isScalar = scalars[clang.CursorKind(pointeeKind)]
 		typ.isString = pointeeKind == clang.Type_Char_S || pointeeKind == clang.Type_UChar
+		typ.isVoid = pointeeKind == clang.Type_Void
 	}
 
 	return typ
@@ -89,6 +91,9 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 
 func (typ typ) goDecl() jen.Code {
 	if typ.isVoid {
+		if typ.isPointer {
+			return jen.Qual("unsafe", "Pointer")
+		}
 		return jen.Null()
 	}
 	if typ.isEnum {
@@ -114,6 +119,9 @@ func (typ typ) goDecl() jen.Code {
 }
 
 func (typ typ) typeDescriptor() jen.Code {
+	if typ.isPointer {
+		return pointerTypeDescriptor
+	}
 	if typ.isVoid {
 		return voidTypeDescriptor
 	}
@@ -124,9 +132,6 @@ func (typ typ) typeDescriptor() jen.Code {
 		return typ.scalar.typeDescriptor
 	}
 	if typ.isStruct && typ.struct_.handle {
-		return pointerTypeDescriptor
-	}
-	if typ.isPointer {
 		return pointerTypeDescriptor
 	}
 	if typ.isString {

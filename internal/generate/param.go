@@ -34,10 +34,13 @@ func (param param) supported() (bool, string) {
 	if param.isStruct && param.isPointer {
 		return true, ""
 	}
-
 	if param.isString {
 		return true, ""
 	}
+	if param.isPointer && param.isVoid {
+		return true, ""
+	}
+
 	return false, fmt.Sprintf("param %s is %q", param.name, param.typ.typ.Spelling())
 }
 
@@ -63,6 +66,9 @@ func (param param) cArgName() jen.Code {
 	}
 	if param.isString {
 		return jen.Id("c_" + param.name)
+	}
+	if param.isPointer && param.isVoid {
+		return jen.Id(param.name)
 	}
 
 	panic("param type")

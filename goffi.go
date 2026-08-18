@@ -27,6 +27,9 @@ var cifImpellerContextRelease = &types.CallInterface{}
 var funcImpellerContextGetVulkanInfo unsafe.Pointer
 var cifImpellerContextGetVulkanInfo = &types.CallInterface{}
 
+var funcImpellerVulkanSwapchainCreateNew unsafe.Pointer
+var cifImpellerVulkanSwapchainCreateNew = &types.CallInterface{}
+
 var funcImpellerVulkanSwapchainRetain unsafe.Pointer
 var cifImpellerVulkanSwapchainRetain = &types.CallInterface{}
 
@@ -38,6 +41,9 @@ var cifImpellerVulkanSwapchainAcquireNextSurfaceNew = &types.CallInterface{}
 
 var funcImpellerSurfaceCreateWrappedFBONew unsafe.Pointer
 var cifImpellerSurfaceCreateWrappedFBONew = &types.CallInterface{}
+
+var funcImpellerSurfaceCreateWrappedMetalDrawableNew unsafe.Pointer
+var cifImpellerSurfaceCreateWrappedMetalDrawableNew = &types.CallInterface{}
 
 var funcImpellerSurfaceRetain unsafe.Pointer
 var cifImpellerSurfaceRetain = &types.CallInterface{}
@@ -144,6 +150,9 @@ var cifImpellerPaintSetImageFilter = &types.CallInterface{}
 var funcImpellerPaintSetMaskFilter unsafe.Pointer
 var cifImpellerPaintSetMaskFilter = &types.CallInterface{}
 
+var funcImpellerTextureCreateWithContentsNew unsafe.Pointer
+var cifImpellerTextureCreateWithContentsNew = &types.CallInterface{}
+
 var funcImpellerTextureCreateWithOpenGLTextureHandleNew unsafe.Pointer
 var cifImpellerTextureCreateWithOpenGLTextureHandleNew = &types.CallInterface{}
 
@@ -155,6 +164,9 @@ var cifImpellerTextureRelease = &types.CallInterface{}
 
 var funcImpellerTextureGetOpenGLHandle unsafe.Pointer
 var cifImpellerTextureGetOpenGLHandle = &types.CallInterface{}
+
+var funcImpellerFragmentProgramNew unsafe.Pointer
+var cifImpellerFragmentProgramNew = &types.CallInterface{}
 
 var funcImpellerFragmentProgramRetain unsafe.Pointer
 var cifImpellerFragmentProgramRetain = &types.CallInterface{}
@@ -344,6 +356,9 @@ var cifImpellerTypographyContextRetain = &types.CallInterface{}
 
 var funcImpellerTypographyContextRelease unsafe.Pointer
 var cifImpellerTypographyContextRelease = &types.CallInterface{}
+
+var funcImpellerTypographyContextRegisterFont unsafe.Pointer
+var cifImpellerTypographyContextRegisterFont = &types.CallInterface{}
 
 var funcImpellerParagraphStyleNew unsafe.Pointer
 var cifImpellerParagraphStyleNew = &types.CallInterface{}
@@ -629,6 +644,22 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerVulkanSwapchainCreateNew, err = ffi.GetSymbol(handle, "ImpellerVulkanSwapchainCreateNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerVulkanSwapchainCreateNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerVulkanSwapchainRetain, err = ffi.GetSymbol(handle, "ImpellerVulkanSwapchainRetain")
 	if err != nil {
 		return err
@@ -686,6 +717,22 @@ func Init() error {
 			types.PointerTypeDescriptor,
 			types.UInt64TypeDescriptor,
 			types.SInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerSurfaceCreateWrappedMetalDrawableNew, err = ffi.GetSymbol(handle, "ImpellerSurfaceCreateWrappedMetalDrawableNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerSurfaceCreateWrappedMetalDrawableNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
 	if err != nil {
@@ -1242,6 +1289,24 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerTextureCreateWithContentsNew, err = ffi.GetSymbol(handle, "ImpellerTextureCreateWithContentsNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerTextureCreateWithContentsNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerTextureCreateWithOpenGLTextureHandleNew, err = ffi.GetSymbol(handle, "ImpellerTextureCreateWithOpenGLTextureHandleNew")
 	if err != nil {
 		return err
@@ -1298,6 +1363,22 @@ func Init() error {
 		types.DefaultCall,
 		types.UInt64TypeDescriptor,
 		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerFragmentProgramNew, err = ffi.GetSymbol(handle, "ImpellerFragmentProgramNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerFragmentProgramNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
 	if err != nil {
@@ -1377,7 +1458,7 @@ func Init() error {
 			types.PointerTypeDescriptor,
 			types.UInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
-			types.FloatTypeDescriptor,
+			types.PointerTypeDescriptor,
 			types.SInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
@@ -1398,7 +1479,7 @@ func Init() error {
 			types.FloatTypeDescriptor,
 			types.UInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
-			types.FloatTypeDescriptor,
+			types.PointerTypeDescriptor,
 			types.SInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
@@ -1421,7 +1502,7 @@ func Init() error {
 			types.FloatTypeDescriptor,
 			types.UInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
-			types.FloatTypeDescriptor,
+			types.PointerTypeDescriptor,
 			types.SInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
@@ -1443,7 +1524,7 @@ func Init() error {
 			types.FloatTypeDescriptor,
 			types.UInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
-			types.FloatTypeDescriptor,
+			types.PointerTypeDescriptor,
 			types.SInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
@@ -2352,6 +2433,24 @@ func Init() error {
 		types.DefaultCall,
 		types.VoidTypeDescriptor,
 		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerTypographyContextRegisterFont, err = ffi.GetSymbol(handle, "ImpellerTypographyContextRegisterFont")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerTypographyContextRegisterFont,
+		types.DefaultCall,
+		types.UInt8TypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
 	if err != nil {

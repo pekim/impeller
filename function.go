@@ -162,7 +162,35 @@ func ContextGetVulkanInfo(context Context, out_vulkan_info *ContextVulkanInfo) B
 	return result
 }
 
-// UNSUPPORTED VulkanSwapchainCreateNew : param vulkan_surface_khr is "void *"
+/*
+Create a new Vulkan swapchain using a VkSurfaceKHR instance.
+Ownership of the surface is transferred over to Impeller. The
+Vulkan instance the surface is created from must the same as the
+context provided.
+
+@param[in]  context             The context. Must be a Vulkan context whose
+instance is the same used to create the
+surface passed into the next argument.
+@param      vulkan_surface_khr  The vulkan surface.
+
+@return     The vulkan swapchain.
+*/
+func VulkanSwapchainCreateNew(context Context, vulkan_surface_khr unsafe.Pointer) VulkanSwapchain {
+	var result VulkanSwapchain
+	_, err := ffi.CallFunction(
+		cifImpellerVulkanSwapchainCreateNew,
+		funcImpellerVulkanSwapchainCreateNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+			unsafe.Pointer(&vulkan_surface_khr),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -263,7 +291,37 @@ func SurfaceCreateWrappedFBONew(context Context, fbo uint64, format PixelFormat,
 	return result
 }
 
-// UNSUPPORTED SurfaceCreateWrappedMetalDrawableNew : param metal_drawable is "void *"
+/*
+Create a surface by wrapping a Metal drawable. This is useful
+during WSI when the drawable is the backing store of the Metal
+layer being drawn to.
+
+The Metal layer must be using the same device managed by the
+underlying context.
+
+@param[in]  context         The context. The Metal device managed by this
+context must be the same used to create the
+drawable that is being wrapped.
+@param      metal_drawable  The drawable to wrap as a surface.
+
+@return     The surface if one could be wrapped, NULL otherwise.
+*/
+func SurfaceCreateWrappedMetalDrawableNew(context Context, metal_drawable unsafe.Pointer) Surface {
+	var result Surface
+	_, err := ffi.CallFunction(
+		cifImpellerSurfaceCreateWrappedMetalDrawableNew,
+		funcImpellerSurfaceCreateWrappedMetalDrawableNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+			unsafe.Pointer(&metal_drawable),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -1051,7 +1109,57 @@ func PaintSetMaskFilter(paint Paint, mask_filter MaskFilter) {
 	}
 }
 
-// UNSUPPORTED TextureCreateWithContentsNew : param contents_on_release_user_data is "void *"
+/*
+Create a texture with decompressed bytes.
+
+Impeller will do its best to perform the transfer of this data
+to GPU memory with a minimal number of copies. Towards this
+end, it may need to send this data to a different thread for
+preparation and transfer. To facilitate this transfer, it is
+recommended that the content mapping have a release callback
+attach to it. When there is a release callback, Impeller assumes
+that collection of the data can be deferred till texture upload
+is done and can happen on a background thread. When there is no
+release callback, Impeller may try to perform an eager copy of
+the data if it needs to perform data preparation and transfer on
+a background thread.
+
+Whether an extra data copy actually occurs will always depend on
+the rendering backend in use. But it is best practice to provide
+a release callback and be resilient to the data being released
+in a deferred manner on a background thread.
+
+@warning    Do **not** supply compressed image data directly (PNG, JPEG,
+etc...). This function only works with tightly packed
+decompressed data.
+
+@param[in]  context                        The context.
+@param[in]  descriptor                     The texture descriptor.
+@param[in]  contents                       The contents.
+@param[in]  contents_on_release_user_data  The baton passes to the contents
+release callback if one exists.
+
+@return     The texture if one can be created using the provided data, NULL
+otherwise.
+*/
+func TextureCreateWithContentsNew(context Context, descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data unsafe.Pointer) Texture {
+	var result Texture
+	_, err := ffi.CallFunction(
+		cifImpellerTextureCreateWithContentsNew,
+		funcImpellerTextureCreateWithContentsNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+			unsafe.Pointer(&descriptor),
+			unsafe.Pointer(&contents),
+			unsafe.Pointer(&contents_on_release_user_data),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Create a texture with an externally created OpenGL texture
@@ -1164,7 +1272,38 @@ func TextureGetOpenGLHandle(texture Texture) uint64 {
 	return result
 }
 
-// UNSUPPORTED FragmentProgramNew : param data_release_user_data is "void *"
+/*
+Create a new fragment program using data obtained by compiling a
+GLSL shader with `impellerc`.
+
+@warning    The data provided must be compiled by `impellerc`. Providing raw
+GLSL strings will lead to a `nullptr` return. Impeller does not
+compile shaders at runtime.
+
+@param[in]  data                    The data compiled by `impellerc`.
+@param      data_release_user_data  A baton passed back to the caller on the
+invocation of the mappings release
+callback. This call can happen on any
+thread.
+
+@return     The fragment program if one can be created, nullptr otherwise.
+*/
+func FragmentProgramNew(data *Mapping, data_release_user_data unsafe.Pointer) FragmentProgram {
+	var result FragmentProgram
+	_, err := ffi.CallFunction(
+		cifImpellerFragmentProgramNew,
+		funcImpellerFragmentProgramNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&data),
+			unsafe.Pointer(&data_release_user_data),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -2726,7 +2865,65 @@ func TypographyContextRelease(context TypographyContext) {
 	}
 }
 
-// UNSUPPORTED TypographyContextRegisterFont : param contents_on_release_user_data is "void *"
+/*
+Register a custom font.
+
+The following font formats are supported:
+* OpenType font collections (.ttc extension)
+* TrueType fonts: (.ttf extension)
+* OpenType fonts: (.otf extension)
+
+@warning    Web Open Font Formats (.woff and .woff2 extensions) are **not**
+supported.
+
+The font data is specified as a mapping. It is possible for the
+release callback of the mapping to not be called even past the
+destruction of the typography context. Care must be taken to not
+collect the mapping till the release callback is invoked by
+Impeller.
+
+The family alias name can be NULL. In such cases, the font
+family specified in paragraph styles must match the family that
+is specified in the font data.
+
+If the family name alias is not NULL, that family name must be
+used in the paragraph style to reference glyphs from this font
+instead of the one encoded in the font itself.
+
+Multiple fonts (with glyphs for different styles) can be
+specified with the same family.
+
+@see        `ImpellerParagraphStyleSetFontFamily`
+
+@param[in]  context                        The context.
+@param[in]  contents                       The contents.
+@param[in]  contents_on_release_user_data  The user data baton to be passed
+to the contents release callback.
+@param[in]  family_name_alias              The family name alias or NULL if
+the one specified in the font
+data is to be used.
+
+@return     If the font could be successfully registered.
+*/
+func TypographyContextRegisterFont(context TypographyContext, contents *Mapping, contents_on_release_user_data unsafe.Pointer, family_name_alias string) Bool {
+	var result Bool
+	c_family_name_alias := cString(family_name_alias)
+	_, err := ffi.CallFunction(
+		cifImpellerTypographyContextRegisterFont,
+		funcImpellerTypographyContextRegisterFont,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+			unsafe.Pointer(&contents),
+			unsafe.Pointer(&contents_on_release_user_data),
+			unsafe.Pointer(&c_family_name_alias),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Create a new paragraph style.
