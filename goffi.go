@@ -369,6 +369,9 @@ var cifImpellerGlyphInfoGetGraphemeClusterCodeUnitRangeEnd = &types.CallInterfac
 var funcImpellerGlyphInfoIsEllipsis unsafe.Pointer
 var cifImpellerGlyphInfoIsEllipsis = &types.CallInterface{}
 
+var funcImpellerGlyphInfoGetTextDirection unsafe.Pointer
+var cifImpellerGlyphInfoGetTextDirection = &types.CallInterface{}
+
 var initialised = false
 
 func Init() error {
@@ -2230,6 +2233,21 @@ func Init() error {
 		cifImpellerGlyphInfoIsEllipsis,
 		types.DefaultCall,
 		types.UInt8TypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerGlyphInfoGetTextDirection, err = ffi.GetSymbol(handle, "ImpellerGlyphInfoGetTextDirection")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerGlyphInfoGetTextDirection,
+		types.DefaultCall,
+		types.SInt32TypeDescriptor,
 		[]*types.TypeDescriptor{
 			types.PointerTypeDescriptor,
 		})

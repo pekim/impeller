@@ -21,6 +21,9 @@ func (result result) supported() (bool, string) {
 	if result.isVoid {
 		return true, ""
 	}
+	if result.isEnum {
+		return true, ""
+	}
 	if result.isScalar {
 		return true, ""
 	}

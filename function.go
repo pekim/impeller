@@ -2831,4 +2831,23 @@ func GlyphInfoIsEllipsis(glyph_info GlyphInfo) Bool {
 	return result
 }
 
-// UNSUPPORTED GlyphInfoGetTextDirection : result type is "ImpellerTextDirection"
+/*
+@param[in]  glyph_info  The glyph information.
+
+@return     The direction of the run that contains the glyph.
+*/
+func GlyphInfoGetTextDirection(glyph_info GlyphInfo) TextDirection {
+	var result TextDirection
+	_, err := ffi.CallFunction(
+		cifImpellerGlyphInfoGetTextDirection,
+		funcImpellerGlyphInfoGetTextDirection,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&glyph_info),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
