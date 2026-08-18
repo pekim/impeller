@@ -22,6 +22,9 @@ func newParam(gen *gen, cursor clang.Cursor) param {
 }
 
 func (param param) supported() (bool, string) {
+	if param.isCallback {
+		return true, ""
+	}
 	if param.isEnum {
 		return true, ""
 	}
@@ -55,6 +58,9 @@ func (param param) cArgVar(g *jen.Group) {
 }
 
 func (param param) cArgName() jen.Code {
+	if param.isCallback {
+		return jen.Id(param.name)
+	}
 	if param.isEnum {
 		return jen.Id(param.name)
 	}

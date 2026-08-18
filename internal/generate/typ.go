@@ -50,16 +50,18 @@ var scalars = map[clang.CursorKind]scalar{
 }
 
 type typ struct {
-	typ       clang.Type
-	enum      *enum
-	isEnum    bool
-	isPointer bool
-	isScalar  bool
-	isString  bool
-	isStruct  bool
-	isVoid    bool
-	scalar    scalar
-	struct_   *struct_
+	typ        clang.Type
+	callback   string
+	enum       *enum
+	isCallback bool
+	isEnum     bool
+	isPointer  bool
+	isScalar   bool
+	isString   bool
+	isStruct   bool
+	isVoid     bool
+	scalar     scalar
+	struct_    *struct_
 }
 
 func newTyp(gen *gen, typ_ clang.Type) typ {
@@ -71,6 +73,11 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 	typ.scalar, typ.isScalar = scalars[clang.CursorKind(typ.typ.CanonicalType().Kind())]
 	typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(typ.typ.Spelling()))
 	typ.isVoid = typ.typ.CanonicalType().Kind() == clang.Type_Void
+
+	if strings.HasSuffix(typ.typ.Spelling(), "Callback") {
+		typ.isCallback = true
+		typ.callback = goName(typ.typ.Spelling())
+	}
 
 	typ.isPointer = typ.typ.Kind() == clang.Type_Pointer
 	if typ.isPointer {
@@ -96,6 +103,9 @@ func (typ typ) goDecl() jen.Code {
 		}
 		return jen.Null()
 	}
+	if typ.isCallback {
+		return jen.Id(typ.callback)
+	}
 	if typ.isEnum {
 		return jen.Id(typ.enum.name)
 	}
@@ -119,6 +129,9 @@ func (typ typ) goDecl() jen.Code {
 }
 
 func (typ typ) typeDescriptor() jen.Code {
+	if typ.isCallback {
+		return pointerTypeDescriptor
+	}
 	if typ.isPointer {
 		return pointerTypeDescriptor
 	}

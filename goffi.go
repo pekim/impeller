@@ -12,6 +12,9 @@ import (
 var funcImpellerGetVersion unsafe.Pointer
 var cifImpellerGetVersion = &types.CallInterface{}
 
+var funcImpellerContextCreateOpenGLESNew unsafe.Pointer
+var cifImpellerContextCreateOpenGLESNew = &types.CallInterface{}
+
 var funcImpellerContextCreateMetalNew unsafe.Pointer
 var cifImpellerContextCreateMetalNew = &types.CallInterface{}
 
@@ -563,6 +566,23 @@ func Init() error {
 		types.DefaultCall,
 		types.UInt32TypeDescriptor,
 		[]*types.TypeDescriptor{})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerContextCreateOpenGLESNew, err = ffi.GetSymbol(handle, "ImpellerContextCreateOpenGLESNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerContextCreateOpenGLESNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.UInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
 	if err != nil {
 		return err
 	}

@@ -1,9 +1,5 @@
 package impeller
 
-import (
-	"unsafe"
-)
-
 type cint int32
 type enum cint
 
@@ -20,6 +16,3 @@ func (bool *Bool) Set(value bool) {
 		*bool = 0
 	}
 }
-
-type Callback unsafe.Pointer                  // TODO
-type VulkanProcAddressCallback unsafe.Pointer // TODO

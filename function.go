@@ -41,7 +41,50 @@ func GetVersion() uint32 {
 	return result
 }
 
-// UNSUPPORTED ContextCreateOpenGLESNew : param gl_proc_address_callback is "ImpellerProcAddressCallback"
+/*
+Create an OpenGL(ES) Impeller context.
+
+@warning    Unlike other context types, the OpenGL ES context can only be
+created, used, and collected on the calling thread. This
+restriction may be lifted in the future once reactor workers are
+exposed in the API. No other context types have threading
+restrictions. Till reactor workers can be used, using the
+context on a background thread will cause a stall of OpenGL
+operations.
+
+@param[in]  version      The version of the Impeller
+standalone API. See `ImpellerGetVersion`. If the
+specified here is not compatible with the version
+of the library, context creation will fail and NULL
+context returned from this call.
+@param[in]  gl_proc_address_callback
+The gl proc address callback. For instance,
+`eglGetProcAddress`.
+@param[in]  gl_proc_address_callback_user_data
+The gl proc address callback user data baton. This
+pointer is not interpreted by Impeller and will be
+returned as user data in the proc address callback.
+user data.
+
+@return     The context or NULL if one cannot be created.
+*/
+func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddressCallback, gl_proc_address_callback_user_data unsafe.Pointer) Context {
+	var result Context
+	_, err := ffi.CallFunction(
+		cifImpellerContextCreateOpenGLESNew,
+		funcImpellerContextCreateOpenGLESNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&version),
+			unsafe.Pointer(&gl_proc_address_callback),
+			unsafe.Pointer(&gl_proc_address_callback_user_data),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Create a Metal context using the system default Metal device.
