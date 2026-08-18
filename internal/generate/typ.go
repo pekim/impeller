@@ -1,6 +1,8 @@
 package generate
 
 import (
+	"strings"
+
 	"github.com/dave/jennifer/jen"
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -48,14 +50,15 @@ var scalars = map[clang.CursorKind]scalar{
 }
 
 type typ struct {
-	typ      clang.Type
-	isEnum   bool
-	enum     *enum
-	isScalar bool
-	scalar   scalar
-	isStruct bool
-	struct_  *struct_
-	isVoid   bool
+	typ       clang.Type
+	isEnum    bool
+	enum      *enum
+	isScalar  bool
+	scalar    scalar
+	isStruct  bool
+	struct_   *struct_
+	isPointer bool
+	isVoid    bool
 }
 
 func newTyp(gen *gen, typ_ clang.Type) typ {
@@ -67,6 +70,13 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 	typ.scalar, typ.isScalar = scalars[clang.CursorKind(typ.typ.CanonicalType().Kind())]
 	typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(typ.typ.Spelling()))
 	typ.isVoid = typ.typ.CanonicalType().Kind() == clang.Type_Void
+
+	typ.isPointer = typ.typ.Kind() == clang.Type_Pointer
+	if typ.isPointer {
+		possibleStructName := typ.typ.PointeeType().Spelling()
+		possibleStructName = strings.TrimPrefix(possibleStructName, "const ")
+		typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(possibleStructName))
+	}
 
 	return typ
 }
@@ -88,7 +98,7 @@ func (typ typ) goDecl() jen.Code {
 	panic("unhandled type")
 }
 
-func (typ typ) goffiVar(g *jen.Group) {
+func (typ typ) resultVar(g *jen.Group) {
 	if typ.isVoid {
 		return
 
@@ -117,6 +127,9 @@ func (typ typ) typeDescriptor() jen.Code {
 		return typ.scalar.typeDescriptor
 	}
 	if typ.isStruct && typ.struct_.handle {
+		return pointerTypeDescriptor
+	}
+	if typ.isStruct && typ.isPointer {
 		return pointerTypeDescriptor
 	}
 

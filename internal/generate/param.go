@@ -31,6 +31,9 @@ func (param param) supported() (bool, string) {
 	if param.isStruct && param.struct_.handle {
 		return true, ""
 	}
+	if param.isStruct && param.isPointer {
+		return true, ""
+	}
 
 	return false, fmt.Sprintf("param %s is %q", param.name, param.typ.typ.Spelling())
 }
@@ -39,15 +42,18 @@ func (param param) goDecl(g *jen.Group) {
 	g.Id(param.name).Add(param.typ.goDecl())
 }
 
-func (param param) cArgName() jen.Code {
+func (param param) cArg() jen.Code {
 	if param.isEnum {
-		return jen.Id(param.name)
+		return jen.Op("&").Id(param.name)
 	}
 	if param.isScalar {
-		return jen.Id(param.name)
+		return jen.Op("&").Id(param.name)
 	}
 	if param.isStruct {
-		return jen.Id(param.name)
+		if param.isPointer {
+			return jen.New(jen.Op("&").Id(param.name))
+		}
+		return jen.Op("&").Id(param.name)
 	}
 
 	panic("param type")
