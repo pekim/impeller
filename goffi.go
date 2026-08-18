@@ -309,14 +309,38 @@ var cifImpellerParagraphGetLineMetrics = &types.CallInterface{}
 var funcImpellerParagraphCreateGlyphInfoAtCodeUnitIndexNew unsafe.Pointer
 var cifImpellerParagraphCreateGlyphInfoAtCodeUnitIndexNew = &types.CallInterface{}
 
+var funcImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew unsafe.Pointer
+var cifImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew = &types.CallInterface{}
+
 var funcImpellerLineMetricsRetain unsafe.Pointer
 var cifImpellerLineMetricsRetain = &types.CallInterface{}
 
 var funcImpellerLineMetricsRelease unsafe.Pointer
 var cifImpellerLineMetricsRelease = &types.CallInterface{}
 
+var funcImpellerLineMetricsGetUnscaledAscent unsafe.Pointer
+var cifImpellerLineMetricsGetUnscaledAscent = &types.CallInterface{}
+
+var funcImpellerLineMetricsGetAscent unsafe.Pointer
+var cifImpellerLineMetricsGetAscent = &types.CallInterface{}
+
+var funcImpellerLineMetricsGetDescent unsafe.Pointer
+var cifImpellerLineMetricsGetDescent = &types.CallInterface{}
+
+var funcImpellerLineMetricsGetBaseline unsafe.Pointer
+var cifImpellerLineMetricsGetBaseline = &types.CallInterface{}
+
 var funcImpellerLineMetricsIsHardbreak unsafe.Pointer
 var cifImpellerLineMetricsIsHardbreak = &types.CallInterface{}
+
+var funcImpellerLineMetricsGetWidth unsafe.Pointer
+var cifImpellerLineMetricsGetWidth = &types.CallInterface{}
+
+var funcImpellerLineMetricsGetHeight unsafe.Pointer
+var cifImpellerLineMetricsGetHeight = &types.CallInterface{}
+
+var funcImpellerLineMetricsGetLeft unsafe.Pointer
+var cifImpellerLineMetricsGetLeft = &types.CallInterface{}
 
 var funcImpellerLineMetricsGetCodeUnitStartIndex unsafe.Pointer
 var cifImpellerLineMetricsGetCodeUnitStartIndex = &types.CallInterface{}
@@ -1899,6 +1923,23 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew, err = ffi.GetSymbol(handle, "ImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.DoubleTypeDescriptor,
+			types.DoubleTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerLineMetricsRetain, err = ffi.GetSymbol(handle, "ImpellerLineMetricsRetain")
 	if err != nil {
 		return err
@@ -1929,6 +1970,70 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerLineMetricsGetUnscaledAscent, err = ffi.GetSymbol(handle, "ImpellerLineMetricsGetUnscaledAscent")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerLineMetricsGetUnscaledAscent,
+		types.DefaultCall,
+		types.DoubleTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerLineMetricsGetAscent, err = ffi.GetSymbol(handle, "ImpellerLineMetricsGetAscent")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerLineMetricsGetAscent,
+		types.DefaultCall,
+		types.DoubleTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerLineMetricsGetDescent, err = ffi.GetSymbol(handle, "ImpellerLineMetricsGetDescent")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerLineMetricsGetDescent,
+		types.DefaultCall,
+		types.DoubleTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerLineMetricsGetBaseline, err = ffi.GetSymbol(handle, "ImpellerLineMetricsGetBaseline")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerLineMetricsGetBaseline,
+		types.DefaultCall,
+		types.DoubleTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerLineMetricsIsHardbreak, err = ffi.GetSymbol(handle, "ImpellerLineMetricsIsHardbreak")
 	if err != nil {
 		return err
@@ -1937,6 +2042,54 @@ func Init() error {
 		cifImpellerLineMetricsIsHardbreak,
 		types.DefaultCall,
 		types.UInt8TypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerLineMetricsGetWidth, err = ffi.GetSymbol(handle, "ImpellerLineMetricsGetWidth")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerLineMetricsGetWidth,
+		types.DefaultCall,
+		types.DoubleTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerLineMetricsGetHeight, err = ffi.GetSymbol(handle, "ImpellerLineMetricsGetHeight")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerLineMetricsGetHeight,
+		types.DefaultCall,
+		types.DoubleTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerLineMetricsGetLeft, err = ffi.GetSymbol(handle, "ImpellerLineMetricsGetLeft")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerLineMetricsGetLeft,
+		types.DefaultCall,
+		types.DoubleTypeDescriptor,
 		[]*types.TypeDescriptor{
 			types.PointerTypeDescriptor,
 			types.UInt64TypeDescriptor,

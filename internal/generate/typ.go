@@ -21,6 +21,11 @@ var scalars = map[clang.CursorKind]scalar{
 		typeDescriptor: jen.Qual(typesImportPath, "FloatTypeDescriptor"),
 	},
 
+	clang.Type_Double: {
+		goType:         jen.Float64(),
+		typeDescriptor: jen.Qual(typesImportPath, "DoubleTypeDescriptor"),
+	},
+
 	clang.Type_Int: {
 		goType:         jen.Int32(),
 		typeDescriptor: jen.Qual(typesImportPath, "SInt32TypeDescriptor"),

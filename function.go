@@ -2340,7 +2340,35 @@ func ParagraphCreateGlyphInfoAtCodeUnitIndexNew(paragraph Paragraph, code_unit_i
 	return result
 }
 
-// UNSUPPORTED ParagraphCreateGlyphInfoAtParagraphCoordinatesNew : param x is "double"
+/*
+Create a new instance of glyph info that can be queried for
+information about the glyph closest to the specified coordinates
+relative to the origin of the paragraph. The instance must be
+freed using `ImpellerGlyphInfoRelease`.
+
+@param[in]  paragraph  The paragraph.
+@param[in]  x          The x coordinate relative to paragraph origin.
+@param[in]  y          The x coordinate relative to paragraph origin.
+
+@return     The glyph information.
+*/
+func ParagraphCreateGlyphInfoAtParagraphCoordinatesNew(paragraph Paragraph, x float64, y float64) GlyphInfo {
+	var result GlyphInfo
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew,
+		funcImpellerParagraphCreateGlyphInfoAtParagraphCoordinatesNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph),
+			unsafe.Pointer(&x),
+			unsafe.Pointer(&y),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -2382,13 +2410,109 @@ func LineMetricsRelease(line_metrics LineMetrics) {
 	}
 }
 
-// UNSUPPORTED LineMetricsGetUnscaledAscent : result type is "double"
+/*
+The rise from the baseline as calculated from the font and style
+for this line ignoring the height from the text style.
 
-// UNSUPPORTED LineMetricsGetAscent : result type is "double"
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
 
-// UNSUPPORTED LineMetricsGetDescent : result type is "double"
+@return     The unscaled ascent.
+*/
+func LineMetricsGetUnscaledAscent(metrics LineMetrics, line uint64) float64 {
+	var result float64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetUnscaledAscent,
+		funcImpellerLineMetricsGetUnscaledAscent,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
-// UNSUPPORTED LineMetricsGetBaseline : result type is "double"
+/*
+The rise from the baseline as calculated from the font and style
+for this line.
+
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     The ascent.
+*/
+func LineMetricsGetAscent(metrics LineMetrics, line uint64) float64 {
+	var result float64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetAscent,
+		funcImpellerLineMetricsGetAscent,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+The drop from the baseline as calculated from the font and style
+for this line.
+
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     The descent.
+*/
+func LineMetricsGetDescent(metrics LineMetrics, line uint64) float64 {
+	var result float64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetDescent,
+		funcImpellerLineMetricsGetDescent,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+The y coordinate of the baseline for this line from the top of
+the paragraph.
+
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     The baseline.
+*/
+func LineMetricsGetBaseline(metrics LineMetrics, line uint64) float64 {
+	var result float64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetBaseline,
+		funcImpellerLineMetricsGetBaseline,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Used to determine if this line ends with an explicit line break
@@ -2416,11 +2540,81 @@ func LineMetricsIsHardbreak(metrics LineMetrics, line uint64) Bool {
 	return result
 }
 
-// UNSUPPORTED LineMetricsGetWidth : result type is "double"
+/*
+Width of the line from the left edge of the leftmost glyph to
+the right edge of the rightmost glyph.
 
-// UNSUPPORTED LineMetricsGetHeight : result type is "double"
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
 
-// UNSUPPORTED LineMetricsGetLeft : result type is "double"
+@return     The width.
+*/
+func LineMetricsGetWidth(metrics LineMetrics, line uint64) float64 {
+	var result float64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetWidth,
+		funcImpellerLineMetricsGetWidth,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Total height of the line from the top edge to the bottom edge.
+
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     The height.
+*/
+func LineMetricsGetHeight(metrics LineMetrics, line uint64) float64 {
+	var result float64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetHeight,
+		funcImpellerLineMetricsGetHeight,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+The x coordinate of left edge of the line.
+
+@param[in]  metrics  The metrics.
+@param[in]  line     The line index (zero based).
+
+@return     The left edge coordinate.
+*/
+func LineMetricsGetLeft(metrics LineMetrics, line uint64) float64 {
+	var result float64
+	_, err := ffi.CallFunction(
+		cifImpellerLineMetricsGetLeft,
+		funcImpellerLineMetricsGetLeft,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&metrics),
+			unsafe.Pointer(&line),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Fetch the start index in the buffer of UTF-16 code units used to
