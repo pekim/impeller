@@ -106,24 +106,6 @@ func (typ typ) goDecl() jen.Code {
 	panic("unhandled type")
 }
 
-func (typ typ) resultVar(g *jen.Group) {
-	if typ.isVoid {
-		return
-
-	} else if typ.isEnum {
-		g.Var().Id("result").Id(typ.enum.name)
-
-	} else if typ.isScalar {
-		g.Var().Id("result").Add(typ.scalar.goType)
-
-	} else if typ.isStruct {
-		g.Var().Id("result").Id(typ.struct_.name)
-
-	} else {
-		panic("unhandled type")
-	}
-}
-
 func (typ typ) typeDescriptor() jen.Code {
 	if typ.isVoid {
 		return voidTypeDescriptor
