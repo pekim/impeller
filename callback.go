@@ -34,12 +34,12 @@ func NewCallback(cb func(user_data unsafe.Pointer)) Callback {
 func NewProcAddressCallback(cb func(
 	procName string,
 	user_data unsafe.Pointer,
-)) ProcAddressCallback {
+) unsafe.Pointer) ProcAddressCallback {
 	return ProcAddressCallback(ffi.NewCallback(func(
 		proc_name *byte,
 		user_data unsafe.Pointer,
-	) {
-		cb(
+	) unsafe.Pointer {
+		return cb(
 			goString(proc_name),
 			user_data,
 		)
