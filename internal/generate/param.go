@@ -42,18 +42,15 @@ func (param param) goDecl(g *jen.Group) {
 	g.Id(param.name).Add(param.typ.goDecl())
 }
 
-func (param param) cArg() jen.Code {
+func (param param) cArgName() jen.Code {
 	if param.isEnum {
-		return jen.Op("&").Id(param.name)
+		return jen.Id(param.name)
 	}
 	if param.isScalar {
-		return jen.Op("&").Id(param.name)
+		return jen.Id(param.name)
 	}
 	if param.isStruct {
-		if param.isPointer {
-			return jen.New(jen.Op("&").Id(param.name))
-		}
-		return jen.Op("&").Id(param.name)
+		return jen.Id(param.name)
 	}
 
 	panic("param type")

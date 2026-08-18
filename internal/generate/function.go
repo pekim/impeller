@@ -56,7 +56,7 @@ func (fn function) generate(file file) {
 					g.Line().Qual("unsafe", "Pointer").Parens(fn.result.returnValuePointer())
 					g.Line().Index().Qual("unsafe", "Pointer").ValuesFunc(func(g *jen.Group) {
 						for _, param := range fn.params {
-							g.Line().Qual("unsafe", "Pointer").Parens(param.cArg())
+							g.Line().Qual("unsafe", "Pointer").Parens(jen.Op("&").Add(param.cArgName()))
 						}
 						g.Line()
 					})

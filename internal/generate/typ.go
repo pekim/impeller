@@ -76,6 +76,8 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 		possibleStructName := typ.typ.PointeeType().Spelling()
 		possibleStructName = strings.TrimPrefix(possibleStructName, "const ")
 		typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(possibleStructName))
+
+		typ.scalar, typ.isScalar = scalars[clang.CursorKind(typ.typ.PointeeType().Kind())]
 	}
 
 	return typ
@@ -89,9 +91,15 @@ func (typ typ) goDecl() jen.Code {
 		return jen.Id(typ.enum.name)
 	}
 	if typ.isScalar {
+		if typ.isPointer {
+			return jen.Op("*").Add(typ.scalar.goType)
+		}
 		return typ.scalar.goType
 	}
 	if typ.isStruct {
+		if typ.isPointer {
+			return jen.Op("*").Id(typ.struct_.name)
+		}
 		return jen.Id(typ.struct_.name)
 	}
 
@@ -129,7 +137,7 @@ func (typ typ) typeDescriptor() jen.Code {
 	if typ.isStruct && typ.struct_.handle {
 		return pointerTypeDescriptor
 	}
-	if typ.isStruct && typ.isPointer {
+	if typ.isPointer {
 		return pointerTypeDescriptor
 	}
 

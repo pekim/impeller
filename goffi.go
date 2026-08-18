@@ -168,6 +168,18 @@ var cifImpellerColorSourceRetain = &types.CallInterface{}
 var funcImpellerColorSourceRelease unsafe.Pointer
 var cifImpellerColorSourceRelease = &types.CallInterface{}
 
+var funcImpellerColorSourceCreateLinearGradientNew unsafe.Pointer
+var cifImpellerColorSourceCreateLinearGradientNew = &types.CallInterface{}
+
+var funcImpellerColorSourceCreateRadialGradientNew unsafe.Pointer
+var cifImpellerColorSourceCreateRadialGradientNew = &types.CallInterface{}
+
+var funcImpellerColorSourceCreateConicalGradientNew unsafe.Pointer
+var cifImpellerColorSourceCreateConicalGradientNew = &types.CallInterface{}
+
+var funcImpellerColorSourceCreateSweepGradientNew unsafe.Pointer
+var cifImpellerColorSourceCreateSweepGradientNew = &types.CallInterface{}
+
 var funcImpellerColorSourceCreateImageNew unsafe.Pointer
 var cifImpellerColorSourceCreateImageNew = &types.CallInterface{}
 
@@ -1328,6 +1340,93 @@ func Init() error {
 		types.DefaultCall,
 		types.VoidTypeDescriptor,
 		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerColorSourceCreateLinearGradientNew, err = ffi.GetSymbol(handle, "ImpellerColorSourceCreateLinearGradientNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerColorSourceCreateLinearGradientNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.UInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.SInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerColorSourceCreateRadialGradientNew, err = ffi.GetSymbol(handle, "ImpellerColorSourceCreateRadialGradientNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerColorSourceCreateRadialGradientNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.UInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.SInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerColorSourceCreateConicalGradientNew, err = ffi.GetSymbol(handle, "ImpellerColorSourceCreateConicalGradientNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerColorSourceCreateConicalGradientNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.UInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.SInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerColorSourceCreateSweepGradientNew, err = ffi.GetSymbol(handle, "ImpellerColorSourceCreateSweepGradientNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerColorSourceCreateSweepGradientNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.UInt32TypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.FloatTypeDescriptor,
+			types.SInt32TypeDescriptor,
 			types.PointerTypeDescriptor,
 		})
 	if err != nil {

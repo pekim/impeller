@@ -74,7 +74,7 @@ Create a Vulkan context using the provided Vulkan Settings.
 
 @return     The Vulkan context or NULL if one cannot be created.
 */
-func ContextCreateVulkanNew(version uint32, settings ContextVulkanSettings) Context {
+func ContextCreateVulkanNew(version uint32, settings *ContextVulkanSettings) Context {
 	var result Context
 	_, err := ffi.CallFunction(
 		cifImpellerContextCreateVulkanNew,
@@ -82,7 +82,7 @@ func ContextCreateVulkanNew(version uint32, settings ContextVulkanSettings) Cont
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&version),
-			unsafe.Pointer(new(&settings)),
+			unsafe.Pointer(&settings),
 		},
 	)
 	if err != nil {
@@ -145,7 +145,7 @@ the [out] argument unaffected.
 
 @return     If the Vulkan info could be fetched from the context.
 */
-func ContextGetVulkanInfo(context Context, out_vulkan_info ContextVulkanInfo) Bool {
+func ContextGetVulkanInfo(context Context, out_vulkan_info *ContextVulkanInfo) Bool {
 	var result Bool
 	_, err := ffi.CallFunction(
 		cifImpellerContextGetVulkanInfo,
@@ -153,7 +153,7 @@ func ContextGetVulkanInfo(context Context, out_vulkan_info ContextVulkanInfo) Bo
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&context),
-			unsafe.Pointer(new(&out_vulkan_info)),
+			unsafe.Pointer(&out_vulkan_info),
 		},
 	)
 	if err != nil {
@@ -244,7 +244,7 @@ collected.
 
 @return     The surface if once can be created, NULL otherwise.
 */
-func SurfaceCreateWrappedFBONew(context Context, fbo uint64, format PixelFormat, size ISize) Surface {
+func SurfaceCreateWrappedFBONew(context Context, fbo uint64, format PixelFormat, size *ISize) Surface {
 	var result Surface
 	_, err := ffi.CallFunction(
 		cifImpellerSurfaceCreateWrappedFBONew,
@@ -254,7 +254,7 @@ func SurfaceCreateWrappedFBONew(context Context, fbo uint64, format PixelFormat,
 			unsafe.Pointer(&context),
 			unsafe.Pointer(&fbo),
 			unsafe.Pointer(&format),
-			unsafe.Pointer(new(&size)),
+			unsafe.Pointer(&size),
 		},
 	)
 	if err != nil {
@@ -412,14 +412,14 @@ points and isolated calls to move the cursor.
 @param[in]  path        The path
 @param[out] out_bounds  The conservative bounds of the path.
 */
-func PathGetBounds(path Path, out_bounds Rect) {
+func PathGetBounds(path Path, out_bounds *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathGetBounds,
 		funcImpellerPathGetBounds,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&path),
-			unsafe.Pointer(new(&out_bounds)),
+			unsafe.Pointer(&out_bounds),
 		},
 	)
 	if err != nil {
@@ -493,14 +493,14 @@ Move the cursor to the specified location.
 @param[in]  builder   The builder.
 @param[in]  location  The location.
 */
-func PathBuilderMoveTo(builder PathBuilder, location Point) {
+func PathBuilderMoveTo(builder PathBuilder, location *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderMoveTo,
 		funcImpellerPathBuilderMoveTo,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&location)),
+			unsafe.Pointer(&location),
 		},
 	)
 	if err != nil {
@@ -515,14 +515,14 @@ location. The cursor location is updated to be at the endpoint.
 @param[in]  builder   The builder.
 @param[in]  location  The location.
 */
-func PathBuilderLineTo(builder PathBuilder, location Point) {
+func PathBuilderLineTo(builder PathBuilder, location *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderLineTo,
 		funcImpellerPathBuilderLineTo,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&location)),
+			unsafe.Pointer(&location),
 		},
 	)
 	if err != nil {
@@ -540,15 +540,15 @@ The new location of the cursor after this call is the end point.
 @param[in]  control_point  The control point.
 @param[in]  end_point      The end point.
 */
-func PathBuilderQuadraticCurveTo(builder PathBuilder, control_point Point, end_point Point) {
+func PathBuilderQuadraticCurveTo(builder PathBuilder, control_point *Point, end_point *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderQuadraticCurveTo,
 		funcImpellerPathBuilderQuadraticCurveTo,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&control_point)),
-			unsafe.Pointer(new(&end_point)),
+			unsafe.Pointer(&control_point),
+			unsafe.Pointer(&end_point),
 		},
 	)
 	if err != nil {
@@ -569,16 +569,16 @@ supplied.
 @param[in]  control_point_2  The control point 2
 @param[in]  end_point        The end point
 */
-func PathBuilderCubicCurveTo(builder PathBuilder, control_point_1 Point, control_point_2 Point, end_point Point) {
+func PathBuilderCubicCurveTo(builder PathBuilder, control_point_1 *Point, control_point_2 *Point, end_point *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderCubicCurveTo,
 		funcImpellerPathBuilderCubicCurveTo,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&control_point_1)),
-			unsafe.Pointer(new(&control_point_2)),
-			unsafe.Pointer(new(&end_point)),
+			unsafe.Pointer(&control_point_1),
+			unsafe.Pointer(&control_point_2),
+			unsafe.Pointer(&end_point),
 		},
 	)
 	if err != nil {
@@ -592,14 +592,14 @@ Adds a rectangle to the path.
 @param[in]  builder  The builder.
 @param[in]  rect     The rectangle.
 */
-func PathBuilderAddRect(builder PathBuilder, rect Rect) {
+func PathBuilderAddRect(builder PathBuilder, rect *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddRect,
 		funcImpellerPathBuilderAddRect,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&rect)),
+			unsafe.Pointer(&rect),
 		},
 	)
 	if err != nil {
@@ -615,14 +615,14 @@ Add an arc to the path.
 @param[in]  start_angle_degrees  The start angle in degrees.
 @param[in]  end_angle_degrees    The end angle in degrees.
 */
-func PathBuilderAddArc(builder PathBuilder, oval_bounds Rect, start_angle_degrees float32, end_angle_degrees float32) {
+func PathBuilderAddArc(builder PathBuilder, oval_bounds *Rect, start_angle_degrees float32, end_angle_degrees float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddArc,
 		funcImpellerPathBuilderAddArc,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&oval_bounds)),
+			unsafe.Pointer(&oval_bounds),
 			unsafe.Pointer(&start_angle_degrees),
 			unsafe.Pointer(&end_angle_degrees),
 		},
@@ -638,14 +638,14 @@ Add an oval to the path.
 @param[in]  builder      The builder.
 @param[in]  oval_bounds  The oval bounds.
 */
-func PathBuilderAddOval(builder PathBuilder, oval_bounds Rect) {
+func PathBuilderAddOval(builder PathBuilder, oval_bounds *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddOval,
 		funcImpellerPathBuilderAddOval,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&oval_bounds)),
+			unsafe.Pointer(&oval_bounds),
 		},
 	)
 	if err != nil {
@@ -661,15 +661,15 @@ path.
 @param[in]  rect            The rectangle.
 @param[in]  rounding_radii  The rounding radii.
 */
-func PathBuilderAddRoundedRect(builder PathBuilder, rect Rect, rounding_radii RoundingRadii) {
+func PathBuilderAddRoundedRect(builder PathBuilder, rect *Rect, rounding_radii *RoundingRadii) {
 	_, err := ffi.CallFunction(
 		cifImpellerPathBuilderAddRoundedRect,
 		funcImpellerPathBuilderAddRoundedRect,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&rect)),
-			unsafe.Pointer(new(&rounding_radii)),
+			unsafe.Pointer(&rect),
+			unsafe.Pointer(&rounding_radii),
 		},
 	)
 	if err != nil {
@@ -813,14 +813,14 @@ Set the paint color.
 @param[in]  paint  The paint.
 @param[in]  color  The color.
 */
-func PaintSetColor(paint Paint, color Color) {
+func PaintSetColor(paint Paint, color *Color) {
 	_, err := ffi.CallFunction(
 		cifImpellerPaintSetColor,
 		funcImpellerPaintSetColor,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&paint),
-			unsafe.Pointer(new(&color)),
+			unsafe.Pointer(&color),
 		},
 	)
 	if err != nil {
@@ -1077,7 +1077,7 @@ fail.
 @return     The texture if one could be created by adopting the supplied
 texture handle, NULL otherwise.
 */
-func TextureCreateWithOpenGLTextureHandleNew(context Context, descriptor TextureDescriptor, handle uint64) Texture {
+func TextureCreateWithOpenGLTextureHandleNew(context Context, descriptor *TextureDescriptor, handle uint64) Texture {
 	var result Texture
 	_, err := ffi.CallFunction(
 		cifImpellerTextureCreateWithOpenGLTextureHandleNew,
@@ -1085,7 +1085,7 @@ func TextureCreateWithOpenGLTextureHandleNew(context Context, descriptor Texture
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&context),
-			unsafe.Pointer(new(&descriptor)),
+			unsafe.Pointer(&descriptor),
 			unsafe.Pointer(&handle),
 		},
 	)
@@ -1246,13 +1246,151 @@ func ColorSourceRelease(color_source ColorSource) {
 	}
 }
 
-// UNSUPPORTED ColorSourceCreateLinearGradientNew : param stops is "const float *"
+/*
+Create a color source that forms a linear gradient.
 
-// UNSUPPORTED ColorSourceCreateRadialGradientNew : param stops is "const float *"
+@param[in]  start_point     The start point.
+@param[in]  end_point       The end point.
+@param[in]  stop_count      The stop count.
+@param[in]  colors          The colors.
+@param[in]  stops           The stops.
+@param[in]  tile_mode       The tile mode.
+@param[in]  transformation  The transformation.
 
-// UNSUPPORTED ColorSourceCreateConicalGradientNew : param stops is "const float *"
+@return     The color source.
+*/
+func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
+	var result ColorSource
+	_, err := ffi.CallFunction(
+		cifImpellerColorSourceCreateLinearGradientNew,
+		funcImpellerColorSourceCreateLinearGradientNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&start_point),
+			unsafe.Pointer(&end_point),
+			unsafe.Pointer(&stop_count),
+			unsafe.Pointer(&colors),
+			unsafe.Pointer(&stops),
+			unsafe.Pointer(&tile_mode),
+			unsafe.Pointer(&transformation),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
-// UNSUPPORTED ColorSourceCreateSweepGradientNew : param stops is "const float *"
+/*
+Create a color source that forms a radial gradient.
+
+@param[in]  center          The center.
+@param[in]  radius          The radius.
+@param[in]  stop_count      The stop count.
+@param[in]  colors          The colors.
+@param[in]  stops           The stops.
+@param[in]  tile_mode       The tile mode.
+@param[in]  transformation  The transformation.
+
+@return     The color source.
+*/
+func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
+	var result ColorSource
+	_, err := ffi.CallFunction(
+		cifImpellerColorSourceCreateRadialGradientNew,
+		funcImpellerColorSourceCreateRadialGradientNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&center),
+			unsafe.Pointer(&radius),
+			unsafe.Pointer(&stop_count),
+			unsafe.Pointer(&colors),
+			unsafe.Pointer(&stops),
+			unsafe.Pointer(&tile_mode),
+			unsafe.Pointer(&transformation),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Create a color source that forms a conical gradient.
+
+@param[in]  start_center    The start center.
+@param[in]  start_radius    The start radius.
+@param[in]  end_center      The end center.
+@param[in]  end_radius      The end radius.
+@param[in]  stop_count      The stop count.
+@param[in]  colors          The colors.
+@param[in]  stops           The stops.
+@param[in]  tile_mode       The tile mode.
+@param[in]  transformation  The transformation.
+
+@return     The color source.
+*/
+func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float32, end_center *Point, end_radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
+	var result ColorSource
+	_, err := ffi.CallFunction(
+		cifImpellerColorSourceCreateConicalGradientNew,
+		funcImpellerColorSourceCreateConicalGradientNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&start_center),
+			unsafe.Pointer(&start_radius),
+			unsafe.Pointer(&end_center),
+			unsafe.Pointer(&end_radius),
+			unsafe.Pointer(&stop_count),
+			unsafe.Pointer(&colors),
+			unsafe.Pointer(&stops),
+			unsafe.Pointer(&tile_mode),
+			unsafe.Pointer(&transformation),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
+
+/*
+Create a color source that forms a sweep gradient.
+
+@param[in]  center          The center.
+@param[in]  start           The start.
+@param[in]  end             The end.
+@param[in]  stop_count      The stop count.
+@param[in]  colors          The colors.
+@param[in]  stops           The stops.
+@param[in]  tile_mode       The tile mode.
+@param[in]  transformation  The transformation.
+
+@return     The color source.
+*/
+func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
+	var result ColorSource
+	_, err := ffi.CallFunction(
+		cifImpellerColorSourceCreateSweepGradientNew,
+		funcImpellerColorSourceCreateSweepGradientNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&center),
+			unsafe.Pointer(&start),
+			unsafe.Pointer(&end),
+			unsafe.Pointer(&stop_count),
+			unsafe.Pointer(&colors),
+			unsafe.Pointer(&stops),
+			unsafe.Pointer(&tile_mode),
+			unsafe.Pointer(&transformation),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Create a color source that samples from an image.
@@ -1265,7 +1403,7 @@ Create a color source that samples from an image.
 
 @return     The color source.
 */
-func ColorSourceCreateImageNew(image Texture, horizontal_tile_mode TileMode, vertical_tile_mode TileMode, sampling TextureSampling, transformation Matrix) ColorSource {
+func ColorSourceCreateImageNew(image Texture, horizontal_tile_mode TileMode, vertical_tile_mode TileMode, sampling TextureSampling, transformation *Matrix) ColorSource {
 	var result ColorSource
 	_, err := ffi.CallFunction(
 		cifImpellerColorSourceCreateImageNew,
@@ -1276,7 +1414,7 @@ func ColorSourceCreateImageNew(image Texture, horizontal_tile_mode TileMode, ver
 			unsafe.Pointer(&horizontal_tile_mode),
 			unsafe.Pointer(&vertical_tile_mode),
 			unsafe.Pointer(&sampling),
-			unsafe.Pointer(new(&transformation)),
+			unsafe.Pointer(&transformation),
 		},
 	)
 	if err != nil {
@@ -1336,14 +1474,14 @@ independently.
 
 @return     The color filter.
 */
-func ColorFilterCreateBlendNew(color Color, blend_mode BlendMode) ColorFilter {
+func ColorFilterCreateBlendNew(color *Color, blend_mode BlendMode) ColorFilter {
 	var result ColorFilter
 	_, err := ffi.CallFunction(
 		cifImpellerColorFilterCreateBlendNew,
 		funcImpellerColorFilterCreateBlendNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
-			unsafe.Pointer(new(&color)),
+			unsafe.Pointer(&color),
 			unsafe.Pointer(&blend_mode),
 		},
 	)
@@ -1361,14 +1499,14 @@ independently.
 
 @return     The color filter.
 */
-func ColorFilterCreateColorMatrixNew(color_matrix ColorMatrix) ColorFilter {
+func ColorFilterCreateColorMatrixNew(color_matrix *ColorMatrix) ColorFilter {
 	var result ColorFilter
 	_, err := ffi.CallFunction(
 		cifImpellerColorFilterCreateColorMatrixNew,
 		funcImpellerColorFilterCreateColorMatrixNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
-			unsafe.Pointer(new(&color_matrix)),
+			unsafe.Pointer(&color_matrix),
 		},
 	)
 	if err != nil {
@@ -1573,14 +1711,14 @@ the underlying image.
 
 @return     The image filter.
 */
-func ImageFilterCreateMatrixNew(matrix Matrix, sampling TextureSampling) ImageFilter {
+func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageFilter {
 	var result ImageFilter
 	_, err := ffi.CallFunction(
 		cifImpellerImageFilterCreateMatrixNew,
 		funcImpellerImageFilterCreateMatrixNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
-			unsafe.Pointer(new(&matrix)),
+			unsafe.Pointer(&matrix),
 			unsafe.Pointer(&sampling),
 		},
 	)
@@ -1671,14 +1809,14 @@ This may aid performance optimizations.
 
 @return     The display list builder.
 */
-func DisplayListBuilderNew(cull_rect Rect) DisplayListBuilder {
+func DisplayListBuilderNew(cull_rect *Rect) DisplayListBuilder {
 	var result DisplayListBuilder
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderNew,
 		funcImpellerDisplayListBuilderNew,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
-			unsafe.Pointer(new(&cull_rect)),
+			unsafe.Pointer(&cull_rect),
 		},
 	)
 	if err != nil {
@@ -1785,14 +1923,14 @@ back onto the display display list.
 @param[in]  paint     The paint.
 @param[in]  backdrop  The backdrop.
 */
-func DisplayListBuilderSaveLayer(builder DisplayListBuilder, bounds Rect, paint Paint, backdrop ImageFilter) {
+func DisplayListBuilderSaveLayer(builder DisplayListBuilder, bounds *Rect, paint Paint, backdrop ImageFilter) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderSaveLayer,
 		funcImpellerDisplayListBuilderSaveLayer,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&bounds)),
+			unsafe.Pointer(&bounds),
 			unsafe.Pointer(&paint),
 			unsafe.Pointer(&backdrop),
 		},
@@ -1900,14 +2038,14 @@ already on the save stack.
 @param[in]  builder    The builder.
 @param[in]  transform  The transform to append.
 */
-func DisplayListBuilderTransform(builder DisplayListBuilder, transform Matrix) {
+func DisplayListBuilderTransform(builder DisplayListBuilder, transform *Matrix) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderTransform,
 		funcImpellerDisplayListBuilderTransform,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&transform)),
+			unsafe.Pointer(&transform),
 		},
 	)
 	if err != nil {
@@ -1922,14 +2060,14 @@ with a new value.
 @param[in]  builder    The builder.
 @param[in]  transform  The new transform.
 */
-func DisplayListBuilderSetTransform(builder DisplayListBuilder, transform Matrix) {
+func DisplayListBuilderSetTransform(builder DisplayListBuilder, transform *Matrix) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderSetTransform,
 		funcImpellerDisplayListBuilderSetTransform,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&transform)),
+			unsafe.Pointer(&transform),
 		},
 	)
 	if err != nil {
@@ -1944,14 +2082,14 @@ transformation stack.
 @param[in]  builder        The builder.
 @param[out] out_transform  The transform.
 */
-func DisplayListBuilderGetTransform(builder DisplayListBuilder, out_transform Matrix) {
+func DisplayListBuilderGetTransform(builder DisplayListBuilder, out_transform *Matrix) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderGetTransform,
 		funcImpellerDisplayListBuilderGetTransform,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&out_transform)),
+			unsafe.Pointer(&out_transform),
 		},
 	)
 	if err != nil {
@@ -2032,14 +2170,14 @@ and the given rectangle taking into account the clip operation.
 @param[in]  rect     The rectangle.
 @param[in]  op       The operation.
 */
-func DisplayListBuilderClipRect(builder DisplayListBuilder, rect Rect, op ClipOperation) {
+func DisplayListBuilderClipRect(builder DisplayListBuilder, rect *Rect, op ClipOperation) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderClipRect,
 		funcImpellerDisplayListBuilderClipRect,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&rect)),
+			unsafe.Pointer(&rect),
 			unsafe.Pointer(&op),
 		},
 	)
@@ -2056,14 +2194,14 @@ and the given oval taking into account the clip operation.
 @param[in]  oval_bounds  The oval bounds.
 @param[in]  op           The operation.
 */
-func DisplayListBuilderClipOval(builder DisplayListBuilder, oval_bounds Rect, op ClipOperation) {
+func DisplayListBuilderClipOval(builder DisplayListBuilder, oval_bounds *Rect, op ClipOperation) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderClipOval,
 		funcImpellerDisplayListBuilderClipOval,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&oval_bounds)),
+			unsafe.Pointer(&oval_bounds),
 			unsafe.Pointer(&op),
 		},
 	)
@@ -2082,15 +2220,15 @@ operation.
 @param[in]  radii    The radii.
 @param[in]  op       The operation.
 */
-func DisplayListBuilderClipRoundedRect(builder DisplayListBuilder, rect Rect, radii RoundingRadii, op ClipOperation) {
+func DisplayListBuilderClipRoundedRect(builder DisplayListBuilder, rect *Rect, radii *RoundingRadii, op ClipOperation) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderClipRoundedRect,
 		funcImpellerDisplayListBuilderClipRoundedRect,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&rect)),
-			unsafe.Pointer(new(&radii)),
+			unsafe.Pointer(&rect),
+			unsafe.Pointer(&radii),
 			unsafe.Pointer(&op),
 		},
 	)
@@ -2152,15 +2290,15 @@ Draws a line segment.
 @param[in]  to       The end point of the line.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawLine(builder DisplayListBuilder, from Point, to Point, paint Paint) {
+func DisplayListBuilderDrawLine(builder DisplayListBuilder, from *Point, to *Point, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawLine,
 		funcImpellerDisplayListBuilderDrawLine,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&from)),
-			unsafe.Pointer(new(&to)),
+			unsafe.Pointer(&from),
+			unsafe.Pointer(&to),
 			unsafe.Pointer(&paint),
 		},
 	)
@@ -2179,15 +2317,15 @@ Draws a dash line segment.
 @param[in]  off_length  Off length.
 @param[in]  paint       The paint.
 */
-func DisplayListBuilderDrawDashedLine(builder DisplayListBuilder, from Point, to Point, on_length float32, off_length float32, paint Paint) {
+func DisplayListBuilderDrawDashedLine(builder DisplayListBuilder, from *Point, to *Point, on_length float32, off_length float32, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawDashedLine,
 		funcImpellerDisplayListBuilderDrawDashedLine,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&from)),
-			unsafe.Pointer(new(&to)),
+			unsafe.Pointer(&from),
+			unsafe.Pointer(&to),
 			unsafe.Pointer(&on_length),
 			unsafe.Pointer(&off_length),
 			unsafe.Pointer(&paint),
@@ -2205,14 +2343,14 @@ Draws a rectangle.
 @param[in]  rect     The rectangle.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawRect(builder DisplayListBuilder, rect Rect, paint Paint) {
+func DisplayListBuilderDrawRect(builder DisplayListBuilder, rect *Rect, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawRect,
 		funcImpellerDisplayListBuilderDrawRect,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&rect)),
+			unsafe.Pointer(&rect),
 			unsafe.Pointer(&paint),
 		},
 	)
@@ -2228,14 +2366,14 @@ Draws an oval.
 @param[in]  oval_bounds  The oval bounds.
 @param[in]  paint        The paint.
 */
-func DisplayListBuilderDrawOval(builder DisplayListBuilder, oval_bounds Rect, paint Paint) {
+func DisplayListBuilderDrawOval(builder DisplayListBuilder, oval_bounds *Rect, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawOval,
 		funcImpellerDisplayListBuilderDrawOval,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&oval_bounds)),
+			unsafe.Pointer(&oval_bounds),
 			unsafe.Pointer(&paint),
 		},
 	)
@@ -2252,15 +2390,15 @@ Draws a rounded rect.
 @param[in]  radii    The radii.
 @param[in]  paint    The paint.
 */
-func DisplayListBuilderDrawRoundedRect(builder DisplayListBuilder, rect Rect, radii RoundingRadii, paint Paint) {
+func DisplayListBuilderDrawRoundedRect(builder DisplayListBuilder, rect *Rect, radii *RoundingRadii, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawRoundedRect,
 		funcImpellerDisplayListBuilderDrawRoundedRect,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&rect)),
-			unsafe.Pointer(new(&radii)),
+			unsafe.Pointer(&rect),
+			unsafe.Pointer(&radii),
 			unsafe.Pointer(&paint),
 		},
 	)
@@ -2280,17 +2418,17 @@ rectangles (each with configurable corner radii).
 @param[in]  inner_radii  The inner radii.
 @param[in]  paint        The paint.
 */
-func DisplayListBuilderDrawRoundedRectDifference(builder DisplayListBuilder, outer_rect Rect, outer_radii RoundingRadii, inner_rect Rect, inner_radii RoundingRadii, paint Paint) {
+func DisplayListBuilderDrawRoundedRectDifference(builder DisplayListBuilder, outer_rect *Rect, outer_radii *RoundingRadii, inner_rect *Rect, inner_radii *RoundingRadii, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawRoundedRectDifference,
 		funcImpellerDisplayListBuilderDrawRoundedRectDifference,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(new(&outer_rect)),
-			unsafe.Pointer(new(&outer_radii)),
-			unsafe.Pointer(new(&inner_rect)),
-			unsafe.Pointer(new(&inner_radii)),
+			unsafe.Pointer(&outer_rect),
+			unsafe.Pointer(&outer_radii),
+			unsafe.Pointer(&inner_rect),
+			unsafe.Pointer(&inner_radii),
 			unsafe.Pointer(&paint),
 		},
 	)
@@ -2353,7 +2491,7 @@ Draw a paragraph at the specified point.
 @param[in]  paragraph  The paragraph.
 @param[in]  point      The point.
 */
-func DisplayListBuilderDrawParagraph(builder DisplayListBuilder, paragraph Paragraph, point Point) {
+func DisplayListBuilderDrawParagraph(builder DisplayListBuilder, paragraph Paragraph, point *Point) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawParagraph,
 		funcImpellerDisplayListBuilderDrawParagraph,
@@ -2361,7 +2499,7 @@ func DisplayListBuilderDrawParagraph(builder DisplayListBuilder, paragraph Parag
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
 			unsafe.Pointer(&paragraph),
-			unsafe.Pointer(new(&point)),
+			unsafe.Pointer(&point),
 		},
 	)
 	if err != nil {
@@ -2384,7 +2522,7 @@ If the object casting the shadow is transparent.
 @param[in]  device_pixel_ratio
 The device pixel ratio.
 */
-func DisplayListBuilderDrawShadow(builder DisplayListBuilder, path Path, color Color, elevation float32, occluder_is_transparent Bool, device_pixel_ratio float32) {
+func DisplayListBuilderDrawShadow(builder DisplayListBuilder, path Path, color *Color, elevation float32, occluder_is_transparent Bool, device_pixel_ratio float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawShadow,
 		funcImpellerDisplayListBuilderDrawShadow,
@@ -2392,7 +2530,7 @@ func DisplayListBuilderDrawShadow(builder DisplayListBuilder, path Path, color C
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
 			unsafe.Pointer(&path),
-			unsafe.Pointer(new(&color)),
+			unsafe.Pointer(&color),
 			unsafe.Pointer(&elevation),
 			unsafe.Pointer(&occluder_is_transparent),
 			unsafe.Pointer(&device_pixel_ratio),
@@ -2412,7 +2550,7 @@ Draw a texture at the specified point.
 @param[in]  sampling  The sampling.
 @param[in]  paint     The paint.
 */
-func DisplayListBuilderDrawTexture(builder DisplayListBuilder, texture Texture, point Point, sampling TextureSampling, paint Paint) {
+func DisplayListBuilderDrawTexture(builder DisplayListBuilder, texture Texture, point *Point, sampling TextureSampling, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawTexture,
 		funcImpellerDisplayListBuilderDrawTexture,
@@ -2420,7 +2558,7 @@ func DisplayListBuilderDrawTexture(builder DisplayListBuilder, texture Texture, 
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
 			unsafe.Pointer(&texture),
-			unsafe.Pointer(new(&point)),
+			unsafe.Pointer(&point),
 			unsafe.Pointer(&sampling),
 			unsafe.Pointer(&paint),
 		},
@@ -2440,7 +2578,7 @@ Draw a portion of texture at the specified location.
 @param[in]  sampling  The sampling.
 @param[in]  paint     The paint.
 */
-func DisplayListBuilderDrawTextureRect(builder DisplayListBuilder, texture Texture, src_rect Rect, dst_rect Rect, sampling TextureSampling, paint Paint) {
+func DisplayListBuilderDrawTextureRect(builder DisplayListBuilder, texture Texture, src_rect *Rect, dst_rect *Rect, sampling TextureSampling, paint Paint) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderDrawTextureRect,
 		funcImpellerDisplayListBuilderDrawTextureRect,
@@ -2448,8 +2586,8 @@ func DisplayListBuilderDrawTextureRect(builder DisplayListBuilder, texture Textu
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
 			unsafe.Pointer(&texture),
-			unsafe.Pointer(new(&src_rect)),
-			unsafe.Pointer(new(&dst_rect)),
+			unsafe.Pointer(&src_rect),
+			unsafe.Pointer(&dst_rect),
 			unsafe.Pointer(&sampling),
 			unsafe.Pointer(&paint),
 		},
@@ -2762,14 +2900,14 @@ decorations can be set as well (dashed, dotted, wavy, etc..)
 @param[in]  ImpellerParagraphStyle  The paragraph style.
 @param[in]  decoration              The text decoration.
 */
-func ParagraphStyleSetTextDecoration(paragraph_style ParagraphStyle, decoration TextDecoration) {
+func ParagraphStyleSetTextDecoration(paragraph_style ParagraphStyle, decoration *TextDecoration) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphStyleSetTextDecoration,
 		funcImpellerParagraphStyleSetTextDecoration,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&paragraph_style),
-			unsafe.Pointer(new(&decoration)),
+			unsafe.Pointer(&decoration),
 		},
 	)
 	if err != nil {
@@ -3186,7 +3324,7 @@ Annex #29](http://www.unicode.org/reports/tr29/#Word_Boundaries)
 @param[in]  code_unit_index  The code unit index
 @param[out]  code_unit_index The range.
 */
-func ParagraphGetWordBoundary(paragraph Paragraph, code_unit_index uint64, out_range Range) {
+func ParagraphGetWordBoundary(paragraph Paragraph, code_unit_index uint64, out_range *Range) {
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetWordBoundary,
 		funcImpellerParagraphGetWordBoundary,
@@ -3194,7 +3332,7 @@ func ParagraphGetWordBoundary(paragraph Paragraph, code_unit_index uint64, out_r
 		[]unsafe.Pointer{
 			unsafe.Pointer(&paragraph),
 			unsafe.Pointer(&code_unit_index),
-			unsafe.Pointer(new(&out_range)),
+			unsafe.Pointer(&out_range),
 		},
 	)
 	if err != nil {
@@ -3730,14 +3868,14 @@ coordinate space of the paragraph.
 @param[in]  glyph_info  The glyph information.
 @param[out] out_bounds  The grapheme cluster bounds.
 */
-func GlyphInfoGetGraphemeClusterBounds(glyph_info GlyphInfo, out_bounds Rect) {
+func GlyphInfoGetGraphemeClusterBounds(glyph_info GlyphInfo, out_bounds *Rect) {
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoGetGraphemeClusterBounds,
 		funcImpellerGlyphInfoGetGraphemeClusterBounds,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&glyph_info),
-			unsafe.Pointer(new(&out_bounds)),
+			unsafe.Pointer(&out_bounds),
 		},
 	)
 	if err != nil {
