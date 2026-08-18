@@ -35,11 +35,20 @@ func (param param) supported() (bool, string) {
 		return true, ""
 	}
 
+	if param.isString {
+		return true, ""
+	}
 	return false, fmt.Sprintf("param %s is %q", param.name, param.typ.typ.Spelling())
 }
 
 func (param param) goDecl(g *jen.Group) {
 	g.Id(param.name).Add(param.typ.goDecl())
+}
+
+func (param param) cArgVar(g *jen.Group) {
+	if param.isString {
+		g.Id("c_" + param.name).Op(":=").Id("cString").Call(jen.Id(param.name))
+	}
 }
 
 func (param param) cArgName() jen.Code {
@@ -51,6 +60,9 @@ func (param param) cArgName() jen.Code {
 	}
 	if param.isStruct {
 		return jen.Id(param.name)
+	}
+	if param.isString {
+		return jen.Id("c_" + param.name)
 	}
 
 	panic("param type")
@@ -79,5 +91,11 @@ func (params params) supported() (bool, string) {
 func (params params) goDecl(g *jen.Group) {
 	for _, param := range params {
 		param.goDecl(g)
+	}
+}
+
+func (params params) cArgVars(g *jen.Group) {
+	for _, param := range params {
+		param.cArgVar(g)
 	}
 }

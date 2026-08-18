@@ -1423,7 +1423,42 @@ func ColorSourceCreateImageNew(image Texture, horizontal_tile_mode TileMode, ver
 	return result
 }
 
-// UNSUPPORTED ColorSourceCreateFragmentProgramNew : param data is "const uint8_t *"
+/*
+Create a color source whose pixels are shaded by a fragment
+program.
+
+@see        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
+
+@param[in]  context            The context.
+@param[in]  fragment_program   The fragment program.
+@param      samplers           The samplers.
+@param[in]  samplers_count     The samplers count.
+@param[in]  data               The data (copied).
+@param[in]  data_bytes_length  The data bytes length.
+
+@return     The color source.
+*/
+func ColorSourceCreateFragmentProgramNew(context Context, fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ColorSource {
+	var result ColorSource
+	c_data := cString(data)
+	_, err := ffi.CallFunction(
+		cifImpellerColorSourceCreateFragmentProgramNew,
+		funcImpellerColorSourceCreateFragmentProgramNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+			unsafe.Pointer(&fragment_program),
+			unsafe.Pointer(&samplers),
+			unsafe.Pointer(&samplers_count),
+			unsafe.Pointer(&c_data),
+			unsafe.Pointer(&data_bytes_length),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Retain a strong reference to the object. The object can be NULL
@@ -1728,7 +1763,42 @@ func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageF
 	return result
 }
 
-// UNSUPPORTED ImageFilterCreateFragmentProgramNew : param data is "const uint8_t *"
+/*
+Create an image filter where each pixel is shaded by a fragment
+program.
+
+@see        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
+
+@param[in]  context            The context.
+@param[in]  fragment_program   The fragment program.
+@param      samplers           The samplers.
+@param[in]  samplers_count     The samplers count.
+@param[in]  data               The data (copied).
+@param[in]  data_bytes_length  The data bytes length.
+
+@return     The image filter.
+*/
+func ImageFilterCreateFragmentProgramNew(context Context, fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ImageFilter {
+	var result ImageFilter
+	c_data := cString(data)
+	_, err := ffi.CallFunction(
+		cifImpellerImageFilterCreateFragmentProgramNew,
+		funcImpellerImageFilterCreateFragmentProgramNew,
+		unsafe.Pointer(&result),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&context),
+			unsafe.Pointer(&fragment_program),
+			unsafe.Pointer(&samplers),
+			unsafe.Pointer(&samplers_count),
+			unsafe.Pointer(&c_data),
+			unsafe.Pointer(&data_bytes_length),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	return result
+}
 
 /*
 Creates a composed filter that when applied is identical to
@@ -2801,7 +2871,27 @@ func ParagraphStyleSetFontStyle(paragraph_style ParagraphStyle, style FontStyle)
 	}
 }
 
-// UNSUPPORTED ParagraphStyleSetFontFamily : param family_name is "const char *"
+/*
+Set the font family.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  family_name      The family name.
+*/
+func ParagraphStyleSetFontFamily(paragraph_style ParagraphStyle, family_name string) {
+	c_family_name := cString(family_name)
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetFontFamily,
+		funcImpellerParagraphStyleSetFontFamily,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&c_family_name),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 /*
 Set the font size.
@@ -2936,9 +3026,50 @@ func ParagraphStyleSetMaxLines(paragraph_style ParagraphStyle, max_lines uint32)
 	}
 }
 
-// UNSUPPORTED ParagraphStyleSetLocale : param locale is "const char *"
+/*
+Set the paragraph locale.
 
-// UNSUPPORTED ParagraphStyleSetEllipsis : param ellipsis is "const char *"
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  locale           The locale.
+*/
+func ParagraphStyleSetLocale(paragraph_style ParagraphStyle, locale string) {
+	c_locale := cString(locale)
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetLocale,
+		funcImpellerParagraphStyleSetLocale,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&c_locale),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
+
+/*
+Set the UTF-8 string to use as the ellipsis. Pass `nullptr` to
+clear the setting to default.
+
+@param[in]  paragraph_style  The paragraph style.
+@param[in]  data             The ellipsis string UTF-8 data, or null.
+*/
+func ParagraphStyleSetEllipsis(paragraph_style ParagraphStyle, ellipsis string) {
+	c_ellipsis := cString(ellipsis)
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphStyleSetEllipsis,
+		funcImpellerParagraphStyleSetEllipsis,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_style),
+			unsafe.Pointer(&c_ellipsis),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 /*
 Create a new paragraph builder.
@@ -3057,7 +3188,31 @@ func ParagraphBuilderPopStyle(paragraph_builder ParagraphBuilder) {
 	}
 }
 
-// UNSUPPORTED ParagraphBuilderAddText : param data is "const uint8_t *"
+/*
+Add UTF-8 encoded text to the paragraph. The text will be styled
+according to the paragraph style already on top of the paragraph
+style stack.
+
+@param[in]  paragraph_builder  The paragraph builder.
+@param[in]  data               The data.
+@param[in]  length             The length.
+*/
+func ParagraphBuilderAddText(paragraph_builder ParagraphBuilder, data string, length uint32) {
+	c_data := cString(data)
+	_, err := ffi.CallFunction(
+		cifImpellerParagraphBuilderAddText,
+		funcImpellerParagraphBuilderAddText,
+		unsafe.Pointer(nil),
+		[]unsafe.Pointer{
+			unsafe.Pointer(&paragraph_builder),
+			unsafe.Pointer(&c_data),
+			unsafe.Pointer(&length),
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+}
 
 /*
 Layout and build a new paragraph using the specified width. The

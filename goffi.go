@@ -183,6 +183,9 @@ var cifImpellerColorSourceCreateSweepGradientNew = &types.CallInterface{}
 var funcImpellerColorSourceCreateImageNew unsafe.Pointer
 var cifImpellerColorSourceCreateImageNew = &types.CallInterface{}
 
+var funcImpellerColorSourceCreateFragmentProgramNew unsafe.Pointer
+var cifImpellerColorSourceCreateFragmentProgramNew = &types.CallInterface{}
+
 var funcImpellerColorFilterRetain unsafe.Pointer
 var cifImpellerColorFilterRetain = &types.CallInterface{}
 
@@ -221,6 +224,9 @@ var cifImpellerImageFilterCreateErodeNew = &types.CallInterface{}
 
 var funcImpellerImageFilterCreateMatrixNew unsafe.Pointer
 var cifImpellerImageFilterCreateMatrixNew = &types.CallInterface{}
+
+var funcImpellerImageFilterCreateFragmentProgramNew unsafe.Pointer
+var cifImpellerImageFilterCreateFragmentProgramNew = &types.CallInterface{}
 
 var funcImpellerImageFilterCreateComposeNew unsafe.Pointer
 var cifImpellerImageFilterCreateComposeNew = &types.CallInterface{}
@@ -360,6 +366,9 @@ var cifImpellerParagraphStyleSetFontWeight = &types.CallInterface{}
 var funcImpellerParagraphStyleSetFontStyle unsafe.Pointer
 var cifImpellerParagraphStyleSetFontStyle = &types.CallInterface{}
 
+var funcImpellerParagraphStyleSetFontFamily unsafe.Pointer
+var cifImpellerParagraphStyleSetFontFamily = &types.CallInterface{}
+
 var funcImpellerParagraphStyleSetFontSize unsafe.Pointer
 var cifImpellerParagraphStyleSetFontSize = &types.CallInterface{}
 
@@ -378,6 +387,12 @@ var cifImpellerParagraphStyleSetTextDecoration = &types.CallInterface{}
 var funcImpellerParagraphStyleSetMaxLines unsafe.Pointer
 var cifImpellerParagraphStyleSetMaxLines = &types.CallInterface{}
 
+var funcImpellerParagraphStyleSetLocale unsafe.Pointer
+var cifImpellerParagraphStyleSetLocale = &types.CallInterface{}
+
+var funcImpellerParagraphStyleSetEllipsis unsafe.Pointer
+var cifImpellerParagraphStyleSetEllipsis = &types.CallInterface{}
+
 var funcImpellerParagraphBuilderNew unsafe.Pointer
 var cifImpellerParagraphBuilderNew = &types.CallInterface{}
 
@@ -392,6 +407,9 @@ var cifImpellerParagraphBuilderPushStyle = &types.CallInterface{}
 
 var funcImpellerParagraphBuilderPopStyle unsafe.Pointer
 var cifImpellerParagraphBuilderPopStyle = &types.CallInterface{}
+
+var funcImpellerParagraphBuilderAddText unsafe.Pointer
+var cifImpellerParagraphBuilderAddText = &types.CallInterface{}
 
 var funcImpellerParagraphBuilderBuildParagraphNew unsafe.Pointer
 var cifImpellerParagraphBuilderBuildParagraphNew = &types.CallInterface{}
@@ -1452,6 +1470,26 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerColorSourceCreateFragmentProgramNew, err = ffi.GetSymbol(handle, "ImpellerColorSourceCreateFragmentProgramNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerColorSourceCreateFragmentProgramNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerColorFilterRetain, err = ffi.GetSymbol(handle, "ImpellerColorFilterRetain")
 	if err != nil {
 		return err
@@ -1649,6 +1687,26 @@ func Init() error {
 		[]*types.TypeDescriptor{
 			types.PointerTypeDescriptor,
 			types.SInt32TypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerImageFilterCreateFragmentProgramNew, err = ffi.GetSymbol(handle, "ImpellerImageFilterCreateFragmentProgramNew")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerImageFilterCreateFragmentProgramNew,
+		types.DefaultCall,
+		types.PointerTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.UInt64TypeDescriptor,
 		})
 	if err != nil {
 		return err
@@ -2407,6 +2465,22 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerParagraphStyleSetFontFamily, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetFontFamily")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphStyleSetFontFamily,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerParagraphStyleSetFontSize, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetFontSize")
 	if err != nil {
 		return err
@@ -2503,6 +2577,38 @@ func Init() error {
 		return err
 	}
 
+	funcImpellerParagraphStyleSetLocale, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetLocale")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphStyleSetLocale,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerParagraphStyleSetEllipsis, err = ffi.GetSymbol(handle, "ImpellerParagraphStyleSetEllipsis")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphStyleSetEllipsis,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
 	funcImpellerParagraphBuilderNew, err = ffi.GetSymbol(handle, "ImpellerParagraphBuilderNew")
 	if err != nil {
 		return err
@@ -2574,6 +2680,23 @@ func Init() error {
 		types.VoidTypeDescriptor,
 		[]*types.TypeDescriptor{
 			types.PointerTypeDescriptor,
+		})
+	if err != nil {
+		return err
+	}
+
+	funcImpellerParagraphBuilderAddText, err = ffi.GetSymbol(handle, "ImpellerParagraphBuilderAddText")
+	if err != nil {
+		return err
+	}
+	err = ffi.PrepareCallInterface(
+		cifImpellerParagraphBuilderAddText,
+		types.DefaultCall,
+		types.VoidTypeDescriptor,
+		[]*types.TypeDescriptor{
+			types.PointerTypeDescriptor,
+			types.PointerTypeDescriptor,
+			types.UInt32TypeDescriptor,
 		})
 	if err != nil {
 		return err

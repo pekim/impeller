@@ -51,14 +51,15 @@ var scalars = map[clang.CursorKind]scalar{
 
 type typ struct {
 	typ       clang.Type
-	isEnum    bool
 	enum      *enum
-	isScalar  bool
-	scalar    scalar
-	isStruct  bool
-	struct_   *struct_
+	isEnum    bool
 	isPointer bool
+	isScalar  bool
+	isString  bool
+	isStruct  bool
 	isVoid    bool
+	scalar    scalar
+	struct_   *struct_
 }
 
 func newTyp(gen *gen, typ_ clang.Type) typ {
@@ -78,6 +79,9 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 		typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(possibleStructName))
 
 		typ.scalar, typ.isScalar = scalars[clang.CursorKind(typ.typ.PointeeType().Kind())]
+
+		pointeeKind := typ.typ.PointeeType().CanonicalType().Kind()
+		typ.isString = pointeeKind == clang.Type_Char_S || pointeeKind == clang.Type_UChar
 	}
 
 	return typ
@@ -102,6 +106,9 @@ func (typ typ) goDecl() jen.Code {
 		}
 		return jen.Id(typ.struct_.name)
 	}
+	if typ.isString {
+		return jen.String()
+	}
 
 	panic("unhandled type")
 }
@@ -120,6 +127,9 @@ func (typ typ) typeDescriptor() jen.Code {
 		return pointerTypeDescriptor
 	}
 	if typ.isPointer {
+		return pointerTypeDescriptor
+	}
+	if typ.isString {
 		return pointerTypeDescriptor
 	}
 

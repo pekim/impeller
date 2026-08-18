@@ -45,6 +45,7 @@ func (fn function) generate(file file) {
 		Add(fn.result.goDecl()).
 		BlockFunc(func(g *jen.Group) {
 			fn.result.resultVar(g)
+			fn.params.cArgVars(g)
 
 			g.
 				List(jen.Id("_"), jen.Id("err")).
