@@ -6,23 +6,17 @@ import (
 )
 
 type param struct {
-	cursor   clang.Cursor
-	name     string
-	isScalar bool
-	scalar   scalar
-	isStruct bool
-	struct_  *struct_
+	cursor clang.Cursor
+	name   string
+	typ
 }
 
 func newParam(gen *gen, cursor clang.Cursor) param {
 	param := param{
 		cursor: cursor,
 		name:   cursor.Spelling(),
+		typ:    newTyp(gen, cursor.Type()),
 	}
-
-	typ := cursor.Type()
-	param.scalar, param.isScalar = scalars[clang.CursorKind(typ.CanonicalType().Kind())]
-	param.struct_, param.isStruct = gen.structs.findByGoName(goName(typ.Spelling()))
 
 	return param
 }
@@ -39,13 +33,7 @@ func (param param) supported() bool {
 }
 
 func (param param) goDecl(g *jen.Group) {
-	if param.isScalar {
-		g.Id(param.name).Add(param.scalar.goType)
-	}
-
-	if param.isStruct {
-		g.Id(param.name).Id(param.struct_.name)
-	}
+	g.Id(param.name).Add(param.typ.goDecl())
 }
 
 func (param param) cArgName() jen.Code {
@@ -55,17 +43,6 @@ func (param param) cArgName() jen.Code {
 
 	if param.isStruct {
 		return jen.Id(param.name)
-	}
-
-	panic("param type")
-}
-
-func (param param) typeDescriptor() jen.Code {
-	if param.isScalar {
-		return param.scalar.typeDescriptor
-	}
-	if param.isStruct && param.struct_.handle {
-		return pointerTypeDescriptor
 	}
 
 	panic("param type")
