@@ -3,6 +3,7 @@ module github.com/pekim/impeller
 go 1.26.5
 
 // replace github.com/pekim/gl-purego => ../gl-purego
+replace github.com/go-clang/clang-v15 => github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec
 
 require (
 	github.com/dave/jennifer v1.7.1
