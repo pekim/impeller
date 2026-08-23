@@ -21,13 +21,16 @@ func TestContext(t *testing.T) {
 
 	data := 42
 	dataPtr := unsafe.Pointer(&data)
+	calledCount := 0
 	context := ContextCreateOpenGLESNew(
 		GetVersion(),
 		NewProcAddressCallback(func(procName string, user_data unsafe.Pointer) unsafe.Pointer {
 			assert.Equal(t, data, *(*int)(user_data))
+			calledCount++
 			return unsafe.Pointer(glfw.GetProcAddress(procName))
 		}),
 		dataPtr,
 	)
 	assert.NotNil(t, context.handle)
+	assert.NotZero(t, calledCount)
 }
