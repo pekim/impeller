@@ -1,0 +1,82 @@
+package main
+
+import (
+	"fmt"
+	"unsafe"
+
+	"github.com/pekim/gl-purego/glfw"
+	"github.com/pekim/impeller"
+)
+
+func main() {
+	err := glfw.Initialise()
+	if err != nil {
+		panic(err)
+	}
+	err = impeller.Init()
+	if err != nil {
+		panic(err)
+	}
+
+	glfw.Init()
+
+	glfw.SetErrorCallback(glfw.ErrorCallbackNew(
+		func(error_code glfw.Int, description string) {
+			fmt.Printf("GLFW Error (%d): %s\n", error_code, description)
+		}))
+
+	glfw.WindowHint(glfw.CONTEXT_CREATION_API, glfw.EGL_CONTEXT_API)
+	window := glfw.CreateWindow(800, 600, "Impeller Example (OpenGL)", nil, nil)
+
+	framebufferWidth, framebufferHeight := window.GetFramebufferSize()
+
+	window.MakeContextCurrent()
+
+	context := impeller.ContextCreateOpenGLESNew(
+		impeller.GetVersion(),
+		impeller.NewProcAddressCallback(func(procName string, _user_data unsafe.Pointer) unsafe.Pointer {
+			return unsafe.Pointer(glfw.GetProcAddress(procName))
+		}),
+		nil,
+	)
+
+	surfaceSize := impeller.ISize{
+		Width:  int64(framebufferWidth),
+		Height: int64(framebufferHeight),
+	}
+	surface := context.SurfaceCreateWrappedFBONew(0, impeller.PixelFormatRGBA8888, &surfaceSize)
+
+	builder := impeller.DisplayListBuilderNew(nil)
+	paint := impeller.PaintNew()
+
+	// Clear the background to a white color.
+	clearColour := impeller.Color{Red: 1.0, Green: 1.0, Blue: 1.0, Alpha: 1.0}
+	paint.SetColor(&clearColour)
+	builder.DrawPaint(paint)
+
+	// Draw a red box.
+	boxColour := impeller.Color{Red: 1.0, Green: 0.0, Blue: 0.0, Alpha: 1.0}
+	paint.SetColor(&boxColour)
+	boxRect := impeller.Rect{X: 10, Y: 10, Width: 100, Height: 100}
+	builder.DrawRect(&boxRect, paint)
+
+	dl := builder.CreateDisplayListNew()
+
+	paint.Release()
+	builder.Release()
+
+	window.Show()
+
+	for window.ShouldClose() == glfw.FALSE {
+		glfw.WaitEvents()
+		surface.DrawDisplayList(dl)
+		window.SwapBuffers()
+	}
+
+	dl.Release()
+	surface.Release()
+	context.Release()
+	window.Destroy()
+
+	glfw.Terminate()
+}
