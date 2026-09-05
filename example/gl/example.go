@@ -2,11 +2,18 @@ package main
 
 import (
 	"fmt"
+	"runtime"
 	"unsafe"
 
 	"github.com/pekim/gl-purego/glfw"
 	"github.com/pekim/impeller"
 )
+
+func init() {
+	// This is important to ensure that only a single thread makes calls to
+	// openGL apis.
+	runtime.LockOSThread()
+}
 
 func main() {
 	err := glfw.Initialise()
@@ -64,6 +71,20 @@ func main() {
 
 	paint.Release()
 	builder.Release()
+
+	// window.SetCursorPosCallback(glfw.CursorposCallbackNew(func(_window *glfw.Window, xpos, ypos glfw.Double) {
+	// 	fmt.Println("cursor pos", xpos, ypos)
+	// }))
+
+	window.SetFramebufferSizeCallback(glfw.FramebuffersizeCallbackNew(func(_window *glfw.Window, width, height glfw.Int) {
+		// fmt.Println("frame size", width, height)
+		surface.Release()
+		surfaceSize := impeller.ISize{
+			Width:  int64(width),
+			Height: int64(height),
+		}
+		surface = context.SurfaceCreateWrappedFBONew(0, impeller.PixelFormatRGBA8888, &surfaceSize)
+	}))
 
 	window.Show()
 
