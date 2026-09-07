@@ -67,6 +67,20 @@ func main() {
 	boxRect := impeller.Rect{X: 10, Y: 10, Width: 100, Height: 100}
 	builder.DrawRect(&boxRect, paint)
 
+	paraStyle := impeller.ParagraphStyleNew()
+	// paraStyle.SetFontFamily("serif")
+	paraStyle.SetFontSize(1.25 * 16)
+	textColour := impeller.Color{Red: 0.0, Green: 0.0, Blue: 0.0, Alpha: 1.0}
+	paint.SetColor(&textColour)
+	paraStyle.SetForeground(paint)
+	paraBuilder := impeller.TypographyContextNew().ParagraphBuilderNew()
+	paraBuilder.PushStyle(paraStyle)
+	text := "The quick dog jumped over the lazy dog's hind legs."
+	paraBuilder.AddText(text, uint32(len(text)))
+	windowWidth, _ := window.GetFramebufferSize()
+	para := paraBuilder.BuildParagraphNew(float32(windowWidth))
+	builder.DrawParagraph(para, &impeller.Point{X: 10, Y: 150})
+
 	dl := builder.CreateDisplayListNew()
 
 	paint.Release()
