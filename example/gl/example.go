@@ -13,6 +13,9 @@ import (
 //go:embed DejaVuSans.ttf
 var dejaVuSansTTF []byte
 
+//go:embed NotoColorEmoji.ttf
+var notoColorEmojiTTF []byte
+
 func init() {
 	// This is important to ensure that only a single thread makes calls to
 	// openGL apis.
@@ -72,12 +75,24 @@ func main() {
 	builder.DrawRect(&boxRect, paint)
 
 	typographyContext := impeller.TypographyContextNew()
+
 	fontMapping := impeller.Mapping{
 		Data:   unsafe.Pointer(&dejaVuSansTTF[0]),
 		Length: uint64(len(dejaVuSansTTF)),
 	}
 	dejaVuSans := "DejaVuSans"
-	fmt.Println(typographyContext.RegisterFont(&fontMapping, nil, dejaVuSans))
+	if typographyContext.RegisterFont(&fontMapping, nil, dejaVuSans) != 1 {
+		panic("failed to register font")
+	}
+
+	fontMapping2 := impeller.Mapping{
+		Data:   unsafe.Pointer(&notoColorEmojiTTF[0]),
+		Length: uint64(len(notoColorEmojiTTF)),
+	}
+	notoColorEmoji := "NotoColorEmoji"
+	if typographyContext.RegisterFont(&fontMapping2, nil, notoColorEmoji) != 1 {
+		panic("failed to register font")
+	}
 
 	paraStyle := impeller.ParagraphStyleNew()
 	paraStyle.SetFontSize(1.25 * 16)
@@ -98,9 +113,20 @@ func main() {
 	paraStyle2.SetForeground(paint)
 	paraBuilder2 := typographyContext.ParagraphBuilderNew()
 	paraBuilder2.PushStyle(paraStyle2)
-	paraBuilder2.AddText("The quick dog jumped over the lazy dog's hind legs.")
+	paraBuilder2.AddText("The quick dog jumped over the lazy dog's hind legs. 😅")
 	para2 := paraBuilder2.BuildParagraphNew(float32(windowWidth))
 	builder.DrawParagraph(para2, &impeller.Point{X: 10, Y: 200})
+
+	paraStyle3 := impeller.ParagraphStyleNew()
+	paraStyle3.SetFontFamily(notoColorEmoji)
+	paraStyle3.SetFontSize(1.25 * 24)
+	paint.SetColor(&textColour)
+	paraStyle3.SetForeground(paint)
+	paraBuilder3 := typographyContext.ParagraphBuilderNew()
+	paraBuilder3.PushStyle(paraStyle3)
+	paraBuilder3.AddText("😅")
+	para3 := paraBuilder3.BuildParagraphNew(float32(windowWidth))
+	builder.DrawParagraph(para3, &impeller.Point{X: 10, Y: 250})
 
 	dl := builder.CreateDisplayListNew()
 
