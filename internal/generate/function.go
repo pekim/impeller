@@ -65,6 +65,7 @@ func (fn function) generate(file file) {
 		BlockFunc(func(g *jen.Group) {
 			fn.result.resultVar(g)
 			fn.params.cArgVars(g)
+			fn.params.lengthVar(g)
 
 			g.
 				List(jen.Id("_"), jen.Id("err")).

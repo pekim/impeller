@@ -1620,9 +1620,10 @@ program.
 
 @return     The color source.
 */
-func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ColorSource {
+func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ColorSource {
 	var result ColorSource
 	c_data := cString(data)
+	data_bytes_length := len(data)
 	_, err := ffi.CallFunction(
 		cifImpellerColorSourceCreateFragmentProgramNew,
 		funcImpellerColorSourceCreateFragmentProgramNew,
@@ -1960,9 +1961,10 @@ program.
 
 @return     The image filter.
 */
-func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string, data_bytes_length uint64) ImageFilter {
+func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ImageFilter {
 	var result ImageFilter
 	c_data := cString(data)
+	data_bytes_length := len(data)
 	_, err := ffi.CallFunction(
 		cifImpellerImageFilterCreateFragmentProgramNew,
 		funcImpellerImageFilterCreateFragmentProgramNew,
@@ -3437,8 +3439,9 @@ style stack.
 @param[in]  data               The data.
 @param[in]  length             The length.
 */
-func (paragraph_builder ParagraphBuilder) AddText(data string, length uint32) {
+func (paragraph_builder ParagraphBuilder) AddText(data string) {
 	c_data := cString(data)
+	length := len(data)
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphBuilderAddText,
 		funcImpellerParagraphBuilderAddText,

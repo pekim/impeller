@@ -75,8 +75,7 @@ func main() {
 	paraStyle.SetForeground(paint)
 	paraBuilder := impeller.TypographyContextNew().ParagraphBuilderNew()
 	paraBuilder.PushStyle(paraStyle)
-	text := "The quick dog jumped over the lazy dog's hind legs."
-	paraBuilder.AddText(text, uint32(len(text)))
+	paraBuilder.AddText("The quick dog jumped over the lazy dog's hind legs.")
 	windowWidth, _ := window.GetFramebufferSize()
 	para := paraBuilder.BuildParagraphNew(float32(windowWidth))
 	builder.DrawParagraph(para, &impeller.Point{X: 10, Y: 150})

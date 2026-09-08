@@ -2,14 +2,17 @@ package generate
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dave/jennifer/jen"
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type param struct {
-	name string
 	typ
+	name          string
+	lengthParam   *param
+	isLengthParam bool
 }
 
 func newParam(gen *gen, cursor clang.Cursor) param {
@@ -87,6 +90,17 @@ func newParams(gen *gen, cursor clang.Cursor) params {
 	for i := range len(params) {
 		params[i] = newParam(gen, cursor.Argument(uint32(i)))
 	}
+
+	for i := range len(params) - 1 {
+		param1 := params[i]
+		param2 := params[i+1]
+
+		if param1.isString && param2.isScalar && strings.HasSuffix(param2.name, "length") {
+			params[i].lengthParam = &params[i+1]
+			params[i+1].isLengthParam = true
+		}
+	}
+
 	return params
 }
 
@@ -102,6 +116,9 @@ func (params params) supported() (bool, string) {
 
 func (params params) goDecl(g *jen.Group) {
 	for _, param := range params {
+		if param.isLengthParam {
+			continue
+		}
 		g.Add(param.goDecl())
 	}
 }
@@ -109,5 +126,14 @@ func (params params) goDecl(g *jen.Group) {
 func (params params) cArgVars(g *jen.Group) {
 	for _, param := range params {
 		param.cArgVar(g)
+	}
+}
+
+func (params params) lengthVar(g *jen.Group) {
+	for _, param := range params {
+		if param.lengthParam == nil {
+			continue
+		}
+		g.Id(param.lengthParam.name).Op(":=").Len(jen.Id(param.name))
 	}
 }
