@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"runtime"
 	"unsafe"
@@ -8,6 +9,9 @@ import (
 	"github.com/pekim/glfw"
 	"github.com/pekim/impeller"
 )
+
+//go:embed DejaVuSans.ttf
+var dejaVuSansTTF []byte
 
 func init() {
 	// This is important to ensure that only a single thread makes calls to
@@ -67,18 +71,36 @@ func main() {
 	boxRect := impeller.Rect{X: 10, Y: 10, Width: 100, Height: 100}
 	builder.DrawRect(&boxRect, paint)
 
+	typographyContext := impeller.TypographyContextNew()
+	fontMapping := impeller.Mapping{
+		Data:   unsafe.Pointer(&dejaVuSansTTF[0]),
+		Length: uint64(len(dejaVuSansTTF)),
+	}
+	dejaVuSans := "DejaVuSans"
+	fmt.Println(typographyContext.RegisterFont(&fontMapping, nil, dejaVuSans))
+
 	paraStyle := impeller.ParagraphStyleNew()
-	// paraStyle.SetFontFamily("serif")
 	paraStyle.SetFontSize(1.25 * 16)
 	textColour := impeller.Color{Red: 0.0, Green: 0.0, Blue: 0.0, Alpha: 1.0}
 	paint.SetColor(&textColour)
 	paraStyle.SetForeground(paint)
-	paraBuilder := impeller.TypographyContextNew().ParagraphBuilderNew()
+	paraBuilder := typographyContext.ParagraphBuilderNew()
 	paraBuilder.PushStyle(paraStyle)
 	paraBuilder.AddText("The quick dog jumped over the lazy dog's hind legs.")
 	windowWidth, _ := window.GetFramebufferSize()
 	para := paraBuilder.BuildParagraphNew(float32(windowWidth))
 	builder.DrawParagraph(para, &impeller.Point{X: 10, Y: 150})
+
+	paraStyle2 := impeller.ParagraphStyleNew()
+	paraStyle2.SetFontFamily(dejaVuSans)
+	paraStyle2.SetFontSize(1.25 * 16)
+	paint.SetColor(&textColour)
+	paraStyle2.SetForeground(paint)
+	paraBuilder2 := typographyContext.ParagraphBuilderNew()
+	paraBuilder2.PushStyle(paraStyle2)
+	paraBuilder2.AddText("The quick dog jumped over the lazy dog's hind legs.")
+	para2 := paraBuilder2.BuildParagraphNew(float32(windowWidth))
+	builder.DrawParagraph(para2, &impeller.Point{X: 10, Y: 200})
 
 	dl := builder.CreateDisplayListNew()
 
