@@ -133,6 +133,8 @@ func main() {
 	paint.Release()
 	builder.Release()
 
+	draw := true
+
 	// window.SetCursorPosCallback(glfw.CursorposCallbackNew(func(_window *glfw.Window, xpos, ypos glfw.Double) {
 	// 	fmt.Println("cursor pos", xpos, ypos)
 	// }))
@@ -145,14 +147,23 @@ func main() {
 			Height: int64(height),
 		}
 		surface = context.SurfaceCreateWrappedFBONew(0, impeller.PixelFormatRGBA8888, &surfaceSize)
+		draw = true
 	}))
 
 	window.Show()
 
 	for window.ShouldClose() == glfw.FALSE {
+		// Unfortunately on linux+wayland WaitEvents does not appear to always wait for new events,
+		// and sometimes returns almost immediately.
+		//
+		// So to reduce cpu usage, only draw when required.
+		if draw {
+			surface.DrawDisplayList(dl)
+			window.SwapBuffers()
+			draw = false
+		}
+
 		glfw.WaitEvents()
-		surface.DrawDisplayList(dl)
-		window.SwapBuffers()
 	}
 
 	dl.Release()
