@@ -150,7 +150,6 @@ func main() {
 		glfw.WaitEvents()
 	}
 
-	dl.Release()
 	surface.Release()
 	context.Release()
 	window.Destroy()
