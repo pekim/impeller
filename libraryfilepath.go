@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-//go:embed temp/play/lib/libimpeller.so
+//go:embed internal/interop/lib/libimpeller.so
 var sharedObject []byte
 
 func libraryFilepath() (string, error) {
