@@ -19,7 +19,7 @@ type RequestDraw func()
 
 func Run(
 	title string,
-	setup func(window *glfw.Window, draw RequestDraw),
+	setup func(window *glfw.Window, context impeller.Context, draw RequestDraw),
 	teardown func(),
 	draw func(builder impeller.DisplayListBuilder, width int32, height int32),
 ) {
@@ -78,7 +78,7 @@ func Run(
 		shouldDraw = true
 	}
 
-	setup(window, setShouldDraw)
+	setup(window, context, setShouldDraw)
 
 	window.Show()
 

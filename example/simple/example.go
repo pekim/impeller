@@ -9,7 +9,7 @@ import (
 func main() {
 	var paint impeller.Paint
 
-	setup := func(_window *glfw.Window, _draw common.RequestDraw) {
+	setup := func(_window *glfw.Window, _context impeller.Context, _draw common.RequestDraw) {
 		paint = impeller.PaintNew()
 	}
 	teardown := func() {
