@@ -9,6 +9,9 @@ import (
 	"github.com/pekim/impeller"
 )
 
+// The approach used in this code is not necessarily a good one,
+// or recommended. It's simply one that's good enough for the examples.
+
 func init() {
 	// This is important to ensure that only a single thread makes calls to
 	// openGL apis.
