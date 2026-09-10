@@ -60,6 +60,13 @@ func Run(
 
 	shouldDraw := true
 
+	// Quit on CTRL+Q or ESCAPE pressed.
+	window.SetKeyCallback(glfw.KeyCallbackNew(func(window *glfw.Window, key, _scancode, _action, mods glfw.Int) {
+		if (mods == glfw.MOD_CONTROL && key == glfw.KEY_Q) || (mods == 0 && key == glfw.KEY_ESCAPE) {
+			window.SetShouldClose(glfw.TRUE)
+		}
+	}))
+
 	window.SetFramebufferSizeCallback(glfw.FramebuffersizeCallbackNew(func(_window *glfw.Window, width, height glfw.Int) {
 		framebufferWidth = width
 		framebufferHeight = height
