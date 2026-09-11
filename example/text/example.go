@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/pekim/glfw"
+	"github.com/pekim/go-glfw"
 	"github.com/pekim/impeller"
 	"github.com/pekim/impeller/example/common"
 )

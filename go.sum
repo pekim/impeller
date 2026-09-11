@@ -6,6 +6,8 @@ github.com/go-webgpu/goffi v0.6.3 h1:p4gKGikHBAQ/8iUiew9MV4C5M1ZGIsk8QGFGuJjMj+A
 github.com/go-webgpu/goffi v0.6.3/go.mod h1:wfoxNsJkU+5RFbV1kNN1kunhc1lFHuJKK3zpgx08/uM=
 github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec h1:AffNc+B5pN6crx+Lli5aH7KnjCngoFzJ1NHdkcx+OD0=
 github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec/go.mod h1:Y8J5Du0xnYY8HlSyjQWaNmkg1CqCbgheEhRhQvbb224=
+github.com/pekim/go-glfw v0.0.0-20260911115220-7ec34166a7ae h1:RjdAunAKB7b1bPkZVrVbN0W5PlDcHuxNUplL1njZKek=
+github.com/pekim/go-glfw v0.0.0-20260911115220-7ec34166a7ae/go.mod h1:wuYyJt2Q5cinB18vZ41PGlJWbcu8hkEoFg1/n7ZDrYw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=

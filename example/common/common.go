@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"unsafe"
 
-	"github.com/pekim/glfw"
+	"github.com/pekim/go-glfw"
 	"github.com/pekim/impeller"
 )
 

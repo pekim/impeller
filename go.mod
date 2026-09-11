@@ -2,15 +2,13 @@ module github.com/pekim/impeller
 
 go 1.26.5
 
-replace github.com/pekim/glfw => ../glfw-go
-
 replace github.com/go-clang/clang-v15 => github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec
 
 require (
 	github.com/dave/jennifer v1.7.1
 	github.com/go-clang/clang-v15 v0.0.0-20230222085438-ee3102fa0c71
 	github.com/go-webgpu/goffi v0.6.3
-	github.com/pekim/glfw v0.0.0
+	github.com/pekim/go-glfw v0.0.0-20260911115220-7ec34166a7ae
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/text v0.41.0
 )

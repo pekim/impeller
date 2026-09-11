@@ -4,7 +4,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/pekim/glfw"
+	"github.com/pekim/go-glfw"
 	"github.com/stretchr/testify/assert"
 )
 
