@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"image"
 	_ "image/png" // register png decoder
-	"unsafe"
 
 	"github.com/pekim/glfw"
 	"github.com/pekim/impeller"
@@ -47,7 +46,7 @@ func main() {
 				MipCount: 1,
 			},
 			&impeller.Mapping{
-				Data:   unsafe.Pointer(&pix[0]),
+				Data:   &pix[0],
 				Length: uint64(len(pix)),
 			},
 			nil,

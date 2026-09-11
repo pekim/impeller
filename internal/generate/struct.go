@@ -49,7 +49,7 @@ func (struct_ struct_) generateField(g *jen.Group, cursor clang.Cursor) {
 		g.Id(name).Id(goName(typ))
 
 	} else if cursor.Type().Kind() == clang.Type_Pointer {
-		g.Id(name).Qual("unsafe", "Pointer")
+		g.Id(name).Op("*").Byte()
 
 	} else if cursor.Type().Kind() == clang.Type_ConstantArray {
 		arraySize := int(cursor.Type().ArraySize())

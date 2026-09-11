@@ -18,7 +18,7 @@ func TestMappingOnRelease(t *testing.T) {
 	released := false
 
 	mapping := &Mapping{
-		Data:   unsafe.Pointer(&font[0]),
+		Data:   &font[0],
 		Length: uint64(len(font)),
 		OnRelease: NewCallback(func(user_data unsafe.Pointer) {
 			assert.Equal(t, userData, *(*int)(user_data))

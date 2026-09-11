@@ -2,7 +2,6 @@ package main
 
 import (
 	_ "embed"
-	"unsafe"
 
 	"github.com/pekim/glfw"
 	"github.com/pekim/impeller"
@@ -28,7 +27,7 @@ func main() {
 
 	registerFont := func(name string, data []byte) {
 		fontMapping := impeller.Mapping{
-			Data:   unsafe.Pointer(&data[0]),
+			Data:   &data[0],
 			Length: uint64(len(data)),
 		}
 		if !typographyContext.RegisterFont(&fontMapping, nil, name).Bool() {

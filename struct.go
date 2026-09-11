@@ -368,23 +368,23 @@ type TextureDescriptor struct {
 
 type Mapping struct {
 	_         structs.HostLayout
-	Data      unsafe.Pointer
+	Data      *byte
 	Length    uint64
 	OnRelease Callback
 }
 
 type ContextVulkanSettings struct {
 	_                      structs.HostLayout
-	UserData               unsafe.Pointer
+	UserData               *byte
 	ProcAddressCallback    VulkanProcAddressCallback
 	EnableVulkanValidation Bool
 }
 
 type ContextVulkanInfo struct {
 	_                        structs.HostLayout
-	VkInstance               unsafe.Pointer
-	VkPhysicalDevice         unsafe.Pointer
-	VkLogicalDevice          unsafe.Pointer
+	VkInstance               *byte
+	VkPhysicalDevice         *byte
+	VkLogicalDevice          *byte
 	GraphicsQueueFamilyIndex uint32
 	GraphicsQueueIndex       uint32
 }
