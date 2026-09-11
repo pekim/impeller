@@ -87,7 +87,7 @@ func main() {
 		)
 	}
 
-	common.Run("simple", setup, teardown, draw)
+	common.Run("image", setup, teardown, draw)
 }
 
 // package main
