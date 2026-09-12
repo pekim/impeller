@@ -9,7 +9,6 @@ import (
 )
 
 /*
-Get the version of Impeller standalone API. This is the API that
 will be accepted for validity checks when provided to the
 context creation methods.
 
@@ -23,9 +22,11 @@ Since there are no API stability guarantees today, passing a
 version that is different to the one returned by
 `ImpellerGetVersion` will always fail.
 
-@see        `ImpellerContextCreateOpenGLESNew`
+See        `ImpellerContextCreateOpenGLESNew`
 
-@return     The version of the standalone API.
+# return
+
+	The version of the standalone API.
 */
 func GetVersion() uint32 {
 	var result uint32
@@ -42,9 +43,7 @@ func GetVersion() uint32 {
 }
 
 /*
-Create an OpenGL(ES) Impeller context.
-
-@warning    Unlike other context types, the OpenGL ES context can only be
+Unlike other context types, the OpenGL ES context can only be
 created, used, and collected on the calling thread. This
 restriction may be lifted in the future once reactor workers are
 exposed in the API. No other context types have threading
@@ -52,21 +51,24 @@ restrictions. Till reactor workers can be used, using the
 context on a background thread will cause a stall of OpenGL
 operations.
 
-@param[in]  version      The version of the Impeller
-standalone API. See `ImpellerGetVersion`. If the
-specified here is not compatible with the version
-of the library, context creation will fail and NULL
-context returned from this call.
-@param[in]  gl_proc_address_callback
-The gl proc address callback. For instance,
-`eglGetProcAddress`.
-@param[in]  gl_proc_address_callback_user_data
-The gl proc address callback user data baton. This
-pointer is not interpreted by Impeller and will be
-returned as user data in the proc address callback.
-user data.
+# params
+  - - version      The version of the Impeller
+    standalone API. See `ImpellerGetVersion`. If the
+    specified here is not compatible with the version
+    of the library, context creation will fail and NULL
+    context returned from this call.
+  - - gl_proc_address_callback
+    The gl proc address callback. For instance,
+    `eglGetProcAddress`.
+  - - gl_proc_address_callback_user_data
+    The gl proc address callback user data baton. This
+    pointer is not interpreted by Impeller and will be
+    returned as user data in the proc address callback.
+    user data.
 
-@return     The context or NULL if one cannot be created.
+# return
+
+	The context or NULL if one cannot be created.
 */
 func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddressCallback, gl_proc_address_callback_user_data unsafe.Pointer) Context {
 	var result Context
@@ -87,11 +89,12 @@ func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddre
 }
 
 /*
-Create a Metal context using the system default Metal device.
+# params
+  - - version  The version specified in the IMPELLER_VERSION macro.
 
-@param[in]  version  The version specified in the IMPELLER_VERSION macro.
+# return
 
-@return     The Metal context or NULL if one cannot be created.
+	The Metal context or NULL if one cannot be created.
 */
 func ContextCreateMetalNew(version uint32) Context {
 	var result Context
@@ -110,12 +113,13 @@ func ContextCreateMetalNew(version uint32) Context {
 }
 
 /*
-Create a Vulkan context using the provided Vulkan Settings.
+# params
+  - - version   The version specified in the IMPELLER_VERSION macro.
+  - - settings  The Vulkan settings.
 
-@param[in]  version   The version specified in the IMPELLER_VERSION macro.
-@param[in]  settings  The Vulkan settings.
+# return
 
-@return     The Vulkan context or NULL if one cannot be created.
+	The Vulkan context or NULL if one cannot be created.
 */
 func ContextCreateVulkanNew(version uint32, settings *ContextVulkanSettings) Context {
 	var result Context
@@ -135,10 +139,10 @@ func ContextCreateVulkanNew(version uint32, settings *ContextVulkanSettings) Con
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  context  The context.
+# params
+  - - context  The context.
 */
 func (context Context) Retain() {
 	_, err := ffi.CallFunction(
@@ -155,10 +159,10 @@ func (context Context) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  context  The context.
+# params
+  - - context  The context.
 */
 func (context Context) Release() {
 	_, err := ffi.CallFunction(
@@ -175,18 +179,20 @@ func (context Context) Release() {
 }
 
 /*
-Get internal Vulkan handles managed by the given Vulkan context.
 Ownership of the handles is still maintained by Impeller. This
 accessor is just available so embedders can create resources
 using the same device and instance as Impeller for interop.
 
-@warning    If the context is not a Vulkan context, False is returned with
+If the context is not a Vulkan context, False is returned with
 the [out] argument unaffected.
 
-@param[in]  context          The context
-@param[out]  out_vulkan_info  The out vulkan information
+# params
+  - - context          The context
+  - (out) - out_vulkan_info  The out vulkan information
 
-@return     If the Vulkan info could be fetched from the context.
+# return
+
+	If the Vulkan info could be fetched from the context.
 */
 func (context Context) GetVulkanInfo(out_vulkan_info *ContextVulkanInfo) Bool {
 	var result Bool
@@ -206,17 +212,19 @@ func (context Context) GetVulkanInfo(out_vulkan_info *ContextVulkanInfo) Bool {
 }
 
 /*
-Create a new Vulkan swapchain using a VkSurfaceKHR instance.
 Ownership of the surface is transferred over to Impeller. The
 Vulkan instance the surface is created from must the same as the
 context provided.
 
-@param[in]  context             The context. Must be a Vulkan context whose
-instance is the same used to create the
-surface passed into the next argument.
-@param      vulkan_surface_khr  The vulkan surface.
+# params
+  - - context             The context. Must be a Vulkan context whose
+    instance is the same used to create the
+    surface passed into the next argument.
+  - -     vulkan_surface_khr  The vulkan surface.
 
-@return     The vulkan swapchain.
+# return
+
+	The vulkan swapchain.
 */
 func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr unsafe.Pointer) VulkanSwapchain {
 	var result VulkanSwapchain
@@ -236,10 +244,10 @@ func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr unsafe.Pointe
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  swapchain  The swapchain.
+# params
+  - - swapchain  The swapchain.
 */
 func (swapchain VulkanSwapchain) Retain() {
 	_, err := ffi.CallFunction(
@@ -256,10 +264,10 @@ func (swapchain VulkanSwapchain) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  swapchain  The swapchain.
+# params
+  - - swapchain  The swapchain.
 */
 func (swapchain VulkanSwapchain) Release() {
 	_, err := ffi.CallFunction(
@@ -276,14 +284,16 @@ func (swapchain VulkanSwapchain) Release() {
 }
 
 /*
-A potentially blocking operation, acquires the next surface to
 render to. Since this may block, surface acquisition must be
 delayed for as long as possible to avoid an idle wait on the
 CPU.
 
-@param[in]  swapchain  The swapchain.
+# params
+  - - swapchain  The swapchain.
 
-@return     The surface if one could be obtained, NULL otherwise.
+# return
+
+	The surface if one could be obtained, NULL otherwise.
 */
 func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 	var result Surface
@@ -302,18 +312,20 @@ func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 }
 
 /*
-Create a new surface by wrapping an existing framebuffer object.
 The framebuffer must be complete as determined by
 `glCheckFramebufferStatus`. The framebuffer is still owned by
 the caller and it must be collected once the surface is
 collected.
 
-@param[in]  context  The context.
-@param[in]  fbo      The framebuffer object handle.
-@param[in]  format   The format of the framebuffer.
-@param[in]  size     The size of the framebuffer is texels.
+# params
+  - - context  The context.
+  - - fbo      The framebuffer object handle.
+  - - format   The format of the framebuffer.
+  - - size     The size of the framebuffer is texels.
 
-@return     The surface if once can be created, NULL otherwise.
+# return
+
+	The surface if once can be created, NULL otherwise.
 */
 func (context Context) SurfaceCreateWrappedFBONew(fbo uint64, format PixelFormat, size *ISize) Surface {
 	var result Surface
@@ -335,19 +347,21 @@ func (context Context) SurfaceCreateWrappedFBONew(fbo uint64, format PixelFormat
 }
 
 /*
-Create a surface by wrapping a Metal drawable. This is useful
 during WSI when the drawable is the backing store of the Metal
 layer being drawn to.
 
 The Metal layer must be using the same device managed by the
 underlying context.
 
-@param[in]  context         The context. The Metal device managed by this
-context must be the same used to create the
-drawable that is being wrapped.
-@param      metal_drawable  The drawable to wrap as a surface.
+# params
+  - - context         The context. The Metal device managed by this
+    context must be the same used to create the
+    drawable that is being wrapped.
+  - -     metal_drawable  The drawable to wrap as a surface.
 
-@return     The surface if one could be wrapped, NULL otherwise.
+# return
+
+	The surface if one could be wrapped, NULL otherwise.
 */
 func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable unsafe.Pointer) Surface {
 	var result Surface
@@ -367,10 +381,10 @@ func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable unsaf
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  surface  The surface.
+# params
+  - - surface  The surface.
 */
 func (surface Surface) Retain() {
 	_, err := ffi.CallFunction(
@@ -387,10 +401,10 @@ func (surface Surface) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  surface  The surface.
+# params
+  - - surface  The surface.
 */
 func (surface Surface) Release() {
 	_, err := ffi.CallFunction(
@@ -407,10 +421,9 @@ func (surface Surface) Release() {
 }
 
 /*
-Draw a display list onto the surface. The same display list can
 be drawn multiple times to different surfaces.
 
-@warning    In the OpenGL backend, Impeller will not make an effort to
+In the OpenGL backend, Impeller will not make an effort to
 preserve the OpenGL state that is current in the context.
 Embedders that perform additional OpenGL operations in the
 context should expect the reset state after control transitions
@@ -418,10 +431,13 @@ back to them. Key state to watch out for would be the viewports,
 stencil rects, test toggles, resource (texture, framebuffer,
 buffer) bindings, etc...
 
-@param[in]  surface       The surface to draw the display list to.
-@param[in]  display_list  The display list to draw onto the surface.
+# params
+  - - surface       The surface to draw the display list to.
+  - - display_list  The display list to draw onto the surface.
 
-@return     If the display list could be drawn onto the surface.
+# return
+
+	If the display list could be drawn onto the surface.
 */
 func (surface Surface) DrawDisplayList(display_list DisplayList) Bool {
 	var result Bool
@@ -441,11 +457,12 @@ func (surface Surface) DrawDisplayList(display_list DisplayList) Bool {
 }
 
 /*
-Present the surface to the underlying window system.
+# params
+  - - surface  The surface to present.
 
-@param[in]  surface  The surface to present.
+# return
 
-@return     True if the surface could be presented.
+	True if the surface could be presented.
 */
 func (surface Surface) Present() Bool {
 	var result Bool
@@ -464,10 +481,10 @@ func (surface Surface) Present() Bool {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  path  The path.
+# params
+  - - path  The path.
 */
 func (path Path) Retain() {
 	_, err := ffi.CallFunction(
@@ -484,10 +501,10 @@ func (path Path) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  path  The path.
+# params
+  - - path  The path.
 */
 func (path Path) Release() {
 	_, err := ffi.CallFunction(
@@ -504,14 +521,13 @@ func (path Path) Release() {
 }
 
 /*
-Get the bounds of the path.
-
 The bounds are conservative. That is, they may be larger than
 the actual shape of the path and could include the control
 points and isolated calls to move the cursor.
 
-@param[in]  path        The path
-@param[out] out_bounds  The conservative bounds of the path.
+# params
+  - - path        The path
+  - out_bounds (out) -  The conservative bounds of the path.
 */
 func (path Path) GetBounds(out_bounds *Rect) {
 	_, err := ffi.CallFunction(
@@ -529,10 +545,11 @@ func (path Path) GetBounds(out_bounds *Rect) {
 }
 
 /*
-Create a new path builder. Paths themselves are immutable.
 A builder builds these immutable paths.
 
-@return     The path builder.
+# return
+
+	The path builder.
 */
 func PathBuilderNew() PathBuilder {
 	var result PathBuilder
@@ -549,10 +566,10 @@ func PathBuilderNew() PathBuilder {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  builder  The builder.
+# params
+  - - builder  The builder.
 */
 func (builder PathBuilder) Retain() {
 	_, err := ffi.CallFunction(
@@ -569,10 +586,10 @@ func (builder PathBuilder) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  builder  The builder.
+# params
+  - - builder  The builder.
 */
 func (builder PathBuilder) Release() {
 	_, err := ffi.CallFunction(
@@ -589,10 +606,9 @@ func (builder PathBuilder) Release() {
 }
 
 /*
-Move the cursor to the specified location.
-
-@param[in]  builder   The builder.
-@param[in]  location  The location.
+# params
+  - - builder   The builder.
+  - - location  The location.
 */
 func (builder PathBuilder) MoveTo(location *Point) {
 	_, err := ffi.CallFunction(
@@ -610,11 +626,11 @@ func (builder PathBuilder) MoveTo(location *Point) {
 }
 
 /*
-Add a line segment from the current cursor location to the given
 location. The cursor location is updated to be at the endpoint.
 
-@param[in]  builder   The builder.
-@param[in]  location  The location.
+# params
+  - - builder   The builder.
+  - - location  The location.
 */
 func (builder PathBuilder) LineTo(location *Point) {
 	_, err := ffi.CallFunction(
@@ -632,14 +648,14 @@ func (builder PathBuilder) LineTo(location *Point) {
 }
 
 /*
-Add a quadratic curve from whose start point is the cursor to
 the specified end point using the a single control point.
 
 The new location of the cursor after this call is the end point.
 
-@param[in]  builder        The builder.
-@param[in]  control_point  The control point.
-@param[in]  end_point      The end point.
+# params
+  - - builder        The builder.
+  - - control_point  The control point.
+  - - end_point      The end point.
 */
 func (builder PathBuilder) QuadraticCurveTo(control_point *Point, end_point *Point) {
 	_, err := ffi.CallFunction(
@@ -658,17 +674,17 @@ func (builder PathBuilder) QuadraticCurveTo(control_point *Point, end_point *Poi
 }
 
 /*
-Add a cubic curve whose start point is current cursor location
 to the specified end point using the two specified control
 points.
 
 The new location of the cursor after this call is the end point
 supplied.
 
-@param[in]  builder          The builder
-@param[in]  control_point_1  The control point 1
-@param[in]  control_point_2  The control point 2
-@param[in]  end_point        The end point
+# params
+  - - builder          The builder
+  - - control_point_1  The control point 1
+  - - control_point_2  The control point 2
+  - - end_point        The end point
 */
 func (builder PathBuilder) CubicCurveTo(control_point_1 *Point, control_point_2 *Point, end_point *Point) {
 	_, err := ffi.CallFunction(
@@ -688,10 +704,9 @@ func (builder PathBuilder) CubicCurveTo(control_point_1 *Point, control_point_2 
 }
 
 /*
-Adds a rectangle to the path.
-
-@param[in]  builder  The builder.
-@param[in]  rect     The rectangle.
+# params
+  - - builder  The builder.
+  - - rect     The rectangle.
 */
 func (builder PathBuilder) AddRect(rect *Rect) {
 	_, err := ffi.CallFunction(
@@ -709,12 +724,11 @@ func (builder PathBuilder) AddRect(rect *Rect) {
 }
 
 /*
-Add an arc to the path.
-
-@param[in]  builder              The builder.
-@param[in]  oval_bounds          The oval bounds.
-@param[in]  start_angle_degrees  The start angle in degrees.
-@param[in]  end_angle_degrees    The end angle in degrees.
+# params
+  - - builder              The builder.
+  - - oval_bounds          The oval bounds.
+  - - start_angle_degrees  The start angle in degrees.
+  - - end_angle_degrees    The end angle in degrees.
 */
 func (builder PathBuilder) AddArc(oval_bounds *Rect, start_angle_degrees float32, end_angle_degrees float32) {
 	_, err := ffi.CallFunction(
@@ -734,10 +748,9 @@ func (builder PathBuilder) AddArc(oval_bounds *Rect, start_angle_degrees float32
 }
 
 /*
-Add an oval to the path.
-
-@param[in]  builder      The builder.
-@param[in]  oval_bounds  The oval bounds.
+# params
+  - - builder      The builder.
+  - - oval_bounds  The oval bounds.
 */
 func (builder PathBuilder) AddOval(oval_bounds *Rect) {
 	_, err := ffi.CallFunction(
@@ -755,12 +768,12 @@ func (builder PathBuilder) AddOval(oval_bounds *Rect) {
 }
 
 /*
-Add a rounded rect with potentially non-uniform radii to the
 path.
 
-@param[in]  builder         The builder.
-@param[in]  rect            The rectangle.
-@param[in]  rounding_radii  The rounding radii.
+# params
+  - - builder         The builder.
+  - - rect            The rectangle.
+  - - rounding_radii  The rounding radii.
 */
 func (builder PathBuilder) AddRoundedRect(rect *Rect, rounding_radii *RoundingRadii) {
 	_, err := ffi.CallFunction(
@@ -779,9 +792,8 @@ func (builder PathBuilder) AddRoundedRect(rect *Rect, rounding_radii *RoundingRa
 }
 
 /*
-Close the path.
-
-@param[in]  builder  The builder.
+# params
+  - - builder  The builder.
 */
 func (builder PathBuilder) Close() {
 	_, err := ffi.CallFunction(
@@ -798,13 +810,15 @@ func (builder PathBuilder) Close() {
 }
 
 /*
-Create a new path by copying the existing built-up path. The
 existing path can continue being added to.
 
-@param[in]  builder  The builder.
-@param[in]  fill     The fill.
+# params
+  - - builder  The builder.
+  - - fill     The fill.
 
-@return     The impeller path.
+# return
+
+	The impeller path.
 */
 func (builder PathBuilder) CopyPathNew(fill FillType) Path {
 	var result Path
@@ -824,13 +838,15 @@ func (builder PathBuilder) CopyPathNew(fill FillType) Path {
 }
 
 /*
-Create a new path using the existing built-up path. The existing
 path builder now contains an empty path.
 
-@param[in]  builder  The builder.
-@param[in]  fill     The fill.
+# params
+  - - builder  The builder.
+  - - fill     The fill.
 
-@return     The impeller path.
+# return
+
+	The impeller path.
 */
 func (builder PathBuilder) TakePathNew(fill FillType) Path {
 	var result Path
@@ -850,9 +866,9 @@ func (builder PathBuilder) TakePathNew(fill FillType) Path {
 }
 
 /*
-Create a new paint with default values.
+# return
 
-@return     The impeller paint.
+	The impeller paint.
 */
 func PaintNew() Paint {
 	var result Paint
@@ -869,10 +885,10 @@ func PaintNew() Paint {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  paint  The paint.
+# params
+  - - paint  The paint.
 */
 func (paint Paint) Retain() {
 	_, err := ffi.CallFunction(
@@ -889,10 +905,10 @@ func (paint Paint) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  paint  The paint.
+# params
+  - - paint  The paint.
 */
 func (paint Paint) Release() {
 	_, err := ffi.CallFunction(
@@ -909,10 +925,9 @@ func (paint Paint) Release() {
 }
 
 /*
-Set the paint color.
-
-@param[in]  paint  The paint.
-@param[in]  color  The color.
+# params
+  - - paint  The paint.
+  - - color  The color.
 */
 func (paint Paint) SetColor(color *Color) {
 	_, err := ffi.CallFunction(
@@ -930,12 +945,12 @@ func (paint Paint) SetColor(color *Color) {
 }
 
 /*
-Set the paint blend mode. The blend mode controls how the new
 paints contents are mixed with the values already drawn using
 previous draw calls.
 
-@param[in]  paint  The paint.
-@param[in]  mode   The mode.
+# params
+  - - paint  The paint.
+  - - mode   The mode.
 */
 func (paint Paint) SetBlendMode(mode BlendMode) {
 	_, err := ffi.CallFunction(
@@ -953,11 +968,11 @@ func (paint Paint) SetBlendMode(mode BlendMode) {
 }
 
 /*
-Set the paint draw style. The style controls if the closed
 shapes are filled and/or stroked.
 
-@param[in]  paint  The paint.
-@param[in]  style  The style.
+# params
+  - - paint  The paint.
+  - - style  The style.
 */
 func (paint Paint) SetDrawStyle(style DrawStyle) {
 	_, err := ffi.CallFunction(
@@ -975,10 +990,9 @@ func (paint Paint) SetDrawStyle(style DrawStyle) {
 }
 
 /*
-Sets how strokes rendered using this paint are capped.
-
-@param[in]  paint  The paint.
-@param[in]  cap    The stroke cap style.
+# params
+  - - paint  The paint.
+  - - cap    The stroke cap style.
 */
 func (paint Paint) SetStrokeCap(cap StrokeCap) {
 	_, err := ffi.CallFunction(
@@ -996,10 +1010,9 @@ func (paint Paint) SetStrokeCap(cap StrokeCap) {
 }
 
 /*
-Sets how strokes rendered using this paint are joined.
-
-@param[in]  paint  The paint.
-@param[in]  join   The join.
+# params
+  - - paint  The paint.
+  - - join   The join.
 */
 func (paint Paint) SetStrokeJoin(join StrokeJoin) {
 	_, err := ffi.CallFunction(
@@ -1017,10 +1030,9 @@ func (paint Paint) SetStrokeJoin(join StrokeJoin) {
 }
 
 /*
-Set the width of the strokes rendered using this paint.
-
-@param[in]  paint  The paint.
-@param[in]  width  The width.
+# params
+  - - paint  The paint.
+  - - width  The width.
 */
 func (paint Paint) SetStrokeWidth(width float32) {
 	_, err := ffi.CallFunction(
@@ -1038,10 +1050,9 @@ func (paint Paint) SetStrokeWidth(width float32) {
 }
 
 /*
-Set the miter limit of the strokes rendered using this paint.
-
-@param[in]  paint  The paint.
-@param[in]  miter  The miter limit.
+# params
+  - - paint  The paint.
+  - - miter  The miter limit.
 */
 func (paint Paint) SetStrokeMiter(miter float32) {
 	_, err := ffi.CallFunction(
@@ -1059,14 +1070,13 @@ func (paint Paint) SetStrokeMiter(miter float32) {
 }
 
 /*
-Set the color filter of the paint.
-
 Color filters are functions that take two colors and mix them to
 produce a single color. This color is then usually merged with
 the destination during blending.
 
-@param[in]  paint         The paint.
-@param[in]  color_filter  The color filter.
+# params
+  - - paint         The paint.
+  - - color_filter  The color filter.
 */
 func (paint Paint) SetColorFilter(color_filter ColorFilter) {
 	_, err := ffi.CallFunction(
@@ -1084,13 +1094,12 @@ func (paint Paint) SetColorFilter(color_filter ColorFilter) {
 }
 
 /*
-Set the color source of the paint.
-
 Color sources are functions that generate colors for each
 texture element covered by a draw call.
 
-@param[in]  paint         The paint.
-@param[in]  color_source  The color source.
+# params
+  - - paint         The paint.
+  - - color_source  The color source.
 */
 func (paint Paint) SetColorSource(color_source ColorSource) {
 	_, err := ffi.CallFunction(
@@ -1108,13 +1117,12 @@ func (paint Paint) SetColorSource(color_source ColorSource) {
 }
 
 /*
-Set the image filter of a paint.
-
 Image filters are functions that are applied to regions of a
 texture to produce a single color.
 
-@param[in]  paint         The paint.
-@param[in]  image_filter  The image filter.
+# params
+  - - paint         The paint.
+  - - image_filter  The image filter.
 */
 func (paint Paint) SetImageFilter(image_filter ImageFilter) {
 	_, err := ffi.CallFunction(
@@ -1132,10 +1140,9 @@ func (paint Paint) SetImageFilter(image_filter ImageFilter) {
 }
 
 /*
-Set the mask filter of a paint.
-
-@param[in]  paint        The paint.
-@param[in]  mask_filter  The mask filter.
+# params
+  - - paint        The paint.
+  - - mask_filter  The mask filter.
 */
 func (paint Paint) SetMaskFilter(mask_filter MaskFilter) {
 	_, err := ffi.CallFunction(
@@ -1153,8 +1160,6 @@ func (paint Paint) SetMaskFilter(mask_filter MaskFilter) {
 }
 
 /*
-Create a texture with decompressed bytes.
-
 Impeller will do its best to perform the transfer of this data
 to GPU memory with a minimal number of copies. Towards this
 end, it may need to send this data to a different thread for
@@ -1172,17 +1177,21 @@ the rendering backend in use. But it is best practice to provide
 a release callback and be resilient to the data being released
 in a deferred manner on a background thread.
 
-@warning    Do **not** supply compressed image data directly (PNG, JPEG,
+Do **not** supply compressed image data directly (PNG, JPEG,
 etc...). This function only works with tightly packed
 decompressed data.
 
-@param[in]  context                        The context.
-@param[in]  descriptor                     The texture descriptor.
-@param[in]  contents                       The contents.
-@param[in]  contents_on_release_user_data  The baton passes to the contents
-release callback if one exists.
+# params
+  - - context                        The context.
+  - - descriptor                     The texture descriptor.
+  - - contents                       The contents.
+  - - contents_on_release_user_data  The baton passes to the contents
+    release callback if one exists.
 
-@return     The texture if one can be created using the provided data, NULL
+# return
+
+	The texture if one can be created using the provided data, NULL
+
 otherwise.
 */
 func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data unsafe.Pointer) Texture {
@@ -1205,7 +1214,6 @@ func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescripto
 }
 
 /*
-Create a texture with an externally created OpenGL texture
 handle.
 
 Ownership of the handle is transferred over to Impeller after a
@@ -1221,11 +1229,15 @@ synchronization of texture contents must already be complete.
 If the context is not an OpenGL context, this call will always
 fail.
 
-@param[in]  context     The context
-@param[in]  descriptor  The descriptor
-@param[in]  handle      The handle
+# params
+  - - context     The context
+  - - descriptor  The descriptor
+  - - handle      The handle
 
-@return     The texture if one could be created by adopting the supplied
+# return
+
+	The texture if one could be created by adopting the supplied
+
 texture handle, NULL otherwise.
 */
 func (context Context) TextureCreateWithOpenGLTextureHandleNew(descriptor *TextureDescriptor, handle uint64) Texture {
@@ -1247,10 +1259,10 @@ func (context Context) TextureCreateWithOpenGLTextureHandleNew(descriptor *Textu
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  texture  The texture.
+# params
+  - - texture  The texture.
 */
 func (texture Texture) Retain() {
 	_, err := ffi.CallFunction(
@@ -1267,10 +1279,10 @@ func (texture Texture) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  texture  The texture.
+# params
+  - - texture  The texture.
 */
 func (texture Texture) Release() {
 	_, err := ffi.CallFunction(
@@ -1287,7 +1299,6 @@ func (texture Texture) Release() {
 }
 
 /*
-Get the OpenGL handle associated with this texture. If this is
 not an OpenGL texture, this method will always return 0.
 
 OpenGL handles are lazily created, this method will return
@@ -1295,9 +1306,12 @@ GL_NONE is no OpenGL handle is available. To ensure that this
 call eagerly creates an OpenGL texture, call this on a thread
 where Impeller knows there is an OpenGL context available.
 
-@param[in]  texture  The texture.
+# params
+  - - texture  The texture.
 
-@return     The OpenGL handle if one is available, GL_NONE otherwise.
+# return
+
+	The OpenGL handle if one is available, GL_NONE otherwise.
 */
 func (texture Texture) GetOpenGLHandle() uint64 {
 	var result uint64
@@ -1315,22 +1329,6 @@ func (texture Texture) GetOpenGLHandle() uint64 {
 	return result
 }
 
-/*
-Create a new fragment program using data obtained by compiling a
-GLSL shader with `impellerc`.
-
-@warning    The data provided must be compiled by `impellerc`. Providing raw
-GLSL strings will lead to a `nullptr` return. Impeller does not
-compile shaders at runtime.
-
-@param[in]  data                    The data compiled by `impellerc`.
-@param      data_release_user_data  A baton passed back to the caller on the
-invocation of the mappings release
-callback. This call can happen on any
-thread.
-
-@return     The fragment program if one can be created, nullptr otherwise.
-*/
 func FragmentProgramNew(data *Mapping, data_release_user_data unsafe.Pointer) FragmentProgram {
 	var result FragmentProgram
 	_, err := ffi.CallFunction(
@@ -1349,10 +1347,10 @@ func FragmentProgramNew(data *Mapping, data_release_user_data unsafe.Pointer) Fr
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  fragment_program  The fragment program.
+# params
+  - - fragment_program  The fragment program.
 */
 func (fragment_program FragmentProgram) Retain() {
 	_, err := ffi.CallFunction(
@@ -1369,10 +1367,10 @@ func (fragment_program FragmentProgram) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  fragment_program  The fragment program.
+# params
+  - - fragment_program  The fragment program.
 */
 func (fragment_program FragmentProgram) Release() {
 	_, err := ffi.CallFunction(
@@ -1388,12 +1386,6 @@ func (fragment_program FragmentProgram) Release() {
 	}
 }
 
-/*
-Retain a strong reference to the object. The object can be NULL
-in which case this method is a no-op.
-
-@param[in]  color_source  The color source.
-*/
 func (color_source ColorSource) Retain() {
 	_, err := ffi.CallFunction(
 		cifImpellerColorSourceRetain,
@@ -1409,10 +1401,10 @@ func (color_source ColorSource) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  color_source  The color source.
+# params
+  - - color_source  The color source.
 */
 func (color_source ColorSource) Release() {
 	_, err := ffi.CallFunction(
@@ -1429,17 +1421,18 @@ func (color_source ColorSource) Release() {
 }
 
 /*
-Create a color source that forms a linear gradient.
+# params
+  - - start_point     The start point.
+  - - end_point       The end point.
+  - - stop_count      The stop count.
+  - - colors          The colors.
+  - - stops           The stops.
+  - - tile_mode       The tile mode.
+  - - transformation  The transformation.
 
-@param[in]  start_point     The start point.
-@param[in]  end_point       The end point.
-@param[in]  stop_count      The stop count.
-@param[in]  colors          The colors.
-@param[in]  stops           The stops.
-@param[in]  tile_mode       The tile mode.
-@param[in]  transformation  The transformation.
+# return
 
-@return     The color source.
+	The color source.
 */
 func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1464,17 +1457,18 @@ func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, st
 }
 
 /*
-Create a color source that forms a radial gradient.
+# params
+  - - center          The center.
+  - - radius          The radius.
+  - - stop_count      The stop count.
+  - - colors          The colors.
+  - - stops           The stops.
+  - - tile_mode       The tile mode.
+  - - transformation  The transformation.
 
-@param[in]  center          The center.
-@param[in]  radius          The radius.
-@param[in]  stop_count      The stop count.
-@param[in]  colors          The colors.
-@param[in]  stops           The stops.
-@param[in]  tile_mode       The tile mode.
-@param[in]  transformation  The transformation.
+# return
 
-@return     The color source.
+	The color source.
 */
 func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1499,19 +1493,20 @@ func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_coun
 }
 
 /*
-Create a color source that forms a conical gradient.
+# params
+  - - start_center    The start center.
+  - - start_radius    The start radius.
+  - - end_center      The end center.
+  - - end_radius      The end radius.
+  - - stop_count      The stop count.
+  - - colors          The colors.
+  - - stops           The stops.
+  - - tile_mode       The tile mode.
+  - - transformation  The transformation.
 
-@param[in]  start_center    The start center.
-@param[in]  start_radius    The start radius.
-@param[in]  end_center      The end center.
-@param[in]  end_radius      The end radius.
-@param[in]  stop_count      The stop count.
-@param[in]  colors          The colors.
-@param[in]  stops           The stops.
-@param[in]  tile_mode       The tile mode.
-@param[in]  transformation  The transformation.
+# return
 
-@return     The color source.
+	The color source.
 */
 func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float32, end_center *Point, end_radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1538,18 +1533,19 @@ func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float
 }
 
 /*
-Create a color source that forms a sweep gradient.
+# params
+  - - center          The center.
+  - - start           The start.
+  - - end             The end.
+  - - stop_count      The stop count.
+  - - colors          The colors.
+  - - stops           The stops.
+  - - tile_mode       The tile mode.
+  - - transformation  The transformation.
 
-@param[in]  center          The center.
-@param[in]  start           The start.
-@param[in]  end             The end.
-@param[in]  stop_count      The stop count.
-@param[in]  colors          The colors.
-@param[in]  stops           The stops.
-@param[in]  tile_mode       The tile mode.
-@param[in]  transformation  The transformation.
+# return
 
-@return     The color source.
+	The color source.
 */
 func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1575,15 +1571,16 @@ func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32
 }
 
 /*
-Create a color source that samples from an image.
+# params
+  - - image                 The image.
+  - - horizontal_tile_mode  The horizontal tile mode.
+  - - vertical_tile_mode    The vertical tile mode.
+  - - sampling              The sampling.
+  - - transformation        The transformation.
 
-@param[in]  image                 The image.
-@param[in]  horizontal_tile_mode  The horizontal tile mode.
-@param[in]  vertical_tile_mode    The vertical tile mode.
-@param[in]  sampling              The sampling.
-@param[in]  transformation        The transformation.
+# return
 
-@return     The color source.
+	The color source.
 */
 func (image Texture) ColorSourceCreateImageNew(horizontal_tile_mode TileMode, vertical_tile_mode TileMode, sampling TextureSampling, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1606,19 +1603,21 @@ func (image Texture) ColorSourceCreateImageNew(horizontal_tile_mode TileMode, ve
 }
 
 /*
-Create a color source whose pixels are shaded by a fragment
 program.
 
-@see        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
+See        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
-@param[in]  context            The context.
-@param[in]  fragment_program   The fragment program.
-@param      samplers           The samplers.
-@param[in]  samplers_count     The samplers count.
-@param[in]  data               The data (copied).
-@param[in]  data_bytes_length  The data bytes length.
+# params
+  - - context            The context.
+  - - fragment_program   The fragment program.
+  - -     samplers           The samplers.
+  - - samplers_count     The samplers count.
+  - - data               The data (copied).
+  - - data_bytes_length  The data bytes length.
 
-@return     The color source.
+# return
+
+	The color source.
 */
 func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ColorSource {
 	var result ColorSource
@@ -1644,10 +1643,10 @@ func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program Frag
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  color_filter  The color filter.
+# params
+  - - color_filter  The color filter.
 */
 func (color_filter ColorFilter) Retain() {
 	_, err := ffi.CallFunction(
@@ -1664,10 +1663,10 @@ func (color_filter ColorFilter) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  color_filter  The color filter.
+# params
+  - - color_filter  The color filter.
 */
 func (color_filter ColorFilter) Release() {
 	_, err := ffi.CallFunction(
@@ -1684,13 +1683,15 @@ func (color_filter ColorFilter) Release() {
 }
 
 /*
-Create a color filter that performs blending of pixel values
 independently.
 
-@param[in]  color       The color.
-@param[in]  blend_mode  The blend mode.
+# params
+  - - color       The color.
+  - - blend_mode  The blend mode.
 
-@return     The color filter.
+# return
+
+	The color filter.
 */
 func ColorFilterCreateBlendNew(color *Color, blend_mode BlendMode) ColorFilter {
 	var result ColorFilter
@@ -1710,12 +1711,14 @@ func ColorFilterCreateBlendNew(color *Color, blend_mode BlendMode) ColorFilter {
 }
 
 /*
-Create a color filter that transforms pixel color values
 independently.
 
-@param[in]  color_matrix  The color matrix.
+# params
+  - - color_matrix  The color matrix.
 
-@return     The color filter.
+# return
+
+	The color filter.
 */
 func ColorFilterCreateColorMatrixNew(color_matrix *ColorMatrix) ColorFilter {
 	var result ColorFilter
@@ -1734,10 +1737,10 @@ func ColorFilterCreateColorMatrixNew(color_matrix *ColorMatrix) ColorFilter {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  mask_filter  The mask filter.
+# params
+  - - mask_filter  The mask filter.
 */
 func (mask_filter MaskFilter) Retain() {
 	_, err := ffi.CallFunction(
@@ -1754,10 +1757,10 @@ func (mask_filter MaskFilter) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  mask_filter  The mask filter.
+# params
+  - - mask_filter  The mask filter.
 */
 func (mask_filter MaskFilter) Release() {
 	_, err := ffi.CallFunction(
@@ -1774,12 +1777,13 @@ func (mask_filter MaskFilter) Release() {
 }
 
 /*
-Create a mask filter that blurs contents in the masked shape.
+# params
+  - - style  The style.
+  - - sigma  The sigma.
 
-@param[in]  style  The style.
-@param[in]  sigma  The sigma.
+# return
 
-@return     The mask filter.
+	The mask filter.
 */
 func MaskFilterCreateBlurNew(style BlurStyle, sigma float32) MaskFilter {
 	var result MaskFilter
@@ -1799,10 +1803,10 @@ func MaskFilterCreateBlurNew(style BlurStyle, sigma float32) MaskFilter {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  image_filter  The image filter.
+# params
+  - - image_filter  The image filter.
 */
 func (image_filter ImageFilter) Retain() {
 	_, err := ffi.CallFunction(
@@ -1819,10 +1823,10 @@ func (image_filter ImageFilter) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  image_filter  The image filter.
+# params
+  - - image_filter  The image filter.
 */
 func (image_filter ImageFilter) Release() {
 	_, err := ffi.CallFunction(
@@ -1839,16 +1843,17 @@ func (image_filter ImageFilter) Release() {
 }
 
 /*
-Creates an image filter that applies a Gaussian blur.
-
 The Gaussian blur applied may be an approximation for
 performance.
 
-@param[in]  x_sigma    The x sigma.
-@param[in]  y_sigma    The y sigma.
-@param[in]  tile_mode  The tile mode.
+# params
+  - - x_sigma    The x sigma.
+  - - y_sigma    The y sigma.
+  - - tile_mode  The tile mode.
 
-@return     The image filter.
+# return
+
+	The image filter.
 */
 func ImageFilterCreateBlurNew(x_sigma float32, y_sigma float32, tile_mode TileMode) ImageFilter {
 	var result ImageFilter
@@ -1868,15 +1873,6 @@ func ImageFilterCreateBlurNew(x_sigma float32, y_sigma float32, tile_mode TileMo
 	return result
 }
 
-/*
-Creates an image filter that enhances the per-channel pixel
-values to the maximum value in a circle around the pixel.
-
-@param[in]  x_radius  The x radius.
-@param[in]  y_radius  The y radius.
-
-@return     The image filter.
-*/
 func ImageFilterCreateDilateNew(x_radius float32, y_radius float32) ImageFilter {
 	var result ImageFilter
 	_, err := ffi.CallFunction(
@@ -1895,13 +1891,15 @@ func ImageFilterCreateDilateNew(x_radius float32, y_radius float32) ImageFilter 
 }
 
 /*
-Creates an image filter that dampens the per-channel pixel
 values to the minimum value in a circle around the pixel.
 
-@param[in]  x_radius  The x radius.
-@param[in]  y_radius  The y radius.
+# params
+  - - x_radius  The x radius.
+  - - y_radius  The y radius.
 
-@return     The image filter.
+# return
+
+	The image filter.
 */
 func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
 	var result ImageFilter
@@ -1921,13 +1919,15 @@ func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
 }
 
 /*
-Creates an image filter that applies a transformation matrix to
 the underlying image.
 
-@param[in]  matrix    The transformation matrix.
-@param[in]  sampling  The image sampling mode.
+# params
+  - - matrix    The transformation matrix.
+  - - sampling  The image sampling mode.
 
-@return     The image filter.
+# return
+
+	The image filter.
 */
 func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageFilter {
 	var result ImageFilter
@@ -1947,19 +1947,21 @@ func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageF
 }
 
 /*
-Create an image filter where each pixel is shaded by a fragment
 program.
 
-@see        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
+See        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
-@param[in]  context            The context.
-@param[in]  fragment_program   The fragment program.
-@param      samplers           The samplers.
-@param[in]  samplers_count     The samplers count.
-@param[in]  data               The data (copied).
-@param[in]  data_bytes_length  The data bytes length.
+# params
+  - - context            The context.
+  - - fragment_program   The fragment program.
+  - -     samplers           The samplers.
+  - - samplers_count     The samplers count.
+  - - data               The data (copied).
+  - - data_bytes_length  The data bytes length.
 
-@return     The image filter.
+# return
+
+	The image filter.
 */
 func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ImageFilter {
 	var result ImageFilter
@@ -1985,15 +1987,20 @@ func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program Frag
 }
 
 /*
-Creates a composed filter that when applied is identical to
 subsequently applying the inner and then the outer filters.
 
+	```
 	destination = outer_filter(inner_filter(source))
 
-@param[in]  outer  The outer image filter.
-@param[in]  inner  The inner image filter.
+```
 
-@return     The combined image filter.
+# params
+  - - outer  The outer image filter.
+  - - inner  The inner image filter.
+
+# return
+
+	The combined image filter.
 */
 func (outer ImageFilter) CreateComposeNew(inner ImageFilter) ImageFilter {
 	var result ImageFilter
@@ -2013,10 +2020,10 @@ func (outer ImageFilter) CreateComposeNew(inner ImageFilter) ImageFilter {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  display_list  The display list.
+# params
+  - - display_list  The display list.
 */
 func (display_list DisplayList) Retain() {
 	_, err := ffi.CallFunction(
@@ -2033,10 +2040,10 @@ func (display_list DisplayList) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  display_list  The display list.
+# params
+  - - display_list  The display list.
 */
 func (display_list DisplayList) Release() {
 	_, err := ffi.CallFunction(
@@ -2053,15 +2060,16 @@ func (display_list DisplayList) Release() {
 }
 
 /*
-Create a new display list builder.
-
 An optional cull rectangle may be specified. Impeller is allowed
 to treat the contents outside this rectangle as being undefined.
 This may aid performance optimizations.
 
-@param[in]  cull_rect  The cull rectangle or NULL.
+# params
+  - - cull_rect  The cull rectangle or NULL.
 
-@return     The display list builder.
+# return
+
+	The display list builder.
 */
 func DisplayListBuilderNew(cull_rect *Rect) DisplayListBuilder {
 	var result DisplayListBuilder
@@ -2080,10 +2088,10 @@ func DisplayListBuilderNew(cull_rect *Rect) DisplayListBuilder {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  builder  The display list builder.
+# params
+  - - builder  The display list builder.
 */
 func (builder DisplayListBuilder) Retain() {
 	_, err := ffi.CallFunction(
@@ -2100,10 +2108,10 @@ func (builder DisplayListBuilder) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  builder  The display list builder.
+# params
+  - - builder  The display list builder.
 */
 func (builder DisplayListBuilder) Release() {
 	_, err := ffi.CallFunction(
@@ -2120,12 +2128,14 @@ func (builder DisplayListBuilder) Release() {
 }
 
 /*
-Create a new display list using the rendering intent already
 encoded in the builder. The builder is reset after this call.
 
-@param[in]  builder  The builder.
+# params
+  - - builder  The builder.
 
-@return     The display list.
+# return
+
+	The display list.
 */
 func (builder DisplayListBuilder) CreateDisplayListNew() DisplayList {
 	var result DisplayList
@@ -2144,10 +2154,10 @@ func (builder DisplayListBuilder) CreateDisplayListNew() DisplayList {
 }
 
 /*
-Stashes the current transformation and clip state onto a save
 stack.
 
-@param[in]  builder  The builder.
+# params
+  - - builder  The builder.
 */
 func (builder DisplayListBuilder) Save() {
 	_, err := ffi.CallFunction(
@@ -2164,7 +2174,6 @@ func (builder DisplayListBuilder) Save() {
 }
 
 /*
-Stashes the current transformation and clip state onto a save
 stack and creates and creates an offscreen layer onto which
 subsequent rendering intent will be directed to.
 
@@ -2172,10 +2181,11 @@ On the balancing call to restore, the supplied paints filters
 and blend modes will be used to composite the offscreen contents
 back onto the display display list.
 
-@param[in]  builder   The builder.
-@param[in]  bounds    The bounds.
-@param[in]  paint     The paint.
-@param[in]  backdrop  The backdrop.
+# params
+  - - builder   The builder.
+  - - bounds    The bounds.
+  - - paint     The paint.
+  - - backdrop  The backdrop.
 */
 func (builder DisplayListBuilder) SaveLayer(bounds *Rect, paint Paint, backdrop ImageFilter) {
 	_, err := ffi.CallFunction(
@@ -2195,11 +2205,11 @@ func (builder DisplayListBuilder) SaveLayer(bounds *Rect, paint Paint, backdrop 
 }
 
 /*
-Pops the last entry pushed onto the save stack using a call to
 `ImpellerDisplayListBuilderSave` or
 `ImpellerDisplayListBuilderSaveLayer`.
 
-@param[in]  builder  The builder.
+# params
+  - - builder  The builder.
 */
 func (builder DisplayListBuilder) Restore() {
 	_, err := ffi.CallFunction(
@@ -2216,12 +2226,12 @@ func (builder DisplayListBuilder) Restore() {
 }
 
 /*
-Apply a scale to the transformation matrix currently on top of
 the save stack.
 
-@param[in]  builder  The builder.
-@param[in]  x_scale  The x scale.
-@param[in]  y_scale  The y scale.
+# params
+  - - builder  The builder.
+  - - x_scale  The x scale.
+  - - y_scale  The y scale.
 */
 func (builder DisplayListBuilder) Scale(x_scale float32, y_scale float32) {
 	_, err := ffi.CallFunction(
@@ -2239,13 +2249,6 @@ func (builder DisplayListBuilder) Scale(x_scale float32, y_scale float32) {
 	}
 }
 
-/*
-Apply a clockwise rotation to the transformation matrix
-currently on top of the save stack.
-
-@param[in]  builder        The builder.
-@param[in]  angle_degrees  The angle in degrees.
-*/
 func (builder DisplayListBuilder) Rotate(angle_degrees float32) {
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderRotate,
@@ -2262,12 +2265,12 @@ func (builder DisplayListBuilder) Rotate(angle_degrees float32) {
 }
 
 /*
-Apply a translation to the transformation matrix currently on
 top of the save stack.
 
-@param[in]  builder        The builder.
-@param[in]  x_translation  The x translation.
-@param[in]  y_translation  The y translation.
+# params
+  - - builder        The builder.
+  - - x_translation  The x translation.
+  - - y_translation  The y translation.
 */
 func (builder DisplayListBuilder) Translate(x_translation float32, y_translation float32) {
 	_, err := ffi.CallFunction(
@@ -2286,11 +2289,11 @@ func (builder DisplayListBuilder) Translate(x_translation float32, y_translation
 }
 
 /*
-Appends the the provided transformation to the transformation
 already on the save stack.
 
-@param[in]  builder    The builder.
-@param[in]  transform  The transform to append.
+# params
+  - - builder    The builder.
+  - - transform  The transform to append.
 */
 func (builder DisplayListBuilder) Transform(transform *Matrix) {
 	_, err := ffi.CallFunction(
@@ -2308,11 +2311,11 @@ func (builder DisplayListBuilder) Transform(transform *Matrix) {
 }
 
 /*
-Clear the transformation on top of the save stack and replace it
 with a new value.
 
-@param[in]  builder    The builder.
-@param[in]  transform  The new transform.
+# params
+  - - builder    The builder.
+  - - transform  The new transform.
 */
 func (builder DisplayListBuilder) SetTransform(transform *Matrix) {
 	_, err := ffi.CallFunction(
@@ -2330,11 +2333,11 @@ func (builder DisplayListBuilder) SetTransform(transform *Matrix) {
 }
 
 /*
-Get the transformation currently built up on the top of the
 transformation stack.
 
-@param[in]  builder        The builder.
-@param[out] out_transform  The transform.
+# params
+  - - builder        The builder.
+  - out_transform (out) -  The transform.
 */
 func (builder DisplayListBuilder) GetTransform(out_transform *Matrix) {
 	_, err := ffi.CallFunction(
@@ -2352,10 +2355,10 @@ func (builder DisplayListBuilder) GetTransform(out_transform *Matrix) {
 }
 
 /*
-Reset the transformation on top of the transformation stack to
 identity.
 
-@param[in]  builder  The builder.
+# params
+  - - builder  The builder.
 */
 func (builder DisplayListBuilder) ResetTransform() {
 	_, err := ffi.CallFunction(
@@ -2372,11 +2375,12 @@ func (builder DisplayListBuilder) ResetTransform() {
 }
 
 /*
-Get the current size of the save stack.
+# params
+  - - builder  The builder.
 
-@param[in]  builder  The builder.
+# return
 
-@return     The save stack size.
+	The save stack size.
 */
 func (builder DisplayListBuilder) GetSaveCount() uint32 {
 	var result uint32
@@ -2395,11 +2399,11 @@ func (builder DisplayListBuilder) GetSaveCount() uint32 {
 }
 
 /*
-Effectively calls ImpellerDisplayListBuilderRestore till the
 size of the save stack becomes a specified count.
 
-@param[in]  builder  The builder.
-@param[in]  count    The count.
+# params
+  - - builder  The builder.
+  - - count    The count.
 */
 func (builder DisplayListBuilder) RestoreToCount(count uint32) {
 	_, err := ffi.CallFunction(
@@ -2417,12 +2421,12 @@ func (builder DisplayListBuilder) RestoreToCount(count uint32) {
 }
 
 /*
-Reduces the clip region to the intersection of the current clip
 and the given rectangle taking into account the clip operation.
 
-@param[in]  builder  The builder.
-@param[in]  rect     The rectangle.
-@param[in]  op       The operation.
+# params
+  - - builder  The builder.
+  - - rect     The rectangle.
+  - - op       The operation.
 */
 func (builder DisplayListBuilder) ClipRect(rect *Rect, op ClipOperation) {
 	_, err := ffi.CallFunction(
@@ -2441,12 +2445,12 @@ func (builder DisplayListBuilder) ClipRect(rect *Rect, op ClipOperation) {
 }
 
 /*
-Reduces the clip region to the intersection of the current clip
 and the given oval taking into account the clip operation.
 
-@param[in]  builder      The builder.
-@param[in]  oval_bounds  The oval bounds.
-@param[in]  op           The operation.
+# params
+  - - builder      The builder.
+  - - oval_bounds  The oval bounds.
+  - - op           The operation.
 */
 func (builder DisplayListBuilder) ClipOval(oval_bounds *Rect, op ClipOperation) {
 	_, err := ffi.CallFunction(
@@ -2465,14 +2469,14 @@ func (builder DisplayListBuilder) ClipOval(oval_bounds *Rect, op ClipOperation) 
 }
 
 /*
-Reduces the clip region to the intersection of the current clip
 and the given rounded rectangle taking into account the clip
 operation.
 
-@param[in]  builder  The builder.
-@param[in]  rect     The rectangle.
-@param[in]  radii    The radii.
-@param[in]  op       The operation.
+# params
+  - - builder  The builder.
+  - - rect     The rectangle.
+  - - radii    The radii.
+  - - op       The operation.
 */
 func (builder DisplayListBuilder) ClipRoundedRect(rect *Rect, radii *RoundingRadii, op ClipOperation) {
 	_, err := ffi.CallFunction(
@@ -2492,12 +2496,12 @@ func (builder DisplayListBuilder) ClipRoundedRect(rect *Rect, radii *RoundingRad
 }
 
 /*
-Reduces the clip region to the intersection of the current clip
 and the given path taking into account the clip operation.
 
-@param[in]  builder  The builder.
-@param[in]  path     The path.
-@param[in]  op       The operation.
+# params
+  - - builder  The builder.
+  - - path     The path.
+  - - op       The operation.
 */
 func (builder DisplayListBuilder) ClipPath(path Path, op ClipOperation) {
 	_, err := ffi.CallFunction(
@@ -2516,10 +2520,9 @@ func (builder DisplayListBuilder) ClipPath(path Path, op ClipOperation) {
 }
 
 /*
-Fills the current clip with the specified paint.
-
-@param[in]  builder  The builder.
-@param[in]  paint    The paint.
+# params
+  - - builder  The builder.
+  - - paint    The paint.
 */
 func (builder DisplayListBuilder) DrawPaint(paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2537,12 +2540,11 @@ func (builder DisplayListBuilder) DrawPaint(paint Paint) {
 }
 
 /*
-Draws a line segment.
-
-@param[in]  builder  The builder.
-@param[in]  from     The starting point of the line.
-@param[in]  to       The end point of the line.
-@param[in]  paint    The paint.
+# params
+  - - builder  The builder.
+  - - from     The starting point of the line.
+  - - to       The end point of the line.
+  - - paint    The paint.
 */
 func (builder DisplayListBuilder) DrawLine(from *Point, to *Point, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2562,14 +2564,13 @@ func (builder DisplayListBuilder) DrawLine(from *Point, to *Point, paint Paint) 
 }
 
 /*
-Draws a dash line segment.
-
-@param[in]  builder     The builder.
-@param[in]  from        The starting point of the line.
-@param[in]  to          The end point of the line.
-@param[in]  on_length   On length.
-@param[in]  off_length  Off length.
-@param[in]  paint       The paint.
+# params
+  - - builder     The builder.
+  - - from        The starting point of the line.
+  - - to          The end point of the line.
+  - - on_length   On length.
+  - - off_length  Off length.
+  - - paint       The paint.
 */
 func (builder DisplayListBuilder) DrawDashedLine(from *Point, to *Point, on_length float32, off_length float32, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2591,11 +2592,10 @@ func (builder DisplayListBuilder) DrawDashedLine(from *Point, to *Point, on_leng
 }
 
 /*
-Draws a rectangle.
-
-@param[in]  builder  The builder.
-@param[in]  rect     The rectangle.
-@param[in]  paint    The paint.
+# params
+  - - builder  The builder.
+  - - rect     The rectangle.
+  - - paint    The paint.
 */
 func (builder DisplayListBuilder) DrawRect(rect *Rect, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2614,11 +2614,10 @@ func (builder DisplayListBuilder) DrawRect(rect *Rect, paint Paint) {
 }
 
 /*
-Draws an oval.
-
-@param[in]  builder      The builder.
-@param[in]  oval_bounds  The oval bounds.
-@param[in]  paint        The paint.
+# params
+  - - builder      The builder.
+  - - oval_bounds  The oval bounds.
+  - - paint        The paint.
 */
 func (builder DisplayListBuilder) DrawOval(oval_bounds *Rect, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2637,12 +2636,11 @@ func (builder DisplayListBuilder) DrawOval(oval_bounds *Rect, paint Paint) {
 }
 
 /*
-Draws a rounded rect.
-
-@param[in]  builder  The builder.
-@param[in]  rect     The rectangle.
-@param[in]  radii    The radii.
-@param[in]  paint    The paint.
+# params
+  - - builder  The builder.
+  - - rect     The rectangle.
+  - - radii    The radii.
+  - - paint    The paint.
 */
 func (builder DisplayListBuilder) DrawRoundedRect(rect *Rect, radii *RoundingRadii, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2662,15 +2660,15 @@ func (builder DisplayListBuilder) DrawRoundedRect(rect *Rect, radii *RoundingRad
 }
 
 /*
-Draws a shape that is the different between the specified
 rectangles (each with configurable corner radii).
 
-@param[in]  builder      The builder.
-@param[in]  outer_rect   The outer rectangle.
-@param[in]  outer_radii  The outer radii.
-@param[in]  inner_rect   The inner rectangle.
-@param[in]  inner_radii  The inner radii.
-@param[in]  paint        The paint.
+# params
+  - - builder      The builder.
+  - - outer_rect   The outer rectangle.
+  - - outer_radii  The outer radii.
+  - - inner_rect   The inner rectangle.
+  - - inner_radii  The inner radii.
+  - - paint        The paint.
 */
 func (builder DisplayListBuilder) DrawRoundedRectDifference(outer_rect *Rect, outer_radii *RoundingRadii, inner_rect *Rect, inner_radii *RoundingRadii, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2692,11 +2690,10 @@ func (builder DisplayListBuilder) DrawRoundedRectDifference(outer_rect *Rect, ou
 }
 
 /*
-Draws the specified shape.
-
-@param[in]  builder  The builder.
-@param[in]  path     The path.
-@param[in]  paint    The paint.
+# params
+  - - builder  The builder.
+  - - path     The path.
+  - - paint    The paint.
 */
 func (builder DisplayListBuilder) DrawPath(path Path, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2715,12 +2712,12 @@ func (builder DisplayListBuilder) DrawPath(path Path, paint Paint) {
 }
 
 /*
-Flattens the contents of another display list into the one
 currently being built.
 
-@param[in]  builder       The builder.
-@param[in]  display_list  The display list.
-@param[in]  opacity       The opacity.
+# params
+  - - builder       The builder.
+  - - display_list  The display list.
+  - - opacity       The opacity.
 */
 func (builder DisplayListBuilder) DrawDisplayList(display_list DisplayList, opacity float32) {
 	_, err := ffi.CallFunction(
@@ -2739,11 +2736,10 @@ func (builder DisplayListBuilder) DrawDisplayList(display_list DisplayList, opac
 }
 
 /*
-Draw a paragraph at the specified point.
-
-@param[in]  builder    The builder.
-@param[in]  paragraph  The paragraph.
-@param[in]  point      The point.
+# params
+  - - builder    The builder.
+  - - paragraph  The paragraph.
+  - - point      The point.
 */
 func (builder DisplayListBuilder) DrawParagraph(paragraph Paragraph, point *Point) {
 	_, err := ffi.CallFunction(
@@ -2762,19 +2758,19 @@ func (builder DisplayListBuilder) DrawParagraph(paragraph Paragraph, point *Poin
 }
 
 /*
-Draw a shadow for a Path given a material elevation. If the
 occluding object is not opaque, additional hints (via the
 `occluder_is_transparent` argument) must be provided to render
 the shadow correctly.
 
-@param[in]  builder    The builder.
-@param[in]  path       The shadow path.
-@param[in]  color      The shadow color.
-@param[in]  elevation  The material elevation.
-@param[in]  occluder_is_transparent
-If the object casting the shadow is transparent.
-@param[in]  device_pixel_ratio
-The device pixel ratio.
+# params
+  - - builder    The builder.
+  - - path       The shadow path.
+  - - color      The shadow color.
+  - - elevation  The material elevation.
+  - - occluder_is_transparent
+    If the object casting the shadow is transparent.
+  - - device_pixel_ratio
+    The device pixel ratio.
 */
 func (builder DisplayListBuilder) DrawShadow(path Path, color *Color, elevation float32, occluder_is_transparent Bool, device_pixel_ratio float32) {
 	_, err := ffi.CallFunction(
@@ -2796,13 +2792,12 @@ func (builder DisplayListBuilder) DrawShadow(path Path, color *Color, elevation 
 }
 
 /*
-Draw a texture at the specified point.
-
-@param[in]  builder   The builder.
-@param[in]  texture   The texture.
-@param[in]  point     The point.
-@param[in]  sampling  The sampling.
-@param[in]  paint     The paint.
+# params
+  - - builder   The builder.
+  - - texture   The texture.
+  - - point     The point.
+  - - sampling  The sampling.
+  - - paint     The paint.
 */
 func (builder DisplayListBuilder) DrawTexture(texture Texture, point *Point, sampling TextureSampling, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2823,14 +2818,13 @@ func (builder DisplayListBuilder) DrawTexture(texture Texture, point *Point, sam
 }
 
 /*
-Draw a portion of texture at the specified location.
-
-@param[in]  builder   The builder.
-@param[in]  texture   The texture.
-@param[in]  src_rect  The source rectangle.
-@param[in]  dst_rect  The destination rectangle.
-@param[in]  sampling  The sampling.
-@param[in]  paint     The paint.
+# params
+  - - builder   The builder.
+  - - texture   The texture.
+  - - src_rect  The source rectangle.
+  - - dst_rect  The destination rectangle.
+  - - sampling  The sampling.
+  - - paint     The paint.
 */
 func (builder DisplayListBuilder) DrawTextureRect(texture Texture, src_rect *Rect, dst_rect *Rect, sampling TextureSampling, paint Paint) {
 	_, err := ffi.CallFunction(
@@ -2852,9 +2846,9 @@ func (builder DisplayListBuilder) DrawTextureRect(texture Texture, src_rect *Rec
 }
 
 /*
-Create a new typography contents.
+# return
 
-@return     The typography context.
+	The typography context.
 */
 func TypographyContextNew() TypographyContext {
 	var result TypographyContext
@@ -2871,10 +2865,10 @@ func TypographyContextNew() TypographyContext {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  context  The typography context.
+# params
+  - - context  The typography context.
 */
 func (context TypographyContext) Retain() {
 	_, err := ffi.CallFunction(
@@ -2891,10 +2885,10 @@ func (context TypographyContext) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  context  The typography context.
+# params
+  - - context  The typography context.
 */
 func (context TypographyContext) Release() {
 	_, err := ffi.CallFunction(
@@ -2911,14 +2905,12 @@ func (context TypographyContext) Release() {
 }
 
 /*
-Register a custom font.
-
 The following font formats are supported:
-* OpenType font collections (.ttc extension)
-* TrueType fonts: (.ttf extension)
-* OpenType fonts: (.otf extension)
+OpenType font collections (.ttc extension)
+TrueType fonts: (.ttf extension)
+OpenType fonts: (.otf extension)
 
-@warning    Web Open Font Formats (.woff and .woff2 extensions) are **not**
+Web Open Font Formats (.woff and .woff2 extensions) are **not**
 supported.
 
 The font data is specified as a mapping. It is possible for the
@@ -2938,17 +2930,20 @@ instead of the one encoded in the font itself.
 Multiple fonts (with glyphs for different styles) can be
 specified with the same family.
 
-@see        `ImpellerParagraphStyleSetFontFamily`
+See        `ImpellerParagraphStyleSetFontFamily`
 
-@param[in]  context                        The context.
-@param[in]  contents                       The contents.
-@param[in]  contents_on_release_user_data  The user data baton to be passed
-to the contents release callback.
-@param[in]  family_name_alias              The family name alias or NULL if
-the one specified in the font
-data is to be used.
+# params
+  - - context                        The context.
+  - - contents                       The contents.
+  - - contents_on_release_user_data  The user data baton to be passed
+    to the contents release callback.
+  - - family_name_alias              The family name alias or NULL if
+    the one specified in the font
+    data is to be used.
 
-@return     If the font could be successfully registered.
+# return
+
+	If the font could be successfully registered.
 */
 func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_release_user_data unsafe.Pointer, family_name_alias string) Bool {
 	var result Bool
@@ -2971,9 +2966,9 @@ func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_rel
 }
 
 /*
-Create a new paragraph style.
+# return
 
-@return     The paragraph style.
+	The paragraph style.
 */
 func ParagraphStyleNew() ParagraphStyle {
 	var result ParagraphStyle
@@ -2990,10 +2985,10 @@ func ParagraphStyleNew() ParagraphStyle {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  paragraph_style  The paragraph style.
+# params
+  - - paragraph_style  The paragraph style.
 */
 func (paragraph_style ParagraphStyle) Retain() {
 	_, err := ffi.CallFunction(
@@ -3010,10 +3005,10 @@ func (paragraph_style ParagraphStyle) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  paragraph_style  The paragraph style.
+# params
+  - - paragraph_style  The paragraph style.
 */
 func (paragraph_style ParagraphStyle) Release() {
 	_, err := ffi.CallFunction(
@@ -3030,10 +3025,9 @@ func (paragraph_style ParagraphStyle) Release() {
 }
 
 /*
-Set the paint used to render the text glyph contents.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  paint            The paint.
+# params
+  - - paragraph_style  The paragraph style.
+  - - paint            The paint.
 */
 func (paragraph_style ParagraphStyle) SetForeground(paint Paint) {
 	_, err := ffi.CallFunction(
@@ -3051,10 +3045,9 @@ func (paragraph_style ParagraphStyle) SetForeground(paint Paint) {
 }
 
 /*
-Set the paint used to render the background of the text glyphs.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  paint            The paint.
+# params
+  - - paragraph_style  The paragraph style.
+  - - paint            The paint.
 */
 func (paragraph_style ParagraphStyle) SetBackground(paint Paint) {
 	_, err := ffi.CallFunction(
@@ -3072,10 +3065,9 @@ func (paragraph_style ParagraphStyle) SetBackground(paint Paint) {
 }
 
 /*
-Set the weight of the font to select when rendering glyphs.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  weight           The weight.
+# params
+  - - paragraph_style  The paragraph style.
+  - - weight           The weight.
 */
 func (paragraph_style ParagraphStyle) SetFontWeight(weight FontWeight) {
 	_, err := ffi.CallFunction(
@@ -3093,10 +3085,9 @@ func (paragraph_style ParagraphStyle) SetFontWeight(weight FontWeight) {
 }
 
 /*
-Set whether the glyphs should be bolded or italicized.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  style            The style.
+# params
+  - - paragraph_style  The paragraph style.
+  - - style            The style.
 */
 func (paragraph_style ParagraphStyle) SetFontStyle(style FontStyle) {
 	_, err := ffi.CallFunction(
@@ -3114,10 +3105,9 @@ func (paragraph_style ParagraphStyle) SetFontStyle(style FontStyle) {
 }
 
 /*
-Set the font family.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  family_name      The family name.
+# params
+  - - paragraph_style  The paragraph style.
+  - - family_name      The family name.
 */
 func (paragraph_style ParagraphStyle) SetFontFamily(family_name string) {
 	c_family_name := cString(family_name)
@@ -3136,10 +3126,9 @@ func (paragraph_style ParagraphStyle) SetFontFamily(family_name string) {
 }
 
 /*
-Set the font size.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  size             The size.
+# params
+  - - paragraph_style  The paragraph style.
+  - - size             The size.
 */
 func (paragraph_style ParagraphStyle) SetFontSize(size float32) {
 	_, err := ffi.CallFunction(
@@ -3157,15 +3146,14 @@ func (paragraph_style ParagraphStyle) SetFontSize(size float32) {
 }
 
 /*
-The height of the text as a multiple of text size.
-
 When height is 0.0, the line height will be determined by the
 font's metrics directly, which may differ from the font size.
 Otherwise the line height of the text will be a multiple of font
 size, and be exactly fontSize * height logical pixels tall.
 
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  height           The height.
+# params
+  - - paragraph_style  The paragraph style.
+  - - height           The height.
 */
 func (paragraph_style ParagraphStyle) SetHeight(height float32) {
 	_, err := ffi.CallFunction(
@@ -3183,10 +3171,9 @@ func (paragraph_style ParagraphStyle) SetHeight(height float32) {
 }
 
 /*
-Set the alignment of text within the paragraph.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  align            The align.
+# params
+  - - paragraph_style  The paragraph style.
+  - - align            The align.
 */
 func (paragraph_style ParagraphStyle) SetTextAlignment(align TextAlignment) {
 	_, err := ffi.CallFunction(
@@ -3204,10 +3191,9 @@ func (paragraph_style ParagraphStyle) SetTextAlignment(align TextAlignment) {
 }
 
 /*
-Set the directionality of the text within the paragraph.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  direction        The direction.
+# params
+  - - paragraph_style  The paragraph style.
+  - - direction        The direction.
 */
 func (paragraph_style ParagraphStyle) SetTextDirection(direction TextDirection) {
 	_, err := ffi.CallFunction(
@@ -3225,12 +3211,12 @@ func (paragraph_style ParagraphStyle) SetTextDirection(direction TextDirection) 
 }
 
 /*
-Set one of more text decorations on the paragraph. Decorations
 can be underlines, overlines, strikethroughs, etc.. The style of
 decorations can be set as well (dashed, dotted, wavy, etc..)
 
-@param[in]  ImpellerParagraphStyle  The paragraph style.
-@param[in]  decoration              The text decoration.
+# params
+  - - ImpellerParagraphStyle  The paragraph style.
+  - - decoration              The text decoration.
 */
 func (paragraph_style ParagraphStyle) SetTextDecoration(decoration *TextDecoration) {
 	_, err := ffi.CallFunction(
@@ -3248,10 +3234,9 @@ func (paragraph_style ParagraphStyle) SetTextDecoration(decoration *TextDecorati
 }
 
 /*
-Set the maximum line count within the paragraph.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  max_lines        The maximum lines.
+# params
+  - - paragraph_style  The paragraph style.
+  - - max_lines        The maximum lines.
 */
 func (paragraph_style ParagraphStyle) SetMaxLines(max_lines uint32) {
 	_, err := ffi.CallFunction(
@@ -3269,10 +3254,9 @@ func (paragraph_style ParagraphStyle) SetMaxLines(max_lines uint32) {
 }
 
 /*
-Set the paragraph locale.
-
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  locale           The locale.
+# params
+  - - paragraph_style  The paragraph style.
+  - - locale           The locale.
 */
 func (paragraph_style ParagraphStyle) SetLocale(locale string) {
 	c_locale := cString(locale)
@@ -3291,11 +3275,11 @@ func (paragraph_style ParagraphStyle) SetLocale(locale string) {
 }
 
 /*
-Set the UTF-8 string to use as the ellipsis. Pass `nullptr` to
 clear the setting to default.
 
-@param[in]  paragraph_style  The paragraph style.
-@param[in]  data             The ellipsis string UTF-8 data, or null.
+# params
+  - - paragraph_style  The paragraph style.
+  - - data             The ellipsis string UTF-8 data, or null.
 */
 func (paragraph_style ParagraphStyle) SetEllipsis(ellipsis string) {
 	c_ellipsis := cString(ellipsis)
@@ -3314,11 +3298,12 @@ func (paragraph_style ParagraphStyle) SetEllipsis(ellipsis string) {
 }
 
 /*
-Create a new paragraph builder.
+# params
+  - - context  The context.
 
-@param[in]  context  The context.
+# return
 
-@return     The paragraph builder.
+	The paragraph builder.
 */
 func (context TypographyContext) ParagraphBuilderNew() ParagraphBuilder {
 	var result ParagraphBuilder
@@ -3337,10 +3322,10 @@ func (context TypographyContext) ParagraphBuilderNew() ParagraphBuilder {
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  paragraph_builder  The paragraph builder.
+# params
+  - - paragraph_builder  The paragraph builder.
 */
 func (paragraph_builder ParagraphBuilder) Retain() {
 	_, err := ffi.CallFunction(
@@ -3357,10 +3342,10 @@ func (paragraph_builder ParagraphBuilder) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  paragraph_builder  The paragraph_builder.
+# params
+  - - paragraph_builder  The paragraph_builder.
 */
 func (paragraph_builder ParagraphBuilder) Release() {
 	_, err := ffi.CallFunction(
@@ -3377,7 +3362,6 @@ func (paragraph_builder ParagraphBuilder) Release() {
 }
 
 /*
-Push a new paragraph style onto the paragraph style stack
 managed by the paragraph builder.
 
 Not all paragraph styles can be combined. For instance, it does
@@ -3392,8 +3376,9 @@ style element cannot be overridden. It is recommended that a
 default paragraph style always be pushed onto the stack before
 the addition of any text.
 
-@param[in]  paragraph_builder  The paragraph builder.
-@param[in]  style              The style.
+# params
+  - - paragraph_builder  The paragraph builder.
+  - - style              The style.
 */
 func (paragraph_builder ParagraphBuilder) PushStyle(style ParagraphStyle) {
 	_, err := ffi.CallFunction(
@@ -3411,10 +3396,10 @@ func (paragraph_builder ParagraphBuilder) PushStyle(style ParagraphStyle) {
 }
 
 /*
-Pop a previously pushed paragraph style from the paragraph style
 stack.
 
-@param[in]  paragraph_builder  The paragraph builder.
+# params
+  - - paragraph_builder  The paragraph builder.
 */
 func (paragraph_builder ParagraphBuilder) PopStyle() {
 	_, err := ffi.CallFunction(
@@ -3431,13 +3416,13 @@ func (paragraph_builder ParagraphBuilder) PopStyle() {
 }
 
 /*
-Add UTF-8 encoded text to the paragraph. The text will be styled
 according to the paragraph style already on top of the paragraph
 style stack.
 
-@param[in]  paragraph_builder  The paragraph builder.
-@param[in]  data               The data.
-@param[in]  length             The length.
+# params
+  - - paragraph_builder  The paragraph builder.
+  - - data               The data.
+  - - length             The length.
 */
 func (paragraph_builder ParagraphBuilder) AddText(data string) {
 	c_data := cString(data)
@@ -3458,14 +3443,16 @@ func (paragraph_builder ParagraphBuilder) AddText(data string) {
 }
 
 /*
-Layout and build a new paragraph using the specified width. The
 resulting paragraph is immutable. The paragraph builder must be
 discarded and a new one created to build more paragraphs.
 
-@param[in]  paragraph_builder  The paragraph builder.
-@param[in]  width              The paragraph width.
+# params
+  - - paragraph_builder  The paragraph builder.
+  - - width              The paragraph width.
 
-@return     The paragraph if one can be created, NULL otherwise.
+# return
+
+	The paragraph if one can be created, NULL otherwise.
 */
 func (paragraph_builder ParagraphBuilder) BuildParagraphNew(width float32) Paragraph {
 	var result Paragraph
@@ -3485,10 +3472,10 @@ func (paragraph_builder ParagraphBuilder) BuildParagraphNew(width float32) Parag
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 */
 func (paragraph Paragraph) Retain() {
 	_, err := ffi.CallFunction(
@@ -3505,10 +3492,10 @@ func (paragraph Paragraph) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 */
 func (paragraph Paragraph) Release() {
 	_, err := ffi.CallFunction(
@@ -3525,11 +3512,15 @@ func (paragraph Paragraph) Release() {
 }
 
 /*
-@see        `ImpellerParagraphGetMinIntrinsicWidth`
+See        `ImpellerParagraphGetMinIntrinsicWidth`
 
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The width provided to the paragraph builder during the call to
+# return
+
+	The width provided to the paragraph builder during the call to
+
 layout. This is the maximum width any line in the laid out
 paragraph can occupy. But, it is not necessarily the actual
 width of the paragraph after layout.
@@ -3551,9 +3542,13 @@ func (paragraph Paragraph) GetMaxWidth() float32 {
 }
 
 /*
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The height of the laid out paragraph. This is **not** a tight
+# return
+
+	The height of the laid out paragraph. This is **not** a tight
+
 bounding box and some glyphs may not reach the minimum location
 they are allowed to reach.
 */
@@ -3574,9 +3569,13 @@ func (paragraph Paragraph) GetHeight() float32 {
 }
 
 /*
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The length of the longest line in the paragraph. This is the
+# return
+
+	The length of the longest line in the paragraph. This is the
+
 horizontal distance between the left edge of the leftmost glyph
 and the right edge of the rightmost glyph, in the longest line
 in the paragraph.
@@ -3598,11 +3597,15 @@ func (paragraph Paragraph) GetLongestLineWidth() float32 {
 }
 
 /*
-@see        `ImpellerParagraphGetMaxWidth`
+See        `ImpellerParagraphGetMaxWidth`
 
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The actual width of the longest line in the paragraph after
+# return
+
+	The actual width of the longest line in the paragraph after
+
 layout. This is expected to be less than or equal to
 `ImpellerParagraphGetMaxWidth`.
 */
@@ -3623,9 +3626,12 @@ func (paragraph Paragraph) GetMinIntrinsicWidth() float32 {
 }
 
 /*
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The width of the paragraph without line breaking.
+# return
+
+	The width of the paragraph without line breaking.
 */
 func (paragraph Paragraph) GetMaxIntrinsicWidth() float32 {
 	var result float32
@@ -3644,9 +3650,13 @@ func (paragraph Paragraph) GetMaxIntrinsicWidth() float32 {
 }
 
 /*
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The distance from the top of the paragraph to the ideographic
+# return
+
+	The distance from the top of the paragraph to the ideographic
+
 baseline of the first line when using ideographic fonts
 (Japanese, Korean, etc...).
 */
@@ -3667,9 +3677,13 @@ func (paragraph Paragraph) GetIdeographicBaseline() float32 {
 }
 
 /*
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The distance from the top of the paragraph to the alphabetic
+# return
+
+	The distance from the top of the paragraph to the alphabetic
+
 baseline of the first line when using alphabetic fonts (A-Z,
 a-z, Greek, etc...).
 */
@@ -3690,9 +3704,13 @@ func (paragraph Paragraph) GetAlphabeticBaseline() float32 {
 }
 
 /*
-@param[in]  paragraph  The paragraph.
+# params
+  - - paragraph  The paragraph.
 
-@return     The number of lines visible in the paragraph after line
+# return
+
+	The number of lines visible in the paragraph after line
+
 breaking.
 */
 func (paragraph Paragraph) GetLineCount() uint32 {
@@ -3712,15 +3730,15 @@ func (paragraph Paragraph) GetLineCount() uint32 {
 }
 
 /*
-Get the range into the UTF-16 code unit buffer that represents
 the word at the specified caret location in the same buffer.
 
 Word boundaries are defined more precisely in [Unicode Standard
 Annex #29](http://www.unicode.org/reports/tr29/#Word_Boundaries)
 
-@param[in]  paragraph        The paragraph
-@param[in]  code_unit_index  The code unit index
-@param[out]  code_unit_index The range.
+# params
+  - - paragraph        The paragraph
+  - - code_unit_index  The code unit index
+  - (out) - code_unit_index The range.
 */
 func (paragraph Paragraph) GetWordBoundary(code_unit_index uint64, out_range *Range) {
 	_, err := ffi.CallFunction(
@@ -3738,16 +3756,6 @@ func (paragraph Paragraph) GetWordBoundary(code_unit_index uint64, out_range *Ra
 	}
 }
 
-/*
-Get the line metrics of this laid out paragraph. Calculating the
-line metrics is expensive. The first time line metrics are
-requested, they will be cached along with the paragraph (which
-is immutable).
-
-@param[in]  paragraph  The paragraph.
-
-@return     The line metrics.
-*/
 func (paragraph Paragraph) GetLineMetrics() LineMetrics {
 	var result LineMetrics
 	_, err := ffi.CallFunction(
@@ -3764,16 +3772,6 @@ func (paragraph Paragraph) GetLineMetrics() LineMetrics {
 	return result
 }
 
-/*
-Create a new instance of glyph info that can be queried for
-information about the glyph at the given UTF-16 code unit index.
-The instance must be freed using `ImpellerGlyphInfoRelease`.
-
-@param[in]  paragraph        The paragraph.
-@param[in]  code_unit_index  The UTF-16 code unit index.
-
-@return     The glyph information.
-*/
 func (paragraph Paragraph) CreateGlyphInfoAtCodeUnitIndexNew(code_unit_index uint64) GlyphInfo {
 	var result GlyphInfo
 	_, err := ffi.CallFunction(
@@ -3791,18 +3789,6 @@ func (paragraph Paragraph) CreateGlyphInfoAtCodeUnitIndexNew(code_unit_index uin
 	return result
 }
 
-/*
-Create a new instance of glyph info that can be queried for
-information about the glyph closest to the specified coordinates
-relative to the origin of the paragraph. The instance must be
-freed using `ImpellerGlyphInfoRelease`.
-
-@param[in]  paragraph  The paragraph.
-@param[in]  x          The x coordinate relative to paragraph origin.
-@param[in]  y          The x coordinate relative to paragraph origin.
-
-@return     The glyph information.
-*/
 func (paragraph Paragraph) CreateGlyphInfoAtParagraphCoordinatesNew(x float64, y float64) GlyphInfo {
 	var result GlyphInfo
 	_, err := ffi.CallFunction(
@@ -3822,10 +3808,10 @@ func (paragraph Paragraph) CreateGlyphInfoAtParagraphCoordinatesNew(x float64, y
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  line_metrics  The line metrics.
+# params
+  - - line_metrics  The line metrics.
 */
 func (line_metrics LineMetrics) Retain() {
 	_, err := ffi.CallFunction(
@@ -3842,10 +3828,10 @@ func (line_metrics LineMetrics) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  line_metrics  The line metrics.
+# params
+  - - line_metrics  The line metrics.
 */
 func (line_metrics LineMetrics) Release() {
 	_, err := ffi.CallFunction(
@@ -3862,13 +3848,15 @@ func (line_metrics LineMetrics) Release() {
 }
 
 /*
-The rise from the baseline as calculated from the font and style
 for this line ignoring the height from the text style.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The unscaled ascent.
+# return
+
+	The unscaled ascent.
 */
 func (metrics LineMetrics) GetUnscaledAscent(line uint64) float64 {
 	var result float64
@@ -3888,13 +3876,15 @@ func (metrics LineMetrics) GetUnscaledAscent(line uint64) float64 {
 }
 
 /*
-The rise from the baseline as calculated from the font and style
 for this line.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The ascent.
+# return
+
+	The ascent.
 */
 func (metrics LineMetrics) GetAscent(line uint64) float64 {
 	var result float64
@@ -3914,13 +3904,15 @@ func (metrics LineMetrics) GetAscent(line uint64) float64 {
 }
 
 /*
-The drop from the baseline as calculated from the font and style
 for this line.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The descent.
+# return
+
+	The descent.
 */
 func (metrics LineMetrics) GetDescent(line uint64) float64 {
 	var result float64
@@ -3940,13 +3932,15 @@ func (metrics LineMetrics) GetDescent(line uint64) float64 {
 }
 
 /*
-The y coordinate of the baseline for this line from the top of
 the paragraph.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The baseline.
+# return
+
+	The baseline.
 */
 func (metrics LineMetrics) GetBaseline(line uint64) float64 {
 	var result float64
@@ -3966,13 +3960,15 @@ func (metrics LineMetrics) GetBaseline(line uint64) float64 {
 }
 
 /*
-Used to determine if this line ends with an explicit line break
 (e.g. '\n') or is the end of the paragraph.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     True if the line is a hard break.
+# return
+
+	True if the line is a hard break.
 */
 func (metrics LineMetrics) IsHardbreak(line uint64) Bool {
 	var result Bool
@@ -3992,13 +3988,15 @@ func (metrics LineMetrics) IsHardbreak(line uint64) Bool {
 }
 
 /*
-Width of the line from the left edge of the leftmost glyph to
 the right edge of the rightmost glyph.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The width.
+# return
+
+	The width.
 */
 func (metrics LineMetrics) GetWidth(line uint64) float64 {
 	var result float64
@@ -4018,12 +4016,13 @@ func (metrics LineMetrics) GetWidth(line uint64) float64 {
 }
 
 /*
-Total height of the line from the top edge to the bottom edge.
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# return
 
-@return     The height.
+	The height.
 */
 func (metrics LineMetrics) GetHeight(line uint64) float64 {
 	var result float64
@@ -4043,12 +4042,13 @@ func (metrics LineMetrics) GetHeight(line uint64) float64 {
 }
 
 /*
-The x coordinate of left edge of the line.
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# return
 
-@return     The left edge coordinate.
+	The left edge coordinate.
 */
 func (metrics LineMetrics) GetLeft(line uint64) float64 {
 	var result float64
@@ -4068,13 +4068,15 @@ func (metrics LineMetrics) GetLeft(line uint64) float64 {
 }
 
 /*
-Fetch the start index in the buffer of UTF-16 code units used to
 represent the paragraph line.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The UTF-16 code units start index.
+# return
+
+	The UTF-16 code units start index.
 */
 func (metrics LineMetrics) GetCodeUnitStartIndex(line uint64) uint64 {
 	var result uint64
@@ -4094,13 +4096,15 @@ func (metrics LineMetrics) GetCodeUnitStartIndex(line uint64) uint64 {
 }
 
 /*
-Fetch the end index in the buffer of UTF-16 code units used to
 represent the paragraph line.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The UTF-16 code units end index.
+# return
+
+	The UTF-16 code units end index.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndex(line uint64) uint64 {
 	var result uint64
@@ -4120,13 +4124,15 @@ func (metrics LineMetrics) GetCodeUnitEndIndex(line uint64) uint64 {
 }
 
 /*
-Fetch the end index (excluding whitespace) in the buffer of
 UTF-16 code units used to represent the paragraph line.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The UTF-16 code units end index excluding whitespace.
+# return
+
+	The UTF-16 code units end index excluding whitespace.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndexExcludingWhitespace(line uint64) uint64 {
 	var result uint64
@@ -4146,13 +4152,15 @@ func (metrics LineMetrics) GetCodeUnitEndIndexExcludingWhitespace(line uint64) u
 }
 
 /*
-Fetch the end index (including newlines) in the buffer of UTF-16
 code units used to represent the paragraph line.
 
-@param[in]  metrics  The metrics.
-@param[in]  line     The line index (zero based).
+# params
+  - - metrics  The metrics.
+  - - line     The line index (zero based).
 
-@return     The UTF-16 code units end index including newlines.
+# return
+
+	The UTF-16 code units end index including newlines.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndexIncludingNewline(line uint64) uint64 {
 	var result uint64
@@ -4172,10 +4180,10 @@ func (metrics LineMetrics) GetCodeUnitEndIndexIncludingNewline(line uint64) uint
 }
 
 /*
-Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
-@param[in]  glyph_info  The glyph information.
+# params
+  - - glyph_info  The glyph information.
 */
 func (glyph_info GlyphInfo) Retain() {
 	_, err := ffi.CallFunction(
@@ -4192,10 +4200,10 @@ func (glyph_info GlyphInfo) Retain() {
 }
 
 /*
-Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
-@param[in]  glyph_info  The glyph information.
+# params
+  - - glyph_info  The glyph information.
 */
 func (glyph_info GlyphInfo) Release() {
 	_, err := ffi.CallFunction(
@@ -4212,12 +4220,14 @@ func (glyph_info GlyphInfo) Release() {
 }
 
 /*
-Fetch the start index in the buffer of UTF-16 code units used to
 represent the grapheme cluster for a glyph.
 
-@param[in]  glyph_info  The glyph information.
+# params
+  - - glyph_info  The glyph information.
 
-@return     The UTF-16 code units start index.
+# return
+
+	The UTF-16 code units start index.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeBegin() uint64 {
 	var result uint64
@@ -4236,12 +4246,14 @@ func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeBegin() uint64 {
 }
 
 /*
-Fetch the end index in the buffer of UTF-16 code units used to
 represent the grapheme cluster for a glyph.
 
-@param[in]  glyph_info  The glyph information.
+# params
+  - - glyph_info  The glyph information.
 
-@return     The UTF-16 code units end index.
+# return
+
+	The UTF-16 code units end index.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeEnd() uint64 {
 	var result uint64
@@ -4260,11 +4272,11 @@ func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeEnd() uint64 {
 }
 
 /*
-Fetch the bounds of the grapheme cluster for the glyph in the
 coordinate space of the paragraph.
 
-@param[in]  glyph_info  The glyph information.
-@param[out] out_bounds  The grapheme cluster bounds.
+# params
+  - - glyph_info  The glyph information.
+  - out_bounds (out) -  The grapheme cluster bounds.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterBounds(out_bounds *Rect) {
 	_, err := ffi.CallFunction(
@@ -4282,9 +4294,12 @@ func (glyph_info GlyphInfo) GetGraphemeClusterBounds(out_bounds *Rect) {
 }
 
 /*
-@param[in]  glyph_info  The glyph information.
+# params
+  - - glyph_info  The glyph information.
 
-@return     True if the glyph represents an ellipsis. False otherwise.
+# return
+
+	True if the glyph represents an ellipsis. False otherwise.
 */
 func (glyph_info GlyphInfo) IsEllipsis() Bool {
 	var result Bool
@@ -4303,9 +4318,12 @@ func (glyph_info GlyphInfo) IsEllipsis() Bool {
 }
 
 /*
-@param[in]  glyph_info  The glyph information.
+# params
+  - - glyph_info  The glyph information.
 
-@return     The direction of the run that contains the glyph.
+# return
+
+	The direction of the run that contains the glyph.
 */
 func (glyph_info GlyphInfo) GetTextDirection() TextDirection {
 	var result TextDirection

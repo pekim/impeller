@@ -2,53 +2,352 @@ package generate
 
 import (
 	"fmt"
+	"regexp"
+	"slices"
+	"strconv"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
 
-func (gen gen) commentText(cursor clang.Cursor) string {
-	lineComment := gen.lineComment(cursor)
-	if lineComment != "" {
-		return lineComment
+type paramDirection byte
+
+const (
+	in paramDirection = iota
+	out
+)
+
+type commentParam struct {
+	name        string
+	description string
+	direction   paramDirection
+}
+
+type commentLink struct {
+	text string
+	url  string
+}
+
+type comment struct {
+	gen        *gen
+	entityName string
+	lines      []string
+	params     map[string]commentParam
+	links      []commentLink
+	sinceMajor int
+	sinceMinor int
+}
+
+type commentParams map[string]commentParam
+
+func (gen *gen) newComment(cursor clang.Cursor) comment {
+	comment := comment{
+		gen:        gen,
+		entityName: cursor.Spelling(),
+		lines:      gen.commentLines(cursor),
+	}
+	comment.cleanLines()
+	comment.setParams()
+	comment.setSince()
+	comment.formatHeadings()
+	comment.formatCodeBlocks()
+	comment.resolveLinks()
+
+	return comment
+}
+
+func (comment *comment) cleanLines() {
+	for i, line := range comment.lines {
+		line = strings.TrimSpace(line)
+		line = strings.TrimSuffix(line, "*/")
+		line = strings.TrimPrefix(line, "*")
+		line = strings.TrimPrefix(line, "/*!")
+		line = strings.TrimPrefix(line, "/*")
+		line = strings.TrimSpace(line)
+
+		line = strings.TrimPrefix(line, "@note")
+		line = strings.TrimPrefix(line, "@remarks")
+		line = strings.TrimPrefix(line, "@remark")
+		line = strings.TrimPrefix(line, "@warning")
+		line = strings.TrimSpace(line)
+
+		if strings.HasPrefix(line, "@brief") ||
+			strings.HasPrefix(line, "@callback_signature") ||
+			strings.HasPrefix(line, "@defgroup") ||
+			strings.HasPrefix(line, "@glfw3") ||
+			strings.HasPrefix(line, "@ingroup") ||
+			line == "@par" ||
+			strings.HasPrefix(line, "@sa") || // TODO convert resolvable references to doc links
+			strings.HasPrefix(line, "@{") ||
+			strings.HasPrefix(line, "@}") {
+			line = ""
+		}
+
+		line = strings.ReplaceAll(line, "@see ", "See ")
+
+		comment.lines[i] = line
+	}
+}
+
+func (comment *comment) setParams() {
+	comment.params = make(commentParams)
+
+	var param commentParam
+	var withinDescription bool
+	for i, line := range comment.lines {
+		if withinDescription {
+			if line == "" || strings.HasPrefix(line, "@") {
+				// description was terminated by a new paragraph or another command
+				comment.params[param.name] = param
+				withinDescription = false
+			} else {
+				// description continues
+				param.description += "\n" + line
+				comment.lines[i] = "  " + line
+			}
+		}
+
+		if strings.HasPrefix(line, "@param") {
+			parts := strings.SplitN(line, " ", 3)
+			param = commentParam{
+				name: parts[1],
+			}
+
+			switch parts[0] {
+			case "@param[in]":
+				param.direction = in
+			case "@param[out]":
+				param.direction = out
+				// default:
+				// 	panic(fmt.Sprintf("unknown direction in %q", line))
+			}
+
+			if len(parts) > 2 {
+				param.description = parts[2]
+				withinDescription = true
+			} else {
+				comment.params[param.name] = param
+			}
+
+			var line string
+			if len(comment.params) == 0 {
+				// this is the first param, so create a header
+				line = "\n# params\n"
+			}
+			outText := ""
+			if param.direction == out {
+				outText = " (out)"
+			}
+			line += fmt.Sprintf("  - %s%s - %s", param.name, outText, param.description)
+			comment.lines[i] = line
+		}
 	}
 
-	text := cursor.RawCommentText()
-	text = strings.TrimPrefix(text, "/**")
-	text = strings.TrimSuffix(text, "*/")
-
-	var builder strings.Builder
-	var codeBlock bool
-
-	// for each line
-	//		- trim leading "///"
-	//		- trim leading and trailing white space
-	lines := strings.Split(text, "\n")
-	if strings.Contains(text, "Estimated number of rows returned") {
-		fmt.Println(text)
-		fmt.Println(lines)
+	if withinDescription {
+		comment.params[param.name] = param
 	}
-	for _, line := range lines {
-		line = strings.TrimSpace(line)
-		line = strings.TrimPrefix(line, "///")
-		line = strings.TrimSpace(line)
-		line = strings.TrimPrefix(line, "@brief")
-		line = strings.TrimSpace(line)
+}
 
-		// support code blocks
-		if strings.HasPrefix(line, "```") {
-			codeBlock = !codeBlock
+func (comment *comment) setSince() {
+	re := regexp.MustCompile(`@since .* (\d)\.(\d)`)
+	for _, line := range comment.lines {
+		groups := re.FindStringSubmatch(line)
+		if len(groups) != 3 {
 			continue
 		}
-		if codeBlock {
-			line = "  " + line
-		}
 
-		builder.WriteString(line)
-		builder.WriteRune('\n')
+		major, err := strconv.Atoi(groups[1])
+		if err != nil {
+			fatalOnError(err)
+		}
+		minor, err := strconv.Atoi(groups[2])
+		if err != nil {
+			fatalOnError(err)
+		}
+		comment.sinceMajor = major
+		comment.sinceMinor = minor
+		break
+	}
+}
+
+func (comment *comment) formatHeadings() {
+	commands := []string{
+		"@analysis", // non-standard, not documented at https://www.doxygen.nl/manual/commands.html
+		"@deprecated",
+		"@errors",
+		"@macos",
+		"@par",
+		"@pointer_lifetime",
+		"@reentrancy",
+		"@return",
+		"@since",
+		"@thread_safety",
+		"@wayland",
+		"@win32",
+		"@x11",
 	}
 
-	return strings.TrimSpace(builder.String())
+	for i, line := range comment.lines {
+		parts := strings.SplitN(line, " ", 2)
+		if len(parts) == 2 && slices.Contains(commands, parts[0]) {
+			title := parts[0][1:]
+			body := parts[1]
+			title = strings.ReplaceAll(title, "_", " ")
+
+			if title == "par" {
+				comment.lines[i] = "# " + body + "\n"
+			} else {
+				comment.lines[i] = "\n# " + title + "\n\n" + body
+			}
+		}
+	}
+}
+
+func (comment *comment) formatCodeBlocks() {
+	inBlock := false
+	for i, line := range comment.lines {
+		// line = strings.TrimSpace(line)
+		if line == "```" {
+			inBlock = !inBlock
+		}
+		if inBlock {
+			comment.lines[i] = "    " + line
+		} else {
+			comment.lines[i] = line
+		}
+	}
+}
+
+func (comment *comment) resolveLinks() {
+	text := strings.Join(comment.lines, "\n")
+	text = comment.resolveMarkdownLinks(text)
+	text = comment.resolveRefs(text)
+	comment.lines = strings.Split(text, "\n")
+}
+
+var markdownLinkRegexp = regexp.MustCompile(`\[([\w ]+)\]\((.*)\)`)
+
+func (comment *comment) resolveMarkdownLinks(text string) string {
+	for {
+		parts := markdownLinkRegexp.FindStringSubmatch(text)
+		if parts == nil {
+			break
+		}
+
+		match := parts[0]
+		linkText := parts[1]
+		target := parts[2]
+
+		if strings.HasPrefix(target, "@ref") {
+			target = strings.TrimPrefix(target, "@ref")
+			target = strings.TrimSpace(target)
+			_, url, resolved := comment.resolveRef(target)
+			if resolved {
+				text = strings.Replace(text, match, "["+linkText+"]", 1)
+				comment.links = append(comment.links, commentLink{
+					text: linkText,
+					url:  url,
+				})
+			} else {
+				text = strings.Replace(text, match, "["+linkText+"]", 1)
+			}
+
+		} else if strings.HasPrefix(target, "https://") {
+			text = strings.Replace(text, match, "["+linkText+"]", 1)
+
+			comment.links = append(comment.links, commentLink{
+				text: linkText,
+				url:  target,
+			})
+
+		} else {
+			panic(fmt.Sprintf("Unsupported target %q in markdown link %q", target, match))
+		}
+
+	}
+
+	return text
+}
+
+var refRegexp = regexp.MustCompile(`@ref\s+([\w\d_]+)`)
+
+func (comment *comment) resolveRefs(text string) string {
+	for {
+		parts := refRegexp.FindStringSubmatch(text)
+		if parts == nil {
+			break
+		}
+
+		match := parts[0]
+		ref := parts[1]
+
+		// if resolvedRef, resolved := comment.gen.resolveEntityReference(ref); resolved {
+		// 	text = strings.Replace(text, match, "["+resolvedRef+"]", 1)
+
+		// } else
+		if title, url, resolved := comment.resolveRef(ref); resolved {
+			text = strings.Replace(text, match, "["+title+"]", 1)
+			comment.links = append(comment.links, commentLink{
+				text: title,
+				url:  url,
+			})
+
+		} else {
+			text = strings.Replace(text, match, "[?ref? "+ref+"]", 1)
+		}
+	}
+
+	return text
+}
+
+func (comment *comment) resolveRef(_ref string) (string, string, bool) {
+	// if url, haveURL := comment.gen.entityURLs[ref]; haveURL {
+	// 	return ref, url, true
+	// }
+	// if url, haveURL := comment.gen.pageSectionURLs[ref]; haveURL {
+	// 	return url.Title, url.URL, true
+	// }
+	// if url, haveURL := comment.gen.groupURLs[ref]; haveURL {
+	// 	return url.Title, url.URL, true
+	// }
+
+	return "", "", false
+}
+
+func (comment comment) text() string {
+	if len(comment.links) > 0 {
+		comment.lines = append(comment.lines, "")
+		for _, link := range comment.links {
+			comment.lines = append(comment.lines, fmt.Sprintf("[%s]: %s", link.text, link.url))
+		}
+	}
+
+	return strings.Join(comment.lines, "\n")
+}
+
+func (gen gen) commentLines(cursor clang.Cursor) []string {
+	_, cursorLine, _, _ := cursor.Location().FileLocation()
+
+	var lines []string
+	for l := int(cursorLine) - 2; l >= 0; l-- {
+		line := strings.TrimSpace(gen.lines[l])
+
+		if strings.HasPrefix(line, "IMPELLER_EXPORT") {
+			continue
+		}
+
+		if !strings.HasPrefix(line, "//") || strings.HasPrefix(line, "//--") {
+			break
+		}
+
+		line = strings.TrimPrefix(line, "///")
+		line = strings.TrimSpace(line)
+		lines = append(lines, line)
+	}
+	slices.Reverse(lines)
+	lines = append(lines, gen.lineComment(cursor))
+
+	return lines
 }
 
 func (gen gen) lineComment(cursor clang.Cursor) string {

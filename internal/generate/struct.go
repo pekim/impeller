@@ -12,12 +12,12 @@ type struct_ struct {
 	cursor  clang.Cursor
 	cName   string
 	name    string
-	comment string
+	comment comment
 	handle  bool // defined using the IMPELLER_DEFINE_HANDLE macro
 }
 
 func (struct_ struct_) generate(file file) {
-	file.Comment(struct_.comment)
+	file.Comment(struct_.comment.text())
 	file.Type().Id(struct_.name).StructFunc(func(g *jen.Group) {
 		g.Id("_").Qual("structs", "HostLayout")
 
@@ -36,11 +36,11 @@ func (struct_ struct_) generate(file file) {
 }
 
 func (struct_ struct_) generateField(g *jen.Group, cursor clang.Cursor) {
-	g.Comment(struct_.gen.commentText(cursor))
-
 	cName := cursor.Spelling()
 	name := goName(cName)
 	typ := cursor.Type().Spelling()
+
+	g.Comment(struct_.gen.newComment(cursor).text())
 
 	if scalar, ok := scalars[clang.CursorKind(cursor.Type().CanonicalType().Kind())]; ok {
 		g.Id(name).Add(scalar.goType)

@@ -16,6 +16,7 @@ type function struct {
 	params     params
 	varName    string
 	cifVarName string
+	comment    comment
 }
 
 func newFunction(gen *gen, cursor clang.Cursor) function {
@@ -29,6 +30,7 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 		params:     newParams(gen, cursor),
 		varName:    "func" + cName,
 		cifVarName: "cif" + cName,
+		comment:    gen.newComment(cursor),
 	}
 
 	if fn.method() {
@@ -44,7 +46,7 @@ func (fn function) generate(file file) {
 		return
 	}
 
-	file.Comment(fn.gen.commentText(fn.cursor))
+	file.Comment(fn.comment.text())
 
 	file.
 		Func().

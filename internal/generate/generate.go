@@ -65,9 +65,10 @@ func (gen *gen) findEntities() {
 
 		case clang.Cursor_EnumDecl:
 			gen.enums = append(gen.enums, enum{
-				gen:    gen,
-				cursor: cursor,
-				name:   goName(cursor.Spelling()),
+				gen:     gen,
+				cursor:  cursor,
+				name:    goName(cursor.Spelling()),
+				comment: gen.newComment(cursor),
 			})
 
 		case clang.Cursor_StructDecl:
@@ -77,7 +78,7 @@ func (gen *gen) findEntities() {
 				cursor:  cursor,
 				cName:   cName,
 				name:    goName(cName),
-				comment: gen.commentText(cursor),
+				comment: gen.newComment(cursor),
 			})
 
 		case clang.Cursor_TypedefDecl:
@@ -91,8 +92,8 @@ func (gen *gen) findEntities() {
 					struct_, found := gen.structs.find(structName)
 					if found {
 						struct_.handle = true
-						if struct_.comment == "" {
-							struct_.comment = gen.commentText(cursor)
+						if struct_.comment.text() == "" {
+							struct_.comment = gen.newComment(cursor)
 						}
 					}
 				}

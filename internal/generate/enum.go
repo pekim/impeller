@@ -6,12 +6,14 @@ import (
 )
 
 type enum struct {
-	gen    *gen
-	cursor clang.Cursor
-	name   string
+	gen     *gen
+	cursor  clang.Cursor
+	name    string
+	comment comment
 }
 
 func (enum enum) generate(file file) {
+	enum.comment.text()
 	file.Type().Id(enum.name).Id("enum")
 
 	enum.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -24,7 +26,7 @@ func (enum enum) generate(file file) {
 			Op("=").
 			Lit(value).
 			Do(func(s *jen.Statement) {
-				comment := enum.gen.commentText(cursor)
+				comment := enum.gen.newComment(cursor).text()
 				if comment != "" {
 					s.Comment(comment)
 				}

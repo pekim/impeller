@@ -114,7 +114,9 @@ type TypographyContext struct {
 	handle unsafe.Pointer
 }
 
-// An immutable, fully laid out paragraph.
+/*
+An immutable, fully laid out paragraph.
+*/
 type Paragraph struct {
 	_      structs.HostLayout
 	handle unsafe.Pointer
@@ -128,7 +130,7 @@ To build a paragraph, users push/pop paragraph styles onto a stack then add
 UTF-8 encoded text. The properties on the top of paragraph style stack when
 the text is added are used to layout and shape that subset of the paragraph.
 
-@see      `ImpellerParagraphStyle`
+See      `ImpellerParagraphStyle`
 */
 type ParagraphBuilder struct {
 	_      structs.HostLayout
@@ -157,7 +159,9 @@ type LineMetrics struct {
 	handle unsafe.Pointer
 }
 
-// Describes the metrics of glyphs in a paragraph line.
+/*
+Describes the metrics of glyphs in a paragraph line.
+*/
 type GlyphInfo struct {
 	_      structs.HostLayout
 	handle unsafe.Pointer
@@ -179,7 +183,9 @@ type Path struct {
 	handle unsafe.Pointer
 }
 
-// Path builders allow for the incremental building up of paths.
+/*
+Path builders allow for the incremental building up of paths.
+*/
 type PathBuilder struct {
 	_      structs.HostLayout
 	handle unsafe.Pointer
@@ -208,7 +214,7 @@ Creating textures is extremely expensive. Creating a single one can
 typically comfortably blow the frame budget of an application. Textures
 should be created on background threads.
 
-@warning    While textures themselves are thread safe, some context types
+While textures themselves are thread safe, some context types
 (like OpenGL) may need extra configuration to be able to operate
 from multiple threads.
 */
@@ -237,12 +243,15 @@ A fragment shader is a small program that is authored in GLSL and compiled
 using `impellerc` that runs on each pixel covered by a polygon and allows
 the user to configure how it is shaded.
 
-@see https://docs.flutter.dev/ui/design/graphics/fragment-shaders
+See https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 */
 type FragmentProgram struct {
 	_      structs.HostLayout
 	handle unsafe.Pointer
 }
+
+// Non-opaque structs
+// -----------------------------------------------------------------------------
 
 type Rect struct {
 	_      structs.HostLayout
@@ -279,10 +288,13 @@ type Range struct {
 /*
 A 4x4 transformation matrix using column-major storage.
 
+	```
 	| m[0] m[4] m[8]  m[12] |
 	| m[1] m[5] m[9]  m[13] |
 	| m[2] m[6] m[10] m[14] |
 	| m[3] m[7] m[11] m[15] |
+
+```
 */
 type Matrix struct {
 	_ structs.HostLayout
@@ -295,11 +307,14 @@ A 4x5 matrix using row-major storage used for transforming color values.
 To transform color values, a 5x5 matrix is constructed with the 5th row
 being identity. Then the following transformation is performed:
 
+	```
 	| R' |   | m[0]  m[1]  m[2]  m[3]  m[4]  |   | R |
 	| G' |   | m[5]  m[6]  m[7]  m[8]  m[9]  |   | G |
 	| B' | = | m[10] m[11] m[12] m[13] m[14] | * | B |
 	| A' |   | m[15] m[16] m[17] m[18] m[19] |   | A |
 	| 1  |   | 0     0     0     0     1     |   | 1 |
+
+```
 
 The translation column (m[4], m[9], m[14], m[19]) must be specified in
 non-normalized 8-bit unsigned integer space (0 to 255). Values outside this
@@ -307,35 +322,47 @@ range will produce undefined results.
 
 The identity transformation is thus:
 
+	```
 	1, 0, 0, 0, 0,
 	0, 1, 0, 0, 0,
 	0, 0, 1, 0, 0,
 	0, 0, 0, 1, 0,
 
+```
+
 Some examples:
 
 To invert all colors:
 
+	```
 	-1,  0,  0, 0, 255,
 	0, -1,  0, 0, 255,
 	0,  0, -1, 0, 255,
 	0,  0,  0, 1,   0,
 
+```
+
 To apply a sepia filter:
 
+	```
 	0.393, 0.769, 0.189, 0, 0,
 	0.349, 0.686, 0.168, 0, 0,
 	0.272, 0.534, 0.131, 0, 0,
 	0,     0,     0,     1, 0,
 
+```
+
 To apply a grayscale conversion filter:
 
+	```
 	0.2126, 0.7152, 0.0722, 0, 0,
 	0.2126, 0.7152, 0.0722, 0, 0,
 	0.2126, 0.7152, 0.0722, 0, 0,
 	0,      0,      0,      1, 0,
 
-@see      ImpellerColorFilter
+```
+
+See      ImpellerColorFilter
 */
 type ColorMatrix struct {
 	_ structs.HostLayout
@@ -391,11 +418,20 @@ type ContextVulkanInfo struct {
 
 type TextDecoration struct {
 	_ structs.HostLayout
-	// A mask of `ImpellerTextDecorationType`s to enable.
+	/*
+	   A mask of `ImpellerTextDecorationType`s to enable.
+	*/
 	Types int32
-	// The decoration color.
+	/*
+	   The decoration color.
+	*/
 	Color Color
-	// The decoration style.
-	Style               TextDecorationStyle
+	/*
+	   The decoration style.
+	*/
+	Style TextDecorationStyle
+	// The multiplier applied to the default thickness of the font to use for the
+	// decoration.
+
 	ThicknessMultiplier float32
 }
