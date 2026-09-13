@@ -130,7 +130,7 @@ To build a paragraph, users push/pop paragraph styles onto a stack then add
 UTF-8 encoded text. The properties on the top of paragraph style stack when
 the text is added are used to layout and shape that subset of the paragraph.
 
-See      `ImpellerParagraphStyle`
+See [ParagraphStyle]
 */
 type ParagraphBuilder struct {
 	_      structs.HostLayout
@@ -362,7 +362,7 @@ To apply a grayscale conversion filter:
 
 ```
 
-See      ImpellerColorFilter
+See [ColorFilter]
 */
 type ColorMatrix struct {
 	_ structs.HostLayout

@@ -51,7 +51,7 @@ func (gen *gen) newComment(cursor clang.Cursor) comment {
 	comment.setSince()
 	comment.formatHeadings()
 	comment.formatCodeBlocks()
-	comment.resolveLinks()
+	comment.resolveSees()
 
 	return comment
 }
@@ -82,8 +82,6 @@ func (comment *comment) cleanLines() {
 			strings.HasPrefix(line, "@}") {
 			line = ""
 		}
-
-		line = strings.ReplaceAll(line, "@see ", "See ")
 
 		comment.lines[i] = line
 	}
@@ -118,8 +116,6 @@ func (comment *comment) setParams() {
 				param.direction = in
 			case "@param[out]":
 				param.direction = out
-				// default:
-				// 	panic(fmt.Sprintf("unknown direction in %q", line))
 			}
 
 			if len(parts) > 2 {
@@ -218,100 +214,26 @@ func (comment *comment) formatCodeBlocks() {
 	}
 }
 
-func (comment *comment) resolveLinks() {
-	text := strings.Join(comment.lines, "\n")
-	text = comment.resolveMarkdownLinks(text)
-	text = comment.resolveRefs(text)
-	comment.lines = strings.Split(text, "\n")
-}
+var seeRegexp = regexp.MustCompile(`@see\s+([^\s]+)`)
 
-var markdownLinkRegexp = regexp.MustCompile(`\[([\w ]+)\]\((.*)\)`)
-
-func (comment *comment) resolveMarkdownLinks(text string) string {
-	for {
-		parts := markdownLinkRegexp.FindStringSubmatch(text)
+func (comment *comment) resolveSees() {
+	for l, line := range comment.lines {
+		parts := seeRegexp.FindStringSubmatch(line)
 		if parts == nil {
-			break
+			continue
 		}
 
-		match := parts[0]
-		linkText := parts[1]
-		target := parts[2]
-
-		if strings.HasPrefix(target, "@ref") {
-			target = strings.TrimPrefix(target, "@ref")
-			target = strings.TrimSpace(target)
-			_, url, resolved := comment.resolveRef(target)
-			if resolved {
-				text = strings.Replace(text, match, "["+linkText+"]", 1)
-				comment.links = append(comment.links, commentLink{
-					text: linkText,
-					url:  url,
-				})
-			} else {
-				text = strings.Replace(text, match, "["+linkText+"]", 1)
-			}
-
-		} else if strings.HasPrefix(target, "https://") {
-			text = strings.Replace(text, match, "["+linkText+"]", 1)
-
-			comment.links = append(comment.links, commentLink{
-				text: linkText,
-				url:  target,
-			})
-
-		} else {
-			panic(fmt.Sprintf("Unsupported target %q in markdown link %q", target, match))
-		}
-
-	}
-
-	return text
-}
-
-var refRegexp = regexp.MustCompile(`@ref\s+([\w\d_]+)`)
-
-func (comment *comment) resolveRefs(text string) string {
-	for {
-		parts := refRegexp.FindStringSubmatch(text)
-		if parts == nil {
-			break
-		}
-
-		match := parts[0]
 		ref := parts[1]
+		ref = strings.TrimSpace(ref)
+		ref = strings.TrimPrefix(ref, "`")
+		ref = strings.TrimSuffix(ref, "`")
 
-		// if resolvedRef, resolved := comment.gen.resolveEntityReference(ref); resolved {
-		// 	text = strings.Replace(text, match, "["+resolvedRef+"]", 1)
-
-		// } else
-		if title, url, resolved := comment.resolveRef(ref); resolved {
-			text = strings.Replace(text, match, "["+title+"]", 1)
-			comment.links = append(comment.links, commentLink{
-				text: title,
-				url:  url,
-			})
-
+		if strings.HasPrefix(ref, "http") {
+			comment.lines[l] = fmt.Sprintf("See %s", ref)
 		} else {
-			text = strings.Replace(text, match, "[?ref? "+ref+"]", 1)
+			comment.lines[l] = fmt.Sprintf("See [%s]", goName(ref))
 		}
 	}
-
-	return text
-}
-
-func (comment *comment) resolveRef(_ref string) (string, string, bool) {
-	// if url, haveURL := comment.gen.entityURLs[ref]; haveURL {
-	// 	return ref, url, true
-	// }
-	// if url, haveURL := comment.gen.pageSectionURLs[ref]; haveURL {
-	// 	return url.Title, url.URL, true
-	// }
-	// if url, haveURL := comment.gen.groupURLs[ref]; haveURL {
-	// 	return url.Title, url.URL, true
-	// }
-
-	return "", "", false
 }
 
 func (comment comment) text() string {

@@ -22,7 +22,7 @@ Since there are no API stability guarantees today, passing a
 version that is different to the one returned by
 `ImpellerGetVersion` will always fail.
 
-See        `ImpellerContextCreateOpenGLESNew`
+See [ContextCreateOpenGLESNew]
 
 # return
 
@@ -1605,7 +1605,7 @@ func (image Texture) ColorSourceCreateImageNew(horizontal_tile_mode TileMode, ve
 /*
 program.
 
-See        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
+See https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
 # params
   - - context            The context.
@@ -1949,7 +1949,7 @@ func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageF
 /*
 program.
 
-See        https://docs.flutter.dev/ui/design/graphics/fragment-shaders
+See https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
 # params
   - - context            The context.
@@ -2930,7 +2930,7 @@ instead of the one encoded in the font itself.
 Multiple fonts (with glyphs for different styles) can be
 specified with the same family.
 
-See        `ImpellerParagraphStyleSetFontFamily`
+See [ParagraphStyleSetFontFamily]
 
 # params
   - - context                        The context.
@@ -3512,7 +3512,7 @@ func (paragraph Paragraph) Release() {
 }
 
 /*
-See        `ImpellerParagraphGetMinIntrinsicWidth`
+See [ParagraphGetMinIntrinsicWidth]
 
 # params
   - - paragraph  The paragraph.
@@ -3597,7 +3597,7 @@ func (paragraph Paragraph) GetLongestLineWidth() float32 {
 }
 
 /*
-See        `ImpellerParagraphGetMaxWidth`
+See [ParagraphGetMaxWidth]
 
 # params
   - - paragraph  The paragraph.
