@@ -67,6 +67,7 @@ func (gen *gen) findEntities() {
 			gen.enums = append(gen.enums, enum{
 				gen:     gen,
 				cursor:  cursor,
+				cName:   cursor.Spelling(),
 				name:    goName(cursor.Spelling()),
 				comment: gen.newComment(cursor),
 			})
@@ -91,6 +92,7 @@ func (gen *gen) findEntities() {
 					structName := parts[1]
 					struct_, found := gen.structs.find(structName)
 					if found {
+						struct_.cName = cursor.Spelling()
 						struct_.handle = true
 						if struct_.comment.text() == "" {
 							struct_.comment = gen.newComment(cursor)
@@ -102,6 +104,24 @@ func (gen *gen) findEntities() {
 
 		return clang.ChildVisit_Continue
 	})
+}
+
+func (gen gen) resolveEntityReference(ref string) (string, bool) {
+	ref = strings.TrimSuffix(ref, "_attrib")
+	ref = strings.TrimSuffix(ref, "_hint")
+
+	if enum, ok := gen.enums.find(ref); ok {
+		return enum.name, true
+	} else if function, ok := gen.functions.find(ref); ok {
+		if function.method() {
+			return function.params[0].struct_.name + "." + function.name, true
+		}
+		return function.name, true
+	} else if struct_, ok := gen.structs.find(ref); ok {
+		return struct_.name, true
+	}
+
+	return "", false
 }
 
 func (gen *gen) generateFiles() {

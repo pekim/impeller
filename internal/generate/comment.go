@@ -51,7 +51,6 @@ func (gen *gen) newComment(cursor clang.Cursor) comment {
 	comment.setSince()
 	comment.formatHeadings()
 	comment.formatCodeBlocks()
-	comment.resolveSees()
 
 	return comment
 }
@@ -214,6 +213,22 @@ func (comment *comment) formatCodeBlocks() {
 	}
 }
 
+var linkRegexp = regexp.MustCompile("`([^\\s]+)`")
+
+func (comment *comment) resolveLinks() {
+	for l, line := range comment.lines {
+		parts := linkRegexp.FindStringSubmatch(line)
+		if parts == nil {
+			continue
+		}
+
+		if reference, ok := comment.gen.resolveEntityReference(parts[1]); ok {
+			line := strings.Replace(line, parts[0], "["+reference+"]", 1)
+			comment.lines[l] = line
+		}
+	}
+}
+
 var seeRegexp = regexp.MustCompile(`@see\s+([^\s]+)`)
 
 func (comment *comment) resolveSees() {
@@ -231,12 +246,17 @@ func (comment *comment) resolveSees() {
 		if strings.HasPrefix(ref, "http") {
 			comment.lines[l] = fmt.Sprintf("See %s", ref)
 		} else {
-			comment.lines[l] = fmt.Sprintf("See [%s]", goName(ref))
+			if reference, ok := comment.gen.resolveEntityReference(ref); ok {
+				comment.lines[l] = fmt.Sprintf("see [%s]", reference)
+			}
 		}
 	}
 }
 
 func (comment comment) text() string {
+	comment.resolveSees()
+	comment.resolveLinks()
+
 	if len(comment.links) > 0 {
 		comment.lines = append(comment.lines, "")
 		for _, link := range comment.links {

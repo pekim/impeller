@@ -114,3 +114,13 @@ func (functions functions) generateGo() {
 		file.Line()
 	}
 }
+
+func (functions functions) find(cName string) (*function, bool) {
+	for i, fn := range functions {
+		if fn.cName == cName {
+			return &(functions[i]), true
+		}
+	}
+
+	return nil, false
+}

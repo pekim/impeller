@@ -8,6 +8,7 @@ import (
 type enum struct {
 	gen     *gen
 	cursor  clang.Cursor
+	cName   string
 	name    string
 	comment comment
 }
@@ -46,6 +47,16 @@ func (enums enums) generate() {
 		enum.generate(file)
 		file.Line()
 	}
+}
+
+func (enums enums) find(cName string) (*enum, bool) {
+	for i, enum := range enums {
+		if enum.cName == cName {
+			return &(enums[i]), true
+		}
+	}
+
+	return nil, false
 }
 
 func (enums enums) findByGoName(name string) (*enum, bool) {

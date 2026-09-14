@@ -20,9 +20,9 @@ by the caller is not supported by the library.
 
 Since there are no API stability guarantees today, passing a
 version that is different to the one returned by
-`ImpellerGetVersion` will always fail.
+[GetVersion] will always fail.
 
-See [ContextCreateOpenGLESNew]
+see [ContextCreateOpenGLESNew]
 
 # return
 
@@ -53,7 +53,7 @@ operations.
 
 # params
   - - version      The version of the Impeller
-    standalone API. See `ImpellerGetVersion`. If the
+    standalone API. See [GetVersion]. If the
     specified here is not compatible with the version
     of the library, context creation will fail and NULL
     context returned from this call.
@@ -2205,8 +2205,8 @@ func (builder DisplayListBuilder) SaveLayer(bounds *Rect, paint Paint, backdrop 
 }
 
 /*
-`ImpellerDisplayListBuilderSave` or
-`ImpellerDisplayListBuilderSaveLayer`.
+[DisplayListBuilder.Save] or
+[DisplayListBuilder.SaveLayer].
 
 # params
   - - builder  The builder.
@@ -2930,7 +2930,7 @@ instead of the one encoded in the font itself.
 Multiple fonts (with glyphs for different styles) can be
 specified with the same family.
 
-See [ParagraphStyleSetFontFamily]
+see [ParagraphStyle.SetFontFamily]
 
 # params
   - - context                        The context.
@@ -3512,7 +3512,7 @@ func (paragraph Paragraph) Release() {
 }
 
 /*
-See [ParagraphGetMinIntrinsicWidth]
+see [Paragraph.GetMinIntrinsicWidth]
 
 # params
   - - paragraph  The paragraph.
@@ -3597,7 +3597,7 @@ func (paragraph Paragraph) GetLongestLineWidth() float32 {
 }
 
 /*
-See [ParagraphGetMaxWidth]
+see [Paragraph.GetMaxWidth]
 
 # params
   - - paragraph  The paragraph.
@@ -3607,7 +3607,7 @@ See [ParagraphGetMaxWidth]
 	The actual width of the longest line in the paragraph after
 
 layout. This is expected to be less than or equal to
-`ImpellerParagraphGetMaxWidth`.
+[Paragraph.GetMaxWidth].
 */
 func (paragraph Paragraph) GetMinIntrinsicWidth() float32 {
 	var result float32
