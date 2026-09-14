@@ -21,16 +21,17 @@ type function struct {
 
 func newFunction(gen *gen, cursor clang.Cursor) function {
 	cName := cursor.Spelling()
+	comment := gen.newComment(cursor)
 	fn := function{
 		gen:        gen,
 		cursor:     cursor,
 		cName:      cName,
 		name:       goName(cName),
 		result:     newResult(gen, cursor.ResultType()),
-		params:     newParams(gen, cursor),
+		params:     newParams(gen, cursor, comment.params),
 		varName:    "func" + cName,
 		cifVarName: "cif" + cName,
-		comment:    gen.newComment(cursor),
+		comment:    comment,
 	}
 
 	if fn.method() {
@@ -56,17 +57,25 @@ func (fn function) generate(file file) {
 			}
 		}).
 		Id(fn.name).
-		ParamsFunc(func(g *jen.Group) {
+		ParamsFunc(func(g *jen.Group) { // params
 			if fn.method() {
 				fn.params[1:].goDecl(g)
 			} else {
 				fn.params.goDecl(g)
 			}
 		}).
-		Add(fn.result.goDecl()). // result type
+		// result type(s)
+		ParamsFunc(func(g *jen.Group) {
+			fn.params.outDecls(g)
+
+			if !fn.result.isVoid {
+				g.Add(fn.result.goDecl())
+			}
+		}).
 		BlockFunc(func(g *jen.Group) {
 			fn.result.resultVar(g)
 			fn.params.cArgVars(g)
+			fn.params.outVars(g)
 			fn.params.lengthVar(g)
 
 			g.
@@ -90,7 +99,19 @@ func (fn function) generate(file file) {
 				jen.Panic(jen.Id("err")),
 			)
 
-			fn.result.returnVar(g)
+			if !fn.result.isVoid || fn.params.haveOut() {
+				g.Return().ListFunc(func(g *jen.Group) {
+					if !fn.result.isVoid {
+						g.Id("result")
+					}
+
+					for _, param := range fn.params {
+						if param.direction == out {
+							g.Op("*").Id(param.name)
+						}
+					}
+				})
+			}
 		})
 }
 

@@ -13,12 +13,17 @@ type param struct {
 	name          string
 	lengthParam   *param
 	isLengthParam bool
+	direction     paramDirection
 }
 
-func newParam(gen *gen, cursor clang.Cursor) param {
+func newParam(gen *gen, cursor clang.Cursor, commentParams map[string]commentParam) param {
 	param := param{
 		name: cursor.Spelling(),
 		typ:  newTyp(gen, cursor.Type()),
+	}
+
+	if commentParam, have := commentParams[param.name]; have {
+		param.direction = commentParam.direction
 	}
 
 	return param
@@ -60,6 +65,12 @@ func (param param) cArgVar(g *jen.Group) {
 	}
 }
 
+func (param param) outVar(g *jen.Group) {
+	if param.direction == out {
+		g.Var().Add(param.goDecl())
+	}
+}
+
 func (param param) cArgName() jen.Code {
 	if param.isCallback {
 		return jen.Id(param.name)
@@ -85,10 +96,10 @@ func (param param) cArgName() jen.Code {
 
 type params []param
 
-func newParams(gen *gen, cursor clang.Cursor) params {
+func newParams(gen *gen, cursor clang.Cursor, commentParams map[string]commentParam) params {
 	params := make(params, cursor.NumArguments())
 	for i := range len(params) {
-		params[i] = newParam(gen, cursor.Argument(uint32(i)))
+		params[i] = newParam(gen, cursor.Argument(uint32(i)), commentParams)
 	}
 
 	for i := range len(params) - 1 {
@@ -119,6 +130,9 @@ func (params params) goDecl(g *jen.Group) {
 		if param.isLengthParam {
 			continue
 		}
+		if param.direction == out {
+			continue
+		}
 		g.Add(param.goDecl())
 	}
 }
@@ -127,6 +141,29 @@ func (params params) cArgVars(g *jen.Group) {
 	for _, param := range params {
 		param.cArgVar(g)
 	}
+}
+
+func (params params) outVars(g *jen.Group) {
+	for _, param := range params {
+		param.outVar(g)
+	}
+}
+
+func (params params) outDecls(g *jen.Group) {
+	for _, param := range params {
+		if param.direction == out {
+			g.Add(param.goOutDecl())
+		}
+	}
+}
+
+func (params params) haveOut() bool {
+	for _, param := range params {
+		if param.direction == out {
+			return true
+		}
+	}
+	return false
 }
 
 func (params params) lengthVar(g *jen.Group) {

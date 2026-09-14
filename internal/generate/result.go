@@ -52,13 +52,13 @@ func (result result) resultVar(g *jen.Group) {
 	}
 }
 
-func (result result) returnVar(g *jen.Group) {
-	if result.isVoid {
-		return
-	}
+// func (result result) returnVar(g *jen.Group) {
+// 	if result.isVoid {
+// 		return
+// 	}
 
-	g.Return().Id("result")
-}
+// 	g.Return().Id("result")
+// }
 
 func (result result) returnValuePointer() jen.Code {
 	if result.isVoid {

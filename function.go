@@ -529,7 +529,8 @@ points and isolated calls to move the cursor.
   - - path        The path
   - out_bounds (out) -  The conservative bounds of the path.
 */
-func (path Path) GetBounds(out_bounds *Rect) {
+func (path Path) GetBounds() Rect {
+	var out_bounds *Rect
 	_, err := ffi.CallFunction(
 		cifImpellerPathGetBounds,
 		funcImpellerPathGetBounds,
@@ -542,6 +543,7 @@ func (path Path) GetBounds(out_bounds *Rect) {
 	if err != nil {
 		panic(err)
 	}
+	return *out_bounds
 }
 
 /*
@@ -2336,7 +2338,8 @@ transformation stack.
   - - builder        The builder.
   - out_transform (out) -  The transform.
 */
-func (builder DisplayListBuilder) GetTransform(out_transform *Matrix) {
+func (builder DisplayListBuilder) GetTransform() Matrix {
+	var out_transform *Matrix
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderGetTransform,
 		funcImpellerDisplayListBuilderGetTransform,
@@ -2349,6 +2352,7 @@ func (builder DisplayListBuilder) GetTransform(out_transform *Matrix) {
 	if err != nil {
 		panic(err)
 	}
+	return *out_transform
 }
 
 /*
@@ -4275,7 +4279,8 @@ coordinate space of the paragraph.
   - - glyph_info  The glyph information.
   - out_bounds (out) -  The grapheme cluster bounds.
 */
-func (glyph_info GlyphInfo) GetGraphemeClusterBounds(out_bounds *Rect) {
+func (glyph_info GlyphInfo) GetGraphemeClusterBounds() Rect {
+	var out_bounds *Rect
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoGetGraphemeClusterBounds,
 		funcImpellerGlyphInfoGetGraphemeClusterBounds,
@@ -4288,6 +4293,7 @@ func (glyph_info GlyphInfo) GetGraphemeClusterBounds(out_bounds *Rect) {
 	if err != nil {
 		panic(err)
 	}
+	return *out_bounds
 }
 
 /*

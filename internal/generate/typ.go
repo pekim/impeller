@@ -128,6 +128,14 @@ func (typ typ) goDecl() jen.Code {
 	panic("unhandled type")
 }
 
+func (typ typ) goOutDecl() jen.Code {
+	if typ.isPointer && typ.isStruct {
+		return jen.Id(typ.struct_.name)
+	}
+
+	panic("unhandled type")
+}
+
 func (typ typ) typeDescriptor() jen.Code {
 	if typ.isCallback {
 		return pointerTypeDescriptor
