@@ -204,6 +204,7 @@ func (comment *comment) formatCodeBlocks() {
 		// line = strings.TrimSpace(line)
 		if line == "```" {
 			inBlock = !inBlock
+			line = ""
 		}
 		if inBlock {
 			comment.lines[i] = "    " + line

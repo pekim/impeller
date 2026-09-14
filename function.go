@@ -1989,10 +1989,7 @@ func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program Frag
 /*
 subsequently applying the inner and then the outer filters.
 
-	```
 	destination = outer_filter(inner_filter(source))
-
-```
 
 # params
   - - outer  The outer image filter.
