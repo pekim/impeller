@@ -124,3 +124,9 @@ func (functions functions) find(cName string) (*function, bool) {
 
 	return nil, false
 }
+
+func (functions functions) resolve() {
+	for i := range functions {
+		(&functions[i]).comment.resolve()
+	}
+}

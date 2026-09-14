@@ -32,6 +32,7 @@ func Generate() {
 func (gen *gen) generate() {
 	gen.parseHeaderFile()
 	gen.findEntities()
+	gen.resolve()
 	gen.generateFiles()
 }
 
@@ -104,6 +105,12 @@ func (gen *gen) findEntities() {
 
 		return clang.ChildVisit_Continue
 	})
+}
+
+func (gen *gen) resolve() {
+	gen.enums.resolve()
+	gen.functions.resolve()
+	gen.structs.resolve()
 }
 
 func (gen gen) resolveEntityReference(ref string) (string, bool) {

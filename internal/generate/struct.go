@@ -40,7 +40,9 @@ func (struct_ struct_) generateField(g *jen.Group, cursor clang.Cursor) {
 	name := goName(cName)
 	typ := cursor.Type().Spelling()
 
-	g.Comment(struct_.gen.newComment(cursor).text())
+	comment := struct_.gen.newComment(cursor)
+	comment.resolve()
+	g.Comment(comment.text())
 
 	if scalar, ok := scalars[clang.CursorKind(cursor.Type().CanonicalType().Kind())]; ok {
 		g.Id(name).Add(scalar.goType)
@@ -96,4 +98,12 @@ func (structs structs) findByGoName(name string) (*struct_, bool) {
 	}
 
 	return nil, false
+}
+
+func (structs structs) resolve() {
+	for i := range structs {
+		(&structs[i]).comment.resolve()
+
+		// for i,field:=range &structs[i].f
+	}
 }

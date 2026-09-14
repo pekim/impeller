@@ -253,10 +253,12 @@ func (comment *comment) resolveSees() {
 	}
 }
 
-func (comment comment) text() string {
+func (comment comment) resolve() {
 	comment.resolveSees()
 	comment.resolveLinks()
+}
 
+func (comment comment) text() string {
 	if len(comment.links) > 0 {
 		comment.lines = append(comment.lines, "")
 		for _, link := range comment.links {

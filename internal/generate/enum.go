@@ -68,3 +68,9 @@ func (enums enums) findByGoName(name string) (*enum, bool) {
 
 	return nil, false
 }
+
+func (enums enums) resolve() {
+	for i := range enums {
+		(&enums[i]).comment.resolve()
+	}
+}
