@@ -20,7 +20,7 @@ type gen struct {
 
 func Generate() {
 	gen := gen{
-		headerFilename: "internal/interop/include/impeller.h",
+		headerFilename: "internal/interop-linux_amd64/include/impeller.h",
 		srcFilename:    "impeller.h",
 	}
 

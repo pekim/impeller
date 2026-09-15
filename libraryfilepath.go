@@ -1,15 +1,11 @@
 package impeller
 
 import (
-	_ "embed"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 )
-
-//go:embed internal/interop/lib/libimpeller.so
-var sharedObject []byte
 
 func libraryFilepath() (string, error) {
 	filepath := filepath.Join(os.TempDir(), fmt.Sprintf("impeller-%s.so", FlutterSHA))
