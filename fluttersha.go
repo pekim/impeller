@@ -1,0 +1,3 @@
+package impeller
+
+const FlutterSHA = "4d3c9c58afe01bf68fae7b002918b014e2da90c7"

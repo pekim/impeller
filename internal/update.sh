@@ -15,5 +15,12 @@ wget \
   --output-document $ZIP_FILE \
   https://storage.googleapis.com/flutter_infra_release/flutter/$FLUTTER_SHA/$PLATFORM_ARCH/impeller_sdk.zip
 
-# Extract the C header file, pre-build library.
+# Extract the C header file and pre-built library.
 unzip $ZIP_FILE -d $DEST_DIR
+
+# Create a Go file with a constant for the Flutter SHA
+cat <<EOF > fluttersha.go
+package impeller
+
+const FlutterSHA = "$FLUTTER_SHA"
+EOF

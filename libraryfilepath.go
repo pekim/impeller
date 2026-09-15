@@ -12,8 +12,8 @@ import (
 var sharedObject []byte
 
 func libraryFilepath() (string, error) {
-	libraryHash := "TODO"
-	filepath := filepath.Join(os.TempDir(), fmt.Sprintf("impeller-%s.so", libraryHash))
+	filepath := filepath.Join(os.TempDir(), fmt.Sprintf("impeller-%s.so", FlutterSHA))
+	fmt.Println(filepath)
 
 	// Check if the file exists. If it does, don't create it.
 	//
