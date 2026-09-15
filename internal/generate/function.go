@@ -101,14 +101,14 @@ func (fn function) generate(file file) {
 
 			if !fn.result.isVoid || fn.params.haveOut() {
 				g.Return().ListFunc(func(g *jen.Group) {
-					if !fn.result.isVoid {
-						g.Id("result")
-					}
-
 					for _, param := range fn.params {
 						if param.direction == out {
 							g.Op("*").Id(param.name)
 						}
+					}
+
+					if !fn.result.isVoid {
+						g.Id("result")
 					}
 				})
 			}

@@ -86,6 +86,8 @@ func (comment *comment) cleanLines() {
 	}
 }
 
+var paramRegexp = regexp.MustCompile(`@param(\[\w+\])?\s+([\w_]+)\s?(.*)`)
+
 func (comment *comment) setParams() {
 	comment.params = make(commentParams)
 
@@ -105,20 +107,20 @@ func (comment *comment) setParams() {
 		}
 
 		if strings.HasPrefix(line, "@param") {
-			parts := strings.SplitN(line, " ", 3)
+			parts := paramRegexp.FindStringSubmatch(line)
 			param = commentParam{
-				name: parts[1],
+				name: parts[2],
 			}
 
-			switch parts[0] {
-			case "@param[in]":
+			switch parts[1] {
+			case "[in]":
 				param.direction = in
-			case "@param[out]":
+			case "[out]":
 				param.direction = out
 			}
 
-			if len(parts) > 2 {
-				param.description = parts[2]
+			if len(parts) > 3 {
+				param.description = parts[3]
 				withinDescription = true
 			} else {
 				comment.params[param.name] = param

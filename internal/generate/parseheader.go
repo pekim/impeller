@@ -41,6 +41,13 @@ func (gen *gen) parseHeaderFile() {
 	headerData, err := os.ReadFile(gen.headerFilename)
 	fatalOnError(err)
 	headerContents := string(headerData)
+
+	// fix incorrect doc comment
+	headerContents = strings.Replace(headerContents,
+		"@param[out]  code_unit_index The range.",
+		"@param[out]  out_range The range.",
+		1)
+
 	headerLines := strings.Split(string(headerContents), "\n")
 	for i, line := range headerLines {
 		line = strings.TrimSpace(line)
@@ -57,7 +64,7 @@ func (gen *gen) parseHeaderFile() {
 	headerContents = strings.Join(headerLines, "\n")
 
 	// write a copy of the modified header file, just for reference
-	modifiedHeaderFilename := strings.Replace(gen.headerFilename, "sqlite3.h", "sqlite3_modified.h", 1)
+	modifiedHeaderFilename := strings.Replace(gen.headerFilename, "impeller.h", "impeller_modified.h", 1)
 	err = os.WriteFile(modifiedHeaderFilename, []byte(headerContents), 0600)
 	fatalOnError(err)
 

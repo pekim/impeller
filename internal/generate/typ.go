@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/dave/jennifer/jen"
@@ -129,11 +130,13 @@ func (typ typ) goDecl() jen.Code {
 }
 
 func (typ typ) goOutDecl() jen.Code {
-	if typ.isPointer && typ.isStruct {
-		return jen.Id(typ.struct_.name)
+	if typ.isPointer {
+		if typ.isStruct {
+			return jen.Id(typ.struct_.name)
+		}
 	}
 
-	panic("unhandled type")
+	panic(fmt.Sprintf("unhandled type : %s", typ.typ.Spelling()))
 }
 
 func (typ typ) typeDescriptor() jen.Code {
