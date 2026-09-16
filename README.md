@@ -6,6 +6,12 @@
 This library provides cgo-free Go bindings for
 [Impeller](https://github.com/flutter/flutter/tree/master/engine/src/flutter/impeller).
 
+## status
+
+This library is experimental.
+It appears to broadly work (at least on linux),
+but it has not been extensively tested.
+
 ## AI
 
 No AI was used in the creation of this library.
