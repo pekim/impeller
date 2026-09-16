@@ -188,7 +188,7 @@ func (comment *comment) formatHeadings() {
 		parts := strings.SplitN(line, " ", 2)
 		if len(parts) == 2 && slices.Contains(commands, parts[0]) {
 			title := parts[0][1:]
-			body := parts[1]
+			body := strings.TrimSpace(parts[1])
 			title = strings.ReplaceAll(title, "_", " ")
 
 			if title == "par" {

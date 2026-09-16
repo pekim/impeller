@@ -26,7 +26,7 @@ see [ContextCreateOpenGLESNew]
 
 # return
 
-	The version of the standalone API.
+The version of the standalone API.
 */
 func GetVersion() uint32 {
 	var result uint32
@@ -68,7 +68,7 @@ operations.
 
 # return
 
-	The context or NULL if one cannot be created.
+The context or NULL if one cannot be created.
 */
 func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddressCallback, gl_proc_address_callback_user_data unsafe.Pointer) Context {
 	var result Context
@@ -94,7 +94,7 @@ func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddre
 
 # return
 
-	The Metal context or NULL if one cannot be created.
+The Metal context or NULL if one cannot be created.
 */
 func ContextCreateMetalNew(version uint32) Context {
 	var result Context
@@ -119,7 +119,7 @@ func ContextCreateMetalNew(version uint32) Context {
 
 # return
 
-	The Vulkan context or NULL if one cannot be created.
+The Vulkan context or NULL if one cannot be created.
 */
 func ContextCreateVulkanNew(version uint32, settings *ContextVulkanSettings) Context {
 	var result Context
@@ -192,7 +192,7 @@ the [out] argument unaffected.
 
 # return
 
-	If the Vulkan info could be fetched from the context.
+If the Vulkan info could be fetched from the context.
 */
 func (context Context) GetVulkanInfo() (ContextVulkanInfo, Bool) {
 	var result Bool
@@ -225,7 +225,7 @@ context provided.
 
 # return
 
-	The vulkan swapchain.
+The vulkan swapchain.
 */
 func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr unsafe.Pointer) VulkanSwapchain {
 	var result VulkanSwapchain
@@ -294,7 +294,7 @@ CPU.
 
 # return
 
-	The surface if one could be obtained, NULL otherwise.
+The surface if one could be obtained, NULL otherwise.
 */
 func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 	var result Surface
@@ -326,7 +326,7 @@ collected.
 
 # return
 
-	The surface if once can be created, NULL otherwise.
+The surface if once can be created, NULL otherwise.
 */
 func (context Context) SurfaceCreateWrappedFBONew(fbo uint64, format PixelFormat, size *ISize) Surface {
 	var result Surface
@@ -362,7 +362,7 @@ underlying context.
 
 # return
 
-	The surface if one could be wrapped, NULL otherwise.
+The surface if one could be wrapped, NULL otherwise.
 */
 func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable unsafe.Pointer) Surface {
 	var result Surface
@@ -438,7 +438,7 @@ buffer) bindings, etc...
 
 # return
 
-	If the display list could be drawn onto the surface.
+If the display list could be drawn onto the surface.
 */
 func (surface Surface) DrawDisplayList(display_list DisplayList) Bool {
 	var result Bool
@@ -463,7 +463,7 @@ func (surface Surface) DrawDisplayList(display_list DisplayList) Bool {
 
 # return
 
-	True if the surface could be presented.
+True if the surface could be presented.
 */
 func (surface Surface) Present() Bool {
 	var result Bool
@@ -552,7 +552,7 @@ A builder builds these immutable paths.
 
 # return
 
-	The path builder.
+The path builder.
 */
 func PathBuilderNew() PathBuilder {
 	var result PathBuilder
@@ -821,7 +821,7 @@ existing path can continue being added to.
 
 # return
 
-	The impeller path.
+The impeller path.
 */
 func (builder PathBuilder) CopyPathNew(fill FillType) Path {
 	var result Path
@@ -849,7 +849,7 @@ path builder now contains an empty path.
 
 # return
 
-	The impeller path.
+The impeller path.
 */
 func (builder PathBuilder) TakePathNew(fill FillType) Path {
 	var result Path
@@ -871,7 +871,7 @@ func (builder PathBuilder) TakePathNew(fill FillType) Path {
 /*
 # return
 
-	The impeller paint.
+The impeller paint.
 */
 func PaintNew() Paint {
 	var result Paint
@@ -1193,8 +1193,7 @@ decompressed data.
 
 # return
 
-	The texture if one can be created using the provided data, NULL
-
+The texture if one can be created using the provided data, NULL
 otherwise.
 */
 func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data unsafe.Pointer) Texture {
@@ -1239,8 +1238,7 @@ fail.
 
 # return
 
-	The texture if one could be created by adopting the supplied
-
+The texture if one could be created by adopting the supplied
 texture handle, NULL otherwise.
 */
 func (context Context) TextureCreateWithOpenGLTextureHandleNew(descriptor *TextureDescriptor, handle uint64) Texture {
@@ -1314,7 +1312,7 @@ where Impeller knows there is an OpenGL context available.
 
 # return
 
-	The OpenGL handle if one is available, GL_NONE otherwise.
+The OpenGL handle if one is available, GL_NONE otherwise.
 */
 func (texture Texture) GetOpenGLHandle() uint64 {
 	var result uint64
@@ -1435,7 +1433,7 @@ func (color_source ColorSource) Release() {
 
 # return
 
-	The color source.
+The color source.
 */
 func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1471,7 +1469,7 @@ func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, st
 
 # return
 
-	The color source.
+The color source.
 */
 func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1509,7 +1507,7 @@ func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_coun
 
 # return
 
-	The color source.
+The color source.
 */
 func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float32, end_center *Point, end_radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1548,7 +1546,7 @@ func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float
 
 # return
 
-	The color source.
+The color source.
 */
 func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1583,7 +1581,7 @@ func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32
 
 # return
 
-	The color source.
+The color source.
 */
 func (image Texture) ColorSourceCreateImageNew(horizontal_tile_mode TileMode, vertical_tile_mode TileMode, sampling TextureSampling, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1620,7 +1618,7 @@ See https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
 # return
 
-	The color source.
+The color source.
 */
 func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ColorSource {
 	var result ColorSource
@@ -1694,7 +1692,7 @@ independently.
 
 # return
 
-	The color filter.
+The color filter.
 */
 func ColorFilterCreateBlendNew(color *Color, blend_mode BlendMode) ColorFilter {
 	var result ColorFilter
@@ -1721,7 +1719,7 @@ independently.
 
 # return
 
-	The color filter.
+The color filter.
 */
 func ColorFilterCreateColorMatrixNew(color_matrix *ColorMatrix) ColorFilter {
 	var result ColorFilter
@@ -1786,7 +1784,7 @@ func (mask_filter MaskFilter) Release() {
 
 # return
 
-	The mask filter.
+The mask filter.
 */
 func MaskFilterCreateBlurNew(style BlurStyle, sigma float32) MaskFilter {
 	var result MaskFilter
@@ -1856,7 +1854,7 @@ performance.
 
 # return
 
-	The image filter.
+The image filter.
 */
 func ImageFilterCreateBlurNew(x_sigma float32, y_sigma float32, tile_mode TileMode) ImageFilter {
 	var result ImageFilter
@@ -1902,7 +1900,7 @@ values to the minimum value in a circle around the pixel.
 
 # return
 
-	The image filter.
+The image filter.
 */
 func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
 	var result ImageFilter
@@ -1930,7 +1928,7 @@ the underlying image.
 
 # return
 
-	The image filter.
+The image filter.
 */
 func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageFilter {
 	var result ImageFilter
@@ -1964,7 +1962,7 @@ See https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
 # return
 
-	The image filter.
+The image filter.
 */
 func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ImageFilter {
 	var result ImageFilter
@@ -2000,7 +1998,7 @@ subsequently applying the inner and then the outer filters.
 
 # return
 
-	The combined image filter.
+The combined image filter.
 */
 func (outer ImageFilter) CreateComposeNew(inner ImageFilter) ImageFilter {
 	var result ImageFilter
@@ -2069,7 +2067,7 @@ This may aid performance optimizations.
 
 # return
 
-	The display list builder.
+The display list builder.
 */
 func DisplayListBuilderNew(cull_rect *Rect) DisplayListBuilder {
 	var result DisplayListBuilder
@@ -2135,7 +2133,7 @@ encoded in the builder. The builder is reset after this call.
 
 # return
 
-	The display list.
+The display list.
 */
 func (builder DisplayListBuilder) CreateDisplayListNew() DisplayList {
 	var result DisplayList
@@ -2382,7 +2380,7 @@ func (builder DisplayListBuilder) ResetTransform() {
 
 # return
 
-	The save stack size.
+The save stack size.
 */
 func (builder DisplayListBuilder) GetSaveCount() uint32 {
 	var result uint32
@@ -2850,7 +2848,7 @@ func (builder DisplayListBuilder) DrawTextureRect(texture Texture, src_rect *Rec
 /*
 # return
 
-	The typography context.
+The typography context.
 */
 func TypographyContextNew() TypographyContext {
 	var result TypographyContext
@@ -2945,7 +2943,7 @@ see [ParagraphStyle.SetFontFamily]
 
 # return
 
-	If the font could be successfully registered.
+If the font could be successfully registered.
 */
 func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_release_user_data unsafe.Pointer, family_name_alias string) Bool {
 	var result Bool
@@ -2970,7 +2968,7 @@ func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_rel
 /*
 # return
 
-	The paragraph style.
+The paragraph style.
 */
 func ParagraphStyleNew() ParagraphStyle {
 	var result ParagraphStyle
@@ -3305,7 +3303,7 @@ func (paragraph_style ParagraphStyle) SetEllipsis(ellipsis string) {
 
 # return
 
-	The paragraph builder.
+The paragraph builder.
 */
 func (context TypographyContext) ParagraphBuilderNew() ParagraphBuilder {
 	var result ParagraphBuilder
@@ -3454,7 +3452,7 @@ discarded and a new one created to build more paragraphs.
 
 # return
 
-	The paragraph if one can be created, NULL otherwise.
+The paragraph if one can be created, NULL otherwise.
 */
 func (paragraph_builder ParagraphBuilder) BuildParagraphNew(width float32) Paragraph {
 	var result Paragraph
@@ -3521,8 +3519,7 @@ see [Paragraph.GetMinIntrinsicWidth]
 
 # return
 
-	The width provided to the paragraph builder during the call to
-
+The width provided to the paragraph builder during the call to
 layout. This is the maximum width any line in the laid out
 paragraph can occupy. But, it is not necessarily the actual
 width of the paragraph after layout.
@@ -3549,8 +3546,7 @@ func (paragraph Paragraph) GetMaxWidth() float32 {
 
 # return
 
-	The height of the laid out paragraph. This is **not** a tight
-
+The height of the laid out paragraph. This is **not** a tight
 bounding box and some glyphs may not reach the minimum location
 they are allowed to reach.
 */
@@ -3576,8 +3572,7 @@ func (paragraph Paragraph) GetHeight() float32 {
 
 # return
 
-	The length of the longest line in the paragraph. This is the
-
+The length of the longest line in the paragraph. This is the
 horizontal distance between the left edge of the leftmost glyph
 and the right edge of the rightmost glyph, in the longest line
 in the paragraph.
@@ -3606,8 +3601,7 @@ see [Paragraph.GetMaxWidth]
 
 # return
 
-	The actual width of the longest line in the paragraph after
-
+The actual width of the longest line in the paragraph after
 layout. This is expected to be less than or equal to
 [Paragraph.GetMaxWidth].
 */
@@ -3633,7 +3627,7 @@ func (paragraph Paragraph) GetMinIntrinsicWidth() float32 {
 
 # return
 
-	The width of the paragraph without line breaking.
+The width of the paragraph without line breaking.
 */
 func (paragraph Paragraph) GetMaxIntrinsicWidth() float32 {
 	var result float32
@@ -3657,8 +3651,7 @@ func (paragraph Paragraph) GetMaxIntrinsicWidth() float32 {
 
 # return
 
-	The distance from the top of the paragraph to the ideographic
-
+The distance from the top of the paragraph to the ideographic
 baseline of the first line when using ideographic fonts
 (Japanese, Korean, etc...).
 */
@@ -3684,8 +3677,7 @@ func (paragraph Paragraph) GetIdeographicBaseline() float32 {
 
 # return
 
-	The distance from the top of the paragraph to the alphabetic
-
+The distance from the top of the paragraph to the alphabetic
 baseline of the first line when using alphabetic fonts (A-Z,
 a-z, Greek, etc...).
 */
@@ -3711,8 +3703,7 @@ func (paragraph Paragraph) GetAlphabeticBaseline() float32 {
 
 # return
 
-	The number of lines visible in the paragraph after line
-
+The number of lines visible in the paragraph after line
 breaking.
 */
 func (paragraph Paragraph) GetLineCount() uint32 {
@@ -3860,7 +3851,7 @@ for this line ignoring the height from the text style.
 
 # return
 
-	The unscaled ascent.
+The unscaled ascent.
 */
 func (metrics LineMetrics) GetUnscaledAscent(line uint64) float64 {
 	var result float64
@@ -3888,7 +3879,7 @@ for this line.
 
 # return
 
-	The ascent.
+The ascent.
 */
 func (metrics LineMetrics) GetAscent(line uint64) float64 {
 	var result float64
@@ -3916,7 +3907,7 @@ for this line.
 
 # return
 
-	The descent.
+The descent.
 */
 func (metrics LineMetrics) GetDescent(line uint64) float64 {
 	var result float64
@@ -3944,7 +3935,7 @@ the paragraph.
 
 # return
 
-	The baseline.
+The baseline.
 */
 func (metrics LineMetrics) GetBaseline(line uint64) float64 {
 	var result float64
@@ -3972,7 +3963,7 @@ func (metrics LineMetrics) GetBaseline(line uint64) float64 {
 
 # return
 
-	True if the line is a hard break.
+True if the line is a hard break.
 */
 func (metrics LineMetrics) IsHardbreak(line uint64) Bool {
 	var result Bool
@@ -4000,7 +3991,7 @@ the right edge of the rightmost glyph.
 
 # return
 
-	The width.
+The width.
 */
 func (metrics LineMetrics) GetWidth(line uint64) float64 {
 	var result float64
@@ -4026,7 +4017,7 @@ func (metrics LineMetrics) GetWidth(line uint64) float64 {
 
 # return
 
-	The height.
+The height.
 */
 func (metrics LineMetrics) GetHeight(line uint64) float64 {
 	var result float64
@@ -4052,7 +4043,7 @@ func (metrics LineMetrics) GetHeight(line uint64) float64 {
 
 # return
 
-	The left edge coordinate.
+The left edge coordinate.
 */
 func (metrics LineMetrics) GetLeft(line uint64) float64 {
 	var result float64
@@ -4080,7 +4071,7 @@ represent the paragraph line.
 
 # return
 
-	The UTF-16 code units start index.
+The UTF-16 code units start index.
 */
 func (metrics LineMetrics) GetCodeUnitStartIndex(line uint64) uint64 {
 	var result uint64
@@ -4108,7 +4099,7 @@ represent the paragraph line.
 
 # return
 
-	The UTF-16 code units end index.
+The UTF-16 code units end index.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndex(line uint64) uint64 {
 	var result uint64
@@ -4136,7 +4127,7 @@ UTF-16 code units used to represent the paragraph line.
 
 # return
 
-	The UTF-16 code units end index excluding whitespace.
+The UTF-16 code units end index excluding whitespace.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndexExcludingWhitespace(line uint64) uint64 {
 	var result uint64
@@ -4164,7 +4155,7 @@ code units used to represent the paragraph line.
 
 # return
 
-	The UTF-16 code units end index including newlines.
+The UTF-16 code units end index including newlines.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndexIncludingNewline(line uint64) uint64 {
 	var result uint64
@@ -4231,7 +4222,7 @@ represent the grapheme cluster for a glyph.
 
 # return
 
-	The UTF-16 code units start index.
+The UTF-16 code units start index.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeBegin() uint64 {
 	var result uint64
@@ -4257,7 +4248,7 @@ represent the grapheme cluster for a glyph.
 
 # return
 
-	The UTF-16 code units end index.
+The UTF-16 code units end index.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeEnd() uint64 {
 	var result uint64
@@ -4305,7 +4296,7 @@ func (glyph_info GlyphInfo) GetGraphemeClusterBounds() Rect {
 
 # return
 
-	True if the glyph represents an ellipsis. False otherwise.
+True if the glyph represents an ellipsis. False otherwise.
 */
 func (glyph_info GlyphInfo) IsEllipsis() Bool {
 	var result Bool
@@ -4329,7 +4320,7 @@ func (glyph_info GlyphInfo) IsEllipsis() Bool {
 
 # return
 
-	The direction of the run that contains the glyph.
+The direction of the run that contains the glyph.
 */
 func (glyph_info GlyphInfo) GetTextDirection() TextDirection {
 	var result TextDirection
