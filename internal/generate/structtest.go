@@ -9,7 +9,7 @@ func (gen gen) generateStructTest() {
 	defer file.save()
 
 	file.CgoPreamble(`#cgo CFLAGS: --std=c11`)
-	file.CgoPreamble(`#include "../interop/include/impeller.h"`)
+	file.CgoPreamble(`#include "../interop-linux_amd64/include/impeller.h"`)
 
 	file.
 		Var().Id("structs").

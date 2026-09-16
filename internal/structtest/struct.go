@@ -5,7 +5,7 @@ package structtest
 import impeller "github.com/pekim/impeller"
 
 // #cgo CFLAGS: --std=c11
-// #include "../interop/include/impeller.h"
+// #include "../interop-linux_amd64/include/impeller.h"
 import "C"
 
 var structs = []struct {
