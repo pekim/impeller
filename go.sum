@@ -6,8 +6,8 @@ github.com/go-webgpu/goffi v0.6.4 h1:8UkFpiQk9nRWtft/avVYZXIt6YYpQSDW4ZIJ95Zl268
 github.com/go-webgpu/goffi v0.6.4/go.mod h1:wfoxNsJkU+5RFbV1kNN1kunhc1lFHuJKK3zpgx08/uM=
 github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec h1:AffNc+B5pN6crx+Lli5aH7KnjCngoFzJ1NHdkcx+OD0=
 github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec/go.mod h1:Y8J5Du0xnYY8HlSyjQWaNmkg1CqCbgheEhRhQvbb224=
-github.com/pekim/go-glfw v0.0.0-20260912082738-8ca07000d48b h1:8/hLn5q358R0EtxjmaSku+t6kQYIdzwEQG5PZ61R4d8=
-github.com/pekim/go-glfw v0.0.0-20260912082738-8ca07000d48b/go.mod h1:wuYyJt2Q5cinB18vZ41PGlJWbcu8hkEoFg1/n7ZDrYw=
+github.com/pekim/go-glfw v0.0.0-20260917095309-e5206b2148a6 h1:dds2kkqxT2wP62jmwdrVlO8T86eHbmiAaS1Bt+CrnJQ=
+github.com/pekim/go-glfw v0.0.0-20260917095309-e5206b2148a6/go.mod h1:wuYyJt2Q5cinB18vZ41PGlJWbcu8hkEoFg1/n7ZDrYw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=

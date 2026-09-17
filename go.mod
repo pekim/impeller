@@ -10,7 +10,7 @@ require (
 	github.com/dave/jennifer v1.7.1
 	github.com/go-clang/clang-v15 v0.0.0-20230222085438-ee3102fa0c71
 	github.com/go-webgpu/goffi v0.6.4
-	github.com/pekim/go-glfw v0.0.0-20260912082738-8ca07000d48b
+	github.com/pekim/go-glfw v0.0.0-20260917095309-e5206b2148a6
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/text v0.42.0
 )
