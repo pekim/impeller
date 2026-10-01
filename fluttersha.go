@@ -1,3 +1,3 @@
 package impeller
 
-const FlutterSHA = "4d3c9c58afe01bf68fae7b002918b014e2da90c7"
+const FlutterSHA = "4e5a09292c1c64a38d604c7ec096537f50d69f93"
