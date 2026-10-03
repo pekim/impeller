@@ -9,6 +9,7 @@ import (
 )
 
 /*
+Get the version of Impeller standalone API. This is the API that
 will be accepted for validity checks when provided to the
 context creation methods.
 
@@ -43,6 +44,8 @@ func GetVersion() uint32 {
 }
 
 /*
+Create an OpenGL(ES) Impeller context.
+
 Unlike other context types, the OpenGL ES context can only be
 created, used, and collected on the calling thread. This
 restriction may be lifted in the future once reactor workers are
@@ -89,6 +92,8 @@ func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddre
 }
 
 /*
+Create a Metal context using the system default Metal device.
+
 # params
   - version -  The version specified in the IMPELLER_VERSION macro.
 
@@ -113,6 +118,8 @@ func ContextCreateMetalNew(version uint32) Context {
 }
 
 /*
+Create a Vulkan context using the provided Vulkan Settings.
+
 # params
   - version -   The version specified in the IMPELLER_VERSION macro.
   - settings -  The Vulkan settings.
@@ -139,6 +146,7 @@ func ContextCreateVulkanNew(version uint32, settings *ContextVulkanSettings) Con
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -159,6 +167,7 @@ func (context Context) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -179,6 +188,7 @@ func (context Context) Release() {
 }
 
 /*
+Get internal Vulkan handles managed by the given Vulkan context.
 Ownership of the handles is still maintained by Impeller. This
 accessor is just available so embedders can create resources
 using the same device and instance as Impeller for interop.
@@ -213,6 +223,7 @@ func (context Context) GetVulkanInfo() (ContextVulkanInfo, Bool) {
 }
 
 /*
+Create a new Vulkan swapchain using a VkSurfaceKHR instance.
 Ownership of the surface is transferred over to Impeller. The
 Vulkan instance the surface is created from must the same as the
 context provided.
@@ -245,6 +256,7 @@ func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr unsafe.Pointe
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -265,6 +277,7 @@ func (swapchain VulkanSwapchain) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -285,6 +298,7 @@ func (swapchain VulkanSwapchain) Release() {
 }
 
 /*
+A potentially blocking operation, acquires the next surface to
 render to. Since this may block, surface acquisition must be
 delayed for as long as possible to avoid an idle wait on the
 CPU.
@@ -313,6 +327,7 @@ func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 }
 
 /*
+Create a new surface by wrapping an existing framebuffer object.
 The framebuffer must be complete as determined by
 `glCheckFramebufferStatus`. The framebuffer is still owned by
 the caller and it must be collected once the surface is
@@ -348,6 +363,7 @@ func (context Context) SurfaceCreateWrappedFBONew(fbo uint64, format PixelFormat
 }
 
 /*
+Create a surface by wrapping a Metal drawable. This is useful
 during WSI when the drawable is the backing store of the Metal
 layer being drawn to.
 
@@ -382,6 +398,7 @@ func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable unsaf
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -402,6 +419,7 @@ func (surface Surface) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -422,6 +440,7 @@ func (surface Surface) Release() {
 }
 
 /*
+Draw a display list onto the surface. The same display list can
 be drawn multiple times to different surfaces.
 
 In the OpenGL backend, Impeller will not make an effort to
@@ -458,6 +477,8 @@ func (surface Surface) DrawDisplayList(display_list DisplayList) Bool {
 }
 
 /*
+Present the surface to the underlying window system.
+
 # params
   - surface -  The surface to present.
 
@@ -482,6 +503,7 @@ func (surface Surface) Present() Bool {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -502,6 +524,7 @@ func (path Path) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -522,6 +545,8 @@ func (path Path) Release() {
 }
 
 /*
+Get the bounds of the path.
+
 The bounds are conservative. That is, they may be larger than
 the actual shape of the path and could include the control
 points and isolated calls to move the cursor.
@@ -548,6 +573,7 @@ func (path Path) GetBounds() Rect {
 }
 
 /*
+Create a new path builder. Paths themselves are immutable.
 A builder builds these immutable paths.
 
 # return
@@ -569,6 +595,7 @@ func PathBuilderNew() PathBuilder {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -589,6 +616,7 @@ func (builder PathBuilder) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -609,6 +637,8 @@ func (builder PathBuilder) Release() {
 }
 
 /*
+Move the cursor to the specified location.
+
 # params
   - builder -   The builder.
   - location -  The location.
@@ -629,6 +659,7 @@ func (builder PathBuilder) MoveTo(location *Point) {
 }
 
 /*
+Add a line segment from the current cursor location to the given
 location. The cursor location is updated to be at the endpoint.
 
 # params
@@ -651,6 +682,7 @@ func (builder PathBuilder) LineTo(location *Point) {
 }
 
 /*
+Add a quadratic curve from whose start point is the cursor to
 the specified end point using the a single control point.
 
 The new location of the cursor after this call is the end point.
@@ -677,6 +709,7 @@ func (builder PathBuilder) QuadraticCurveTo(control_point *Point, end_point *Poi
 }
 
 /*
+Add a cubic curve whose start point is current cursor location
 to the specified end point using the two specified control
 points.
 
@@ -707,6 +740,8 @@ func (builder PathBuilder) CubicCurveTo(control_point_1 *Point, control_point_2 
 }
 
 /*
+Adds a rectangle to the path.
+
 # params
   - builder -  The builder.
   - rect -     The rectangle.
@@ -727,6 +762,8 @@ func (builder PathBuilder) AddRect(rect *Rect) {
 }
 
 /*
+Add an arc to the path.
+
 # params
   - builder -              The builder.
   - oval_bounds -          The oval bounds.
@@ -751,6 +788,8 @@ func (builder PathBuilder) AddArc(oval_bounds *Rect, start_angle_degrees float32
 }
 
 /*
+Add an oval to the path.
+
 # params
   - builder -      The builder.
   - oval_bounds -  The oval bounds.
@@ -771,6 +810,7 @@ func (builder PathBuilder) AddOval(oval_bounds *Rect) {
 }
 
 /*
+Add a rounded rect with potentially non-uniform radii to the
 path.
 
 # params
@@ -795,6 +835,8 @@ func (builder PathBuilder) AddRoundedRect(rect *Rect, rounding_radii *RoundingRa
 }
 
 /*
+Close the path.
+
 # params
   - builder -  The builder.
 */
@@ -813,6 +855,7 @@ func (builder PathBuilder) Close() {
 }
 
 /*
+Create a new path by copying the existing built-up path. The
 existing path can continue being added to.
 
 # params
@@ -841,6 +884,7 @@ func (builder PathBuilder) CopyPathNew(fill FillType) Path {
 }
 
 /*
+Create a new path using the existing built-up path. The existing
 path builder now contains an empty path.
 
 # params
@@ -869,6 +913,8 @@ func (builder PathBuilder) TakePathNew(fill FillType) Path {
 }
 
 /*
+Create a new paint with default values.
+
 # return
 
 The impeller paint.
@@ -888,6 +934,7 @@ func PaintNew() Paint {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -908,6 +955,7 @@ func (paint Paint) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -928,6 +976,8 @@ func (paint Paint) Release() {
 }
 
 /*
+Set the paint color.
+
 # params
   - paint -  The paint.
   - color -  The color.
@@ -948,6 +998,7 @@ func (paint Paint) SetColor(color *Color) {
 }
 
 /*
+Set the paint blend mode. The blend mode controls how the new
 paints contents are mixed with the values already drawn using
 previous draw calls.
 
@@ -971,6 +1022,7 @@ func (paint Paint) SetBlendMode(mode BlendMode) {
 }
 
 /*
+Set the paint draw style. The style controls if the closed
 shapes are filled and/or stroked.
 
 # params
@@ -993,6 +1045,8 @@ func (paint Paint) SetDrawStyle(style DrawStyle) {
 }
 
 /*
+Sets how strokes rendered using this paint are capped.
+
 # params
   - paint -  The paint.
   - cap -    The stroke cap style.
@@ -1013,6 +1067,8 @@ func (paint Paint) SetStrokeCap(cap StrokeCap) {
 }
 
 /*
+Sets how strokes rendered using this paint are joined.
+
 # params
   - paint -  The paint.
   - join -   The join.
@@ -1033,6 +1089,8 @@ func (paint Paint) SetStrokeJoin(join StrokeJoin) {
 }
 
 /*
+Set the width of the strokes rendered using this paint.
+
 # params
   - paint -  The paint.
   - width -  The width.
@@ -1053,6 +1111,8 @@ func (paint Paint) SetStrokeWidth(width float32) {
 }
 
 /*
+Set the miter limit of the strokes rendered using this paint.
+
 # params
   - paint -  The paint.
   - miter -  The miter limit.
@@ -1073,6 +1133,8 @@ func (paint Paint) SetStrokeMiter(miter float32) {
 }
 
 /*
+Set the color filter of the paint.
+
 Color filters are functions that take two colors and mix them to
 produce a single color. This color is then usually merged with
 the destination during blending.
@@ -1097,6 +1159,8 @@ func (paint Paint) SetColorFilter(color_filter ColorFilter) {
 }
 
 /*
+Set the color source of the paint.
+
 Color sources are functions that generate colors for each
 texture element covered by a draw call.
 
@@ -1120,6 +1184,8 @@ func (paint Paint) SetColorSource(color_source ColorSource) {
 }
 
 /*
+Set the image filter of a paint.
+
 Image filters are functions that are applied to regions of a
 texture to produce a single color.
 
@@ -1143,6 +1209,8 @@ func (paint Paint) SetImageFilter(image_filter ImageFilter) {
 }
 
 /*
+Set the mask filter of a paint.
+
 # params
   - paint -        The paint.
   - mask_filter -  The mask filter.
@@ -1163,6 +1231,8 @@ func (paint Paint) SetMaskFilter(mask_filter MaskFilter) {
 }
 
 /*
+Create a texture with decompressed bytes.
+
 Impeller will do its best to perform the transfer of this data
 to GPU memory with a minimal number of copies. Towards this
 end, it may need to send this data to a different thread for
@@ -1216,6 +1286,7 @@ func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescripto
 }
 
 /*
+Create a texture with an externally created OpenGL texture
 handle.
 
 Ownership of the handle is transferred over to Impeller after a
@@ -1260,6 +1331,7 @@ func (context Context) TextureCreateWithOpenGLTextureHandleNew(descriptor *Textu
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -1280,6 +1352,7 @@ func (texture Texture) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -1300,6 +1373,7 @@ func (texture Texture) Release() {
 }
 
 /*
+Get the OpenGL handle associated with this texture. If this is
 not an OpenGL texture, this method will always return 0.
 
 OpenGL handles are lazily created, this method will return
@@ -1348,6 +1422,7 @@ func FragmentProgramNew(data *Mapping, data_release_user_data unsafe.Pointer) Fr
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -1368,6 +1443,7 @@ func (fragment_program FragmentProgram) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -1402,6 +1478,7 @@ func (color_source ColorSource) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -1422,6 +1499,8 @@ func (color_source ColorSource) Release() {
 }
 
 /*
+Create a color source that forms a linear gradient.
+
 # params
   - start_point -     The start point.
   - end_point -       The end point.
@@ -1458,6 +1537,8 @@ func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, st
 }
 
 /*
+Create a color source that forms a radial gradient.
+
 # params
   - center -          The center.
   - radius -          The radius.
@@ -1494,6 +1575,8 @@ func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_coun
 }
 
 /*
+Create a color source that forms a conical gradient.
+
 # params
   - start_center -    The start center.
   - start_radius -    The start radius.
@@ -1534,6 +1617,8 @@ func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float
 }
 
 /*
+Create a color source that forms a sweep gradient.
+
 # params
   - center -          The center.
   - start -           The start.
@@ -1572,6 +1657,8 @@ func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32
 }
 
 /*
+Create a color source that samples from an image.
+
 # params
   - image -                 The image.
   - horizontal_tile_mode -  The horizontal tile mode.
@@ -1604,6 +1691,7 @@ func (image Texture) ColorSourceCreateImageNew(horizontal_tile_mode TileMode, ve
 }
 
 /*
+Create a color source whose pixels are shaded by a fragment
 program.
 
 See https://docs.flutter.dev/ui/design/graphics/fragment-shaders
@@ -1644,6 +1732,7 @@ func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program Frag
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -1664,6 +1753,7 @@ func (color_filter ColorFilter) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -1684,6 +1774,7 @@ func (color_filter ColorFilter) Release() {
 }
 
 /*
+Create a color filter that performs blending of pixel values
 independently.
 
 # params
@@ -1712,6 +1803,7 @@ func ColorFilterCreateBlendNew(color *Color, blend_mode BlendMode) ColorFilter {
 }
 
 /*
+Create a color filter that transforms pixel color values
 independently.
 
 # params
@@ -1738,6 +1830,7 @@ func ColorFilterCreateColorMatrixNew(color_matrix *ColorMatrix) ColorFilter {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -1758,6 +1851,7 @@ func (mask_filter MaskFilter) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -1778,6 +1872,8 @@ func (mask_filter MaskFilter) Release() {
 }
 
 /*
+Create a mask filter that blurs contents in the masked shape.
+
 # params
   - style -  The style.
   - sigma -  The sigma.
@@ -1804,6 +1900,7 @@ func MaskFilterCreateBlurNew(style BlurStyle, sigma float32) MaskFilter {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -1824,6 +1921,7 @@ func (image_filter ImageFilter) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -1844,6 +1942,8 @@ func (image_filter ImageFilter) Release() {
 }
 
 /*
+Creates an image filter that applies a Gaussian blur.
+
 The Gaussian blur applied may be an approximation for
 performance.
 
@@ -1892,6 +1992,7 @@ func ImageFilterCreateDilateNew(x_radius float32, y_radius float32) ImageFilter 
 }
 
 /*
+Creates an image filter that dampens the per-channel pixel
 values to the minimum value in a circle around the pixel.
 
 # params
@@ -1920,6 +2021,7 @@ func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
 }
 
 /*
+Creates an image filter that applies a transformation matrix to
 the underlying image.
 
 # params
@@ -1948,6 +2050,7 @@ func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageF
 }
 
 /*
+Create an image filter where each pixel is shaded by a fragment
 program.
 
 See https://docs.flutter.dev/ui/design/graphics/fragment-shaders
@@ -1988,6 +2091,7 @@ func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program Frag
 }
 
 /*
+Creates a composed filter that when applied is identical to
 subsequently applying the inner and then the outer filters.
 
 	destination = outer_filter(inner_filter(source))
@@ -2018,6 +2122,7 @@ func (outer ImageFilter) CreateComposeNew(inner ImageFilter) ImageFilter {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -2038,6 +2143,7 @@ func (display_list DisplayList) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -2058,6 +2164,8 @@ func (display_list DisplayList) Release() {
 }
 
 /*
+Create a new display list builder.
+
 An optional cull rectangle may be specified. Impeller is allowed
 to treat the contents outside this rectangle as being undefined.
 This may aid performance optimizations.
@@ -2086,6 +2194,7 @@ func DisplayListBuilderNew(cull_rect *Rect) DisplayListBuilder {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -2106,6 +2215,7 @@ func (builder DisplayListBuilder) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -2126,6 +2236,7 @@ func (builder DisplayListBuilder) Release() {
 }
 
 /*
+Create a new display list using the rendering intent already
 encoded in the builder. The builder is reset after this call.
 
 # params
@@ -2152,6 +2263,7 @@ func (builder DisplayListBuilder) CreateDisplayListNew() DisplayList {
 }
 
 /*
+Stashes the current transformation and clip state onto a save
 stack.
 
 # params
@@ -2172,6 +2284,7 @@ func (builder DisplayListBuilder) Save() {
 }
 
 /*
+Stashes the current transformation and clip state onto a save
 stack and creates and creates an offscreen layer onto which
 subsequent rendering intent will be directed to.
 
@@ -2203,6 +2316,7 @@ func (builder DisplayListBuilder) SaveLayer(bounds *Rect, paint Paint, backdrop 
 }
 
 /*
+Pops the last entry pushed onto the save stack using a call to
 [DisplayListBuilder.Save] or
 [DisplayListBuilder.SaveLayer].
 
@@ -2224,6 +2338,7 @@ func (builder DisplayListBuilder) Restore() {
 }
 
 /*
+Apply a scale to the transformation matrix currently on top of
 the save stack.
 
 # params
@@ -2263,6 +2378,7 @@ func (builder DisplayListBuilder) Rotate(angle_degrees float32) {
 }
 
 /*
+Apply a translation to the transformation matrix currently on
 top of the save stack.
 
 # params
@@ -2287,6 +2403,7 @@ func (builder DisplayListBuilder) Translate(x_translation float32, y_translation
 }
 
 /*
+Appends the the provided transformation to the transformation
 already on the save stack.
 
 # params
@@ -2309,6 +2426,7 @@ func (builder DisplayListBuilder) Transform(transform *Matrix) {
 }
 
 /*
+Clear the transformation on top of the save stack and replace it
 with a new value.
 
 # params
@@ -2331,6 +2449,7 @@ func (builder DisplayListBuilder) SetTransform(transform *Matrix) {
 }
 
 /*
+Get the transformation currently built up on the top of the
 transformation stack.
 
 # params
@@ -2355,6 +2474,7 @@ func (builder DisplayListBuilder) GetTransform() Matrix {
 }
 
 /*
+Reset the transformation on top of the transformation stack to
 identity.
 
 # params
@@ -2375,6 +2495,8 @@ func (builder DisplayListBuilder) ResetTransform() {
 }
 
 /*
+Get the current size of the save stack.
+
 # params
   - builder -  The builder.
 
@@ -2399,6 +2521,7 @@ func (builder DisplayListBuilder) GetSaveCount() uint32 {
 }
 
 /*
+Effectively calls ImpellerDisplayListBuilderRestore till the
 size of the save stack becomes a specified count.
 
 # params
@@ -2421,6 +2544,7 @@ func (builder DisplayListBuilder) RestoreToCount(count uint32) {
 }
 
 /*
+Reduces the clip region to the intersection of the current clip
 and the given rectangle taking into account the clip operation.
 
 # params
@@ -2445,6 +2569,7 @@ func (builder DisplayListBuilder) ClipRect(rect *Rect, op ClipOperation) {
 }
 
 /*
+Reduces the clip region to the intersection of the current clip
 and the given oval taking into account the clip operation.
 
 # params
@@ -2469,6 +2594,7 @@ func (builder DisplayListBuilder) ClipOval(oval_bounds *Rect, op ClipOperation) 
 }
 
 /*
+Reduces the clip region to the intersection of the current clip
 and the given rounded rectangle taking into account the clip
 operation.
 
@@ -2496,6 +2622,7 @@ func (builder DisplayListBuilder) ClipRoundedRect(rect *Rect, radii *RoundingRad
 }
 
 /*
+Reduces the clip region to the intersection of the current clip
 and the given path taking into account the clip operation.
 
 # params
@@ -2520,6 +2647,8 @@ func (builder DisplayListBuilder) ClipPath(path Path, op ClipOperation) {
 }
 
 /*
+Fills the current clip with the specified paint.
+
 # params
   - builder -  The builder.
   - paint -    The paint.
@@ -2540,6 +2669,8 @@ func (builder DisplayListBuilder) DrawPaint(paint Paint) {
 }
 
 /*
+Draws a line segment.
+
 # params
   - builder -  The builder.
   - from -     The starting point of the line.
@@ -2564,6 +2695,8 @@ func (builder DisplayListBuilder) DrawLine(from *Point, to *Point, paint Paint) 
 }
 
 /*
+Draws a dash line segment.
+
 # params
   - builder -     The builder.
   - from -        The starting point of the line.
@@ -2592,6 +2725,8 @@ func (builder DisplayListBuilder) DrawDashedLine(from *Point, to *Point, on_leng
 }
 
 /*
+Draws a rectangle.
+
 # params
   - builder -  The builder.
   - rect -     The rectangle.
@@ -2614,6 +2749,8 @@ func (builder DisplayListBuilder) DrawRect(rect *Rect, paint Paint) {
 }
 
 /*
+Draws an oval.
+
 # params
   - builder -      The builder.
   - oval_bounds -  The oval bounds.
@@ -2636,6 +2773,8 @@ func (builder DisplayListBuilder) DrawOval(oval_bounds *Rect, paint Paint) {
 }
 
 /*
+Draws a rounded rect.
+
 # params
   - builder -  The builder.
   - rect -     The rectangle.
@@ -2660,6 +2799,7 @@ func (builder DisplayListBuilder) DrawRoundedRect(rect *Rect, radii *RoundingRad
 }
 
 /*
+Draws a shape that is the different between the specified
 rectangles (each with configurable corner radii).
 
 # params
@@ -2690,6 +2830,8 @@ func (builder DisplayListBuilder) DrawRoundedRectDifference(outer_rect *Rect, ou
 }
 
 /*
+Draws the specified shape.
+
 # params
   - builder -  The builder.
   - path -     The path.
@@ -2712,6 +2854,7 @@ func (builder DisplayListBuilder) DrawPath(path Path, paint Paint) {
 }
 
 /*
+Flattens the contents of another display list into the one
 currently being built.
 
 # params
@@ -2736,6 +2879,8 @@ func (builder DisplayListBuilder) DrawDisplayList(display_list DisplayList, opac
 }
 
 /*
+Draw a paragraph at the specified point.
+
 # params
   - builder -    The builder.
   - paragraph -  The paragraph.
@@ -2758,6 +2903,7 @@ func (builder DisplayListBuilder) DrawParagraph(paragraph Paragraph, point *Poin
 }
 
 /*
+Draw a shadow for a Path given a material elevation. If the
 occluding object is not opaque, additional hints (via the
 `occluder_is_transparent` argument) must be provided to render
 the shadow correctly.
@@ -2792,6 +2938,8 @@ func (builder DisplayListBuilder) DrawShadow(path Path, color *Color, elevation 
 }
 
 /*
+Draw a texture at the specified point.
+
 # params
   - builder -   The builder.
   - texture -   The texture.
@@ -2818,6 +2966,8 @@ func (builder DisplayListBuilder) DrawTexture(texture Texture, point *Point, sam
 }
 
 /*
+Draw a portion of texture at the specified location.
+
 # params
   - builder -   The builder.
   - texture -   The texture.
@@ -2846,6 +2996,8 @@ func (builder DisplayListBuilder) DrawTextureRect(texture Texture, src_rect *Rec
 }
 
 /*
+Create a new typography contents.
+
 # return
 
 The typography context.
@@ -2865,6 +3017,7 @@ func TypographyContextNew() TypographyContext {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -2885,6 +3038,7 @@ func (context TypographyContext) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -2905,6 +3059,8 @@ func (context TypographyContext) Release() {
 }
 
 /*
+Register a custom font.
+
 The following font formats are supported:
 OpenType font collections (.ttc extension)
 TrueType fonts: (.ttf extension)
@@ -2966,6 +3122,8 @@ func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_rel
 }
 
 /*
+Create a new paragraph style.
+
 # return
 
 The paragraph style.
@@ -2985,6 +3143,7 @@ func ParagraphStyleNew() ParagraphStyle {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -3005,6 +3164,7 @@ func (paragraph_style ParagraphStyle) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -3025,6 +3185,8 @@ func (paragraph_style ParagraphStyle) Release() {
 }
 
 /*
+Set the paint used to render the text glyph contents.
+
 # params
   - paragraph_style -  The paragraph style.
   - paint -            The paint.
@@ -3045,6 +3207,8 @@ func (paragraph_style ParagraphStyle) SetForeground(paint Paint) {
 }
 
 /*
+Set the paint used to render the background of the text glyphs.
+
 # params
   - paragraph_style -  The paragraph style.
   - paint -            The paint.
@@ -3065,6 +3229,8 @@ func (paragraph_style ParagraphStyle) SetBackground(paint Paint) {
 }
 
 /*
+Set the weight of the font to select when rendering glyphs.
+
 # params
   - paragraph_style -  The paragraph style.
   - weight -           The weight.
@@ -3085,6 +3251,8 @@ func (paragraph_style ParagraphStyle) SetFontWeight(weight FontWeight) {
 }
 
 /*
+Set whether the glyphs should be bolded or italicized.
+
 # params
   - paragraph_style -  The paragraph style.
   - style -            The style.
@@ -3105,6 +3273,8 @@ func (paragraph_style ParagraphStyle) SetFontStyle(style FontStyle) {
 }
 
 /*
+Set the font family.
+
 # params
   - paragraph_style -  The paragraph style.
   - family_name -      The family name.
@@ -3126,6 +3296,8 @@ func (paragraph_style ParagraphStyle) SetFontFamily(family_name string) {
 }
 
 /*
+Set the font size.
+
 # params
   - paragraph_style -  The paragraph style.
   - size -             The size.
@@ -3146,6 +3318,8 @@ func (paragraph_style ParagraphStyle) SetFontSize(size float32) {
 }
 
 /*
+The height of the text as a multiple of text size.
+
 When height is 0.0, the line height will be determined by the
 font's metrics directly, which may differ from the font size.
 Otherwise the line height of the text will be a multiple of font
@@ -3171,6 +3345,8 @@ func (paragraph_style ParagraphStyle) SetHeight(height float32) {
 }
 
 /*
+Set the alignment of text within the paragraph.
+
 # params
   - paragraph_style -  The paragraph style.
   - align -            The align.
@@ -3191,6 +3367,8 @@ func (paragraph_style ParagraphStyle) SetTextAlignment(align TextAlignment) {
 }
 
 /*
+Set the directionality of the text within the paragraph.
+
 # params
   - paragraph_style -  The paragraph style.
   - direction -        The direction.
@@ -3211,6 +3389,7 @@ func (paragraph_style ParagraphStyle) SetTextDirection(direction TextDirection) 
 }
 
 /*
+Set one of more text decorations on the paragraph. Decorations
 can be underlines, overlines, strikethroughs, etc.. The style of
 decorations can be set as well (dashed, dotted, wavy, etc..)
 
@@ -3234,6 +3413,8 @@ func (paragraph_style ParagraphStyle) SetTextDecoration(decoration *TextDecorati
 }
 
 /*
+Set the maximum line count within the paragraph.
+
 # params
   - paragraph_style -  The paragraph style.
   - max_lines -        The maximum lines.
@@ -3254,6 +3435,8 @@ func (paragraph_style ParagraphStyle) SetMaxLines(max_lines uint32) {
 }
 
 /*
+Set the paragraph locale.
+
 # params
   - paragraph_style -  The paragraph style.
   - locale -           The locale.
@@ -3275,6 +3458,7 @@ func (paragraph_style ParagraphStyle) SetLocale(locale string) {
 }
 
 /*
+Set the UTF-8 string to use as the ellipsis. Pass `nullptr` to
 clear the setting to default.
 
 # params
@@ -3298,6 +3482,8 @@ func (paragraph_style ParagraphStyle) SetEllipsis(ellipsis string) {
 }
 
 /*
+Create a new paragraph builder.
+
 # params
   - context -  The context.
 
@@ -3322,6 +3508,7 @@ func (context TypographyContext) ParagraphBuilderNew() ParagraphBuilder {
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -3342,6 +3529,7 @@ func (paragraph_builder ParagraphBuilder) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -3362,6 +3550,7 @@ func (paragraph_builder ParagraphBuilder) Release() {
 }
 
 /*
+Push a new paragraph style onto the paragraph style stack
 managed by the paragraph builder.
 
 Not all paragraph styles can be combined. For instance, it does
@@ -3396,6 +3585,7 @@ func (paragraph_builder ParagraphBuilder) PushStyle(style ParagraphStyle) {
 }
 
 /*
+Pop a previously pushed paragraph style from the paragraph style
 stack.
 
 # params
@@ -3416,6 +3606,7 @@ func (paragraph_builder ParagraphBuilder) PopStyle() {
 }
 
 /*
+Add UTF-8 encoded text to the paragraph. The text will be styled
 according to the paragraph style already on top of the paragraph
 style stack.
 
@@ -3443,6 +3634,7 @@ func (paragraph_builder ParagraphBuilder) AddText(data string) {
 }
 
 /*
+Layout and build a new paragraph using the specified width. The
 resulting paragraph is immutable. The paragraph builder must be
 discarded and a new one created to build more paragraphs.
 
@@ -3472,6 +3664,7 @@ func (paragraph_builder ParagraphBuilder) BuildParagraphNew(width float32) Parag
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -3492,6 +3685,7 @@ func (paragraph Paragraph) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -3723,6 +3917,7 @@ func (paragraph Paragraph) GetLineCount() uint32 {
 }
 
 /*
+Get the range into the UTF-16 code unit buffer that represents
 the word at the specified caret location in the same buffer.
 
 Word boundaries are defined more precisely in [Unicode Standard
@@ -3803,6 +3998,7 @@ func (paragraph Paragraph) CreateGlyphInfoAtParagraphCoordinatesNew(x float64, y
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -3823,6 +4019,7 @@ func (line_metrics LineMetrics) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -3843,6 +4040,7 @@ func (line_metrics LineMetrics) Release() {
 }
 
 /*
+The rise from the baseline as calculated from the font and style
 for this line ignoring the height from the text style.
 
 # params
@@ -3871,6 +4069,7 @@ func (metrics LineMetrics) GetUnscaledAscent(line uint64) float64 {
 }
 
 /*
+The rise from the baseline as calculated from the font and style
 for this line.
 
 # params
@@ -3899,6 +4098,7 @@ func (metrics LineMetrics) GetAscent(line uint64) float64 {
 }
 
 /*
+The drop from the baseline as calculated from the font and style
 for this line.
 
 # params
@@ -3927,6 +4127,7 @@ func (metrics LineMetrics) GetDescent(line uint64) float64 {
 }
 
 /*
+The y coordinate of the baseline for this line from the top of
 the paragraph.
 
 # params
@@ -3955,6 +4156,7 @@ func (metrics LineMetrics) GetBaseline(line uint64) float64 {
 }
 
 /*
+Used to determine if this line ends with an explicit line break
 (e.g. '\n') or is the end of the paragraph.
 
 # params
@@ -3983,6 +4185,7 @@ func (metrics LineMetrics) IsHardbreak(line uint64) Bool {
 }
 
 /*
+Width of the line from the left edge of the leftmost glyph to
 the right edge of the rightmost glyph.
 
 # params
@@ -4011,6 +4214,8 @@ func (metrics LineMetrics) GetWidth(line uint64) float64 {
 }
 
 /*
+Total height of the line from the top edge to the bottom edge.
+
 # params
   - metrics -  The metrics.
   - line -     The line index (zero based).
@@ -4037,6 +4242,8 @@ func (metrics LineMetrics) GetHeight(line uint64) float64 {
 }
 
 /*
+The x coordinate of left edge of the line.
+
 # params
   - metrics -  The metrics.
   - line -     The line index (zero based).
@@ -4063,6 +4270,7 @@ func (metrics LineMetrics) GetLeft(line uint64) float64 {
 }
 
 /*
+Fetch the start index in the buffer of UTF-16 code units used to
 represent the paragraph line.
 
 # params
@@ -4091,6 +4299,7 @@ func (metrics LineMetrics) GetCodeUnitStartIndex(line uint64) uint64 {
 }
 
 /*
+Fetch the end index in the buffer of UTF-16 code units used to
 represent the paragraph line.
 
 # params
@@ -4119,6 +4328,7 @@ func (metrics LineMetrics) GetCodeUnitEndIndex(line uint64) uint64 {
 }
 
 /*
+Fetch the end index (excluding whitespace) in the buffer of
 UTF-16 code units used to represent the paragraph line.
 
 # params
@@ -4147,6 +4357,7 @@ func (metrics LineMetrics) GetCodeUnitEndIndexExcludingWhitespace(line uint64) u
 }
 
 /*
+Fetch the end index (including newlines) in the buffer of UTF-16
 code units used to represent the paragraph line.
 
 # params
@@ -4175,6 +4386,7 @@ func (metrics LineMetrics) GetCodeUnitEndIndexIncludingNewline(line uint64) uint
 }
 
 /*
+Retain a strong reference to the object. The object can be NULL
 in which case this method is a no-op.
 
 # params
@@ -4195,6 +4407,7 @@ func (glyph_info GlyphInfo) Retain() {
 }
 
 /*
+Release a previously retained reference to the object. The
 object can be NULL in which case this method is a no-op.
 
 # params
@@ -4215,6 +4428,7 @@ func (glyph_info GlyphInfo) Release() {
 }
 
 /*
+Fetch the start index in the buffer of UTF-16 code units used to
 represent the grapheme cluster for a glyph.
 
 # params
@@ -4241,6 +4455,7 @@ func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeBegin() uint64 {
 }
 
 /*
+Fetch the end index in the buffer of UTF-16 code units used to
 represent the grapheme cluster for a glyph.
 
 # params
@@ -4267,6 +4482,7 @@ func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeEnd() uint64 {
 }
 
 /*
+Fetch the bounds of the grapheme cluster for the glyph in the
 coordinate space of the paragraph.
 
 # params

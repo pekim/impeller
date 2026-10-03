@@ -70,15 +70,21 @@ func (comment *comment) cleanLines() {
 		line = strings.TrimPrefix(line, "@warning")
 		line = strings.TrimSpace(line)
 
-		if strings.HasPrefix(line, "@brief") ||
-			strings.HasPrefix(line, "@callback_signature") ||
-			strings.HasPrefix(line, "@defgroup") ||
-			strings.HasPrefix(line, "@glfw3") ||
-			strings.HasPrefix(line, "@ingroup") ||
-			line == "@par" ||
-			strings.HasPrefix(line, "@sa") || // TODO convert resolvable references to doc links
-			strings.HasPrefix(line, "@{") ||
-			strings.HasPrefix(line, "@}") {
+		for _, tag := range []string{
+			"@brief",
+			"@callback_signature",
+			"@defgroup",
+			"@glfw3",
+			"@ingroup",
+			"@sa",
+			"@{",
+			"@}",
+		} {
+			line = strings.TrimPrefix(line, tag)
+			line = strings.TrimSpace(line)
+		}
+
+		if line == "@par" {
 			line = ""
 		}
 
