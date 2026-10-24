@@ -14,7 +14,7 @@ type enum struct {
 }
 
 func (enum enum) generate(file file) {
-	enum.comment.text()
+	file.Comment(enum.comment.text)
 	file.Type().Id(enum.name).Id("enum")
 
 	enum.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -27,9 +27,9 @@ func (enum enum) generate(file file) {
 			Op("=").
 			Lit(value).
 			Do(func(s *jen.Statement) {
-				comment := enum.gen.newComment(cursor).text()
-				if comment != "" {
-					s.Comment(comment)
+				comment := enum.gen.newComment(cursor)
+				if comment.text != "" {
+					s.Comment(comment.text)
 				}
 			})
 
@@ -67,10 +67,4 @@ func (enums enums) findByGoName(name string) (*enum, bool) {
 	}
 
 	return nil, false
-}
-
-func (enums enums) resolve() {
-	for i := range enums {
-		(&enums[i]).comment.resolve()
-	}
 }

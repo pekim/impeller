@@ -8,16 +8,20 @@ import (
 )
 
 type struct_ struct {
-	gen     *gen
-	cursor  clang.Cursor
-	cName   string
-	name    string
-	comment comment
-	handle  bool // defined using the IMPELLER_DEFINE_HANDLE macro
+	gen    *gen
+	cursor clang.Cursor
+	cName  string
+	name   string
+	handle bool // defined using the IMPELLER_DEFINE_HANDLE macro
 }
 
 func (struct_ struct_) generate(file file) {
-	file.Comment(struct_.comment.text())
+	comment := struct_.gen.newComment(struct_.cursor).text
+	if comment == "" {
+		comment = struct_.gen.handlesComments[struct_.cName].text
+	}
+	file.Comment(comment)
+
 	file.Type().Id(struct_.name).StructFunc(func(g *jen.Group) {
 		g.Id("_").Qual("structs", "HostLayout")
 
@@ -41,8 +45,8 @@ func (struct_ struct_) generateField(g *jen.Group, cursor clang.Cursor) {
 	typ := cursor.Type().Spelling()
 
 	comment := struct_.gen.newComment(cursor)
-	comment.resolve()
-	g.Comment(comment.text())
+	// comment.resolve()
+	g.Comment(comment.text)
 
 	if scalar, ok := scalars[clang.CursorKind(cursor.Type().CanonicalType().Kind())]; ok {
 		g.Id(name).Add(scalar.goType)
@@ -98,12 +102,4 @@ func (structs structs) findByGoName(name string) (*struct_, bool) {
 	}
 
 	return nil, false
-}
-
-func (structs structs) resolve() {
-	for i := range structs {
-		(&structs[i]).comment.resolve()
-
-		// for i,field:=range &structs[i].f
-	}
 }

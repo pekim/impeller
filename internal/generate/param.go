@@ -13,17 +13,17 @@ type param struct {
 	name          string
 	lengthParam   *param
 	isLengthParam bool
-	direction     paramDirection
+	direction     clang.CommentParamPassDirection
 }
 
-func newParam(gen *gen, cursor clang.Cursor, commentParams map[string]commentParam) param {
+func newParam(gen *gen, cursor clang.Cursor, commentParams commentParams) param {
 	param := param{
 		name: cursor.Spelling(),
 		typ:  newTyp(gen, cursor.Type()),
 	}
 
-	if commentParam, have := commentParams[param.name]; have {
-		param.direction = commentParam.direction
+	if direction, have := commentParams[param.name]; have {
+		param.direction = direction
 	}
 
 	return param
@@ -66,7 +66,7 @@ func (param param) cArgVar(g *jen.Group) {
 }
 
 func (param param) outVar(g *jen.Group) {
-	if param.direction == out {
+	if param.direction == clang.CommentParamPassDirection_Out {
 		g.Var().Add(param.goDecl())
 	}
 }
@@ -96,7 +96,7 @@ func (param param) cArgName() jen.Code {
 
 type params []param
 
-func newParams(gen *gen, cursor clang.Cursor, commentParams map[string]commentParam) params {
+func newParams(gen *gen, cursor clang.Cursor, commentParams commentParams) params {
 	params := make(params, cursor.NumArguments())
 	for i := range len(params) {
 		params[i] = newParam(gen, cursor.Argument(uint32(i)), commentParams)
@@ -130,7 +130,7 @@ func (params params) goDecl(g *jen.Group) {
 		if param.isLengthParam {
 			continue
 		}
-		if param.direction == out {
+		if param.direction == clang.CommentParamPassDirection_Out {
 			continue
 		}
 		g.Add(param.goDecl())
@@ -151,7 +151,7 @@ func (params params) outVars(g *jen.Group) {
 
 func (params params) outDecls(g *jen.Group) {
 	for _, param := range params {
-		if param.direction == out {
+		if param.direction == clang.CommentParamPassDirection_Out {
 			g.Add(param.goOutDecl())
 		}
 	}
@@ -159,7 +159,7 @@ func (params params) outDecls(g *jen.Group) {
 
 func (params params) haveOut() bool {
 	for _, param := range params {
-		if param.direction == out {
+		if param.direction == clang.CommentParamPassDirection_Out {
 			return true
 		}
 	}

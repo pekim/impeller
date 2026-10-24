@@ -16,7 +16,6 @@ type function struct {
 	params     params
 	varName    string
 	cifVarName string
-	comment    comment
 }
 
 func newFunction(gen *gen, cursor clang.Cursor) function {
@@ -31,7 +30,6 @@ func newFunction(gen *gen, cursor clang.Cursor) function {
 		params:     newParams(gen, cursor, comment.params),
 		varName:    "func" + cName,
 		cifVarName: "cif" + cName,
-		comment:    comment,
 	}
 
 	if fn.method() {
@@ -47,7 +45,7 @@ func (fn function) generate(file file) {
 		return
 	}
 
-	file.Comment(fn.comment.text())
+	file.Comment(fn.gen.newComment(fn.cursor).text)
 
 	file.
 		Func().
@@ -102,7 +100,7 @@ func (fn function) generate(file file) {
 			if !fn.result.isVoid || fn.params.haveOut() {
 				g.Return().ListFunc(func(g *jen.Group) {
 					for _, param := range fn.params {
-						if param.direction == out {
+						if param.direction == clang.CommentParamPassDirection_Out {
 							g.Op("*").Id(param.name)
 						}
 					}
@@ -144,10 +142,4 @@ func (functions functions) find(cName string) (*function, bool) {
 	}
 
 	return nil, false
-}
-
-func (functions functions) resolve() {
-	for i := range functions {
-		(&functions[i]).comment.resolve()
-	}
 }

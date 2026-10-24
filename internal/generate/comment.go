@@ -2,330 +2,169 @@ package generate
 
 import (
 	"fmt"
-	"regexp"
-	"slices"
-	"strconv"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
 
-type paramDirection byte
-
-const (
-	in paramDirection = iota
-	out
-)
-
-type commentParam struct {
-	name        string
-	description string
-	direction   paramDirection
-}
-
-type commentLink struct {
-	text string
-	url  string
-}
+type commentParams map[string]clang.CommentParamPassDirection
 
 type comment struct {
-	gen        *gen
-	entityName string
-	lines      []string
-	params     map[string]commentParam
-	links      []commentLink
-	sinceMajor int
-	sinceMinor int
+	gen     *gen
+	cursor  clang.Cursor
+	rawText string
+	text    string
+	params  commentParams
 }
-
-type commentParams map[string]commentParam
 
 func (gen *gen) newComment(cursor clang.Cursor) comment {
-	comment := comment{
-		gen:        gen,
-		entityName: cursor.Spelling(),
-		lines:      gen.commentLines(cursor),
+	c := comment{
+		gen:     gen,
+		cursor:  cursor,
+		rawText: cursor.RawCommentText(),
+		params:  make(commentParams),
 	}
-	comment.cleanLines()
-	comment.setParams()
-	comment.setSince()
-	comment.formatHeadings()
-	comment.formatCodeBlocks()
 
-	return comment
+	var builder strings.Builder
+	c.processComment(&builder, c.cursor.ParsedComment())
+	text := builder.String()
+	lines := strings.Split(text, "\n")
+	for i, line := range lines {
+		if len(line) > 1 && line[0] == ' ' && line[1] != ' ' {
+			// Remove a lone space that most (all) of the block comment lines have
+			// at the start of the line.
+			lines[i] = line[1:]
+		}
+	}
+	c.text = strings.TrimSpace(strings.Join(lines, "\n"))
+
+	return c
 }
 
-func (comment *comment) cleanLines() {
-	for i, line := range comment.lines {
-		line = strings.TrimSpace(line)
-		line = strings.TrimSuffix(line, "*/")
-		line = strings.TrimPrefix(line, "*")
-		line = strings.TrimPrefix(line, "/*!")
-		line = strings.TrimPrefix(line, "/*")
-		line = strings.TrimSpace(line)
+func (c *comment) processComment(builder *strings.Builder, comment clang.Comment) {
+	switch comment.Kind() {
 
-		line = strings.TrimPrefix(line, "@note")
-		line = strings.TrimPrefix(line, "@remarks")
-		line = strings.TrimPrefix(line, "@remark")
-		line = strings.TrimPrefix(line, "@warning")
-		line = strings.TrimSpace(line)
+	case clang.Comment_BlockCommand:
+		switch comment.BlockCommandComment_getCommandName() {
+		case "brief":
+			c.processChildren(builder, comment)
+			builder.WriteRune('\n')
 
-		for _, tag := range []string{
-			"@brief",
-			"@callback_signature",
-			"@defgroup",
-			"@glfw3",
-			"@ingroup",
-			"@sa",
-			"@{",
-			"@}",
-		} {
-			line = strings.TrimPrefix(line, tag)
-			line = strings.TrimSpace(line)
-		}
+		case "deprecated":
+			builder.WriteString("\nDEPRECATED:")
+			c.processChildren(builder, comment)
 
-		if line == "@par" {
-			line = ""
-		}
+		case "note":
+			builder.WriteString("\nNOTE:")
+			c.processChildren(builder, comment)
 
-		comment.lines[i] = line
-	}
-}
+		case "return":
+			builder.WriteString("\nRETURN:")
+			c.processChildren(builder, comment)
 
-var paramRegexp = regexp.MustCompile(`@param(\[\w+\])?\s+([\w_]+)\s?(.*)`)
+		case "see":
+			reference := comment.Child(0).Child(0).TextComment_getText()
+			reference = strings.TrimSpace(reference)
 
-func (comment *comment) setParams() {
-	comment.params = make(commentParams)
+			// remove surrounding backticks
+			if strings.HasPrefix(reference, "`") && strings.HasSuffix(reference, "`") {
+				reference = reference[1 : len(reference)-1]
+			}
 
-	var param commentParam
-	var withinDescription bool
-	for i, line := range comment.lines {
-		if withinDescription {
-			if line == "" || strings.HasPrefix(line, "@") {
-				// description was terminated by a new paragraph or another command
-				comment.params[param.name] = param
-				withinDescription = false
+			if entity, found := c.gen.resolveEntityReference(reference); found {
+				fmt.Fprintf(builder, "\n\nsee [%s]", entity)
 			} else {
-				// description continues
-				param.description += "\n" + line
-				comment.lines[i] = "  " + line
-			}
-		}
-
-		if strings.HasPrefix(line, "@param") {
-			parts := paramRegexp.FindStringSubmatch(line)
-			param = commentParam{
-				name: parts[2],
+				fmt.Fprintf(builder, "\n\nsee %s", reference)
 			}
 
-			switch parts[1] {
-			case "[in]":
-				param.direction = in
-			case "[out]":
-				param.direction = out
-			}
+		case "since":
+			builder.WriteString("Since:")
+			c.processChildren(builder, comment)
 
-			if len(parts) > 3 {
-				param.description = parts[3]
-				withinDescription = true
-			} else {
-				comment.params[param.name] = param
-			}
+		case "warning":
+			builder.WriteString("\nWARNING:")
+			c.processChildren(builder, comment)
 
-			var line string
-			if len(comment.params) == 0 {
-				// this is the first param, so create a header
-				line = "\n# params\n"
-			}
-			outText := ""
-			if param.direction == out {
-				outText = " (out)"
-			}
-			line += fmt.Sprintf("  - %s%s - %s", param.name, outText, param.description)
-			comment.lines[i] = line
-		}
-	}
-
-	if withinDescription {
-		comment.params[param.name] = param
-	}
-}
-
-func (comment *comment) setSince() {
-	re := regexp.MustCompile(`@since .* (\d)\.(\d)`)
-	for _, line := range comment.lines {
-		groups := re.FindStringSubmatch(line)
-		if len(groups) != 3 {
-			continue
+		default:
+			fmt.Println(c.rawText)
+			fatalf("unhandled block command : %s\n", comment.BlockCommandComment_getCommandName())
 		}
 
-		major, err := strconv.Atoi(groups[1])
-		if err != nil {
-			fatalOnError(err)
-		}
-		minor, err := strconv.Atoi(groups[2])
-		if err != nil {
-			fatalOnError(err)
-		}
-		comment.sinceMajor = major
-		comment.sinceMinor = minor
-		break
-	}
-}
+	case clang.Comment_InlineCommand:
+		switch comment.InlineCommandComment_getCommandName() {
+		case "c": // fixed font
+			builder.WriteString(comment.InlineCommandComment_getArgText(0))
 
-func (comment *comment) formatHeadings() {
-	commands := []string{
-		"@analysis", // non-standard, not documented at https://www.doxygen.nl/manual/commands.html
-		"@deprecated",
-		"@errors",
-		"@macos",
-		"@par",
-		"@pointer_lifetime",
-		"@reentrancy",
-		"@return",
-		"@since",
-		"@thread_safety",
-		"@wayland",
-		"@win32",
-		"@x11",
-	}
+		case "n": // newline
+			builder.WriteRune('\n')
+			builder.WriteString(comment.InlineCommandComment_getArgText(0))
 
-	for i, line := range comment.lines {
-		parts := strings.SplitN(line, " ", 2)
-		if len(parts) == 2 && slices.Contains(commands, parts[0]) {
-			title := parts[0][1:]
-			body := strings.TrimSpace(parts[1])
-			title = strings.ReplaceAll(title, "_", " ")
+		case "p": // fixed font
+			builder.WriteString(comment.InlineCommandComment_getArgText(0))
 
-			if title == "par" {
-				comment.lines[i] = "# " + body + "\n"
-			} else {
-				comment.lines[i] = "\n# " + title + "\n\n" + body
-			}
+		default:
+			fmt.Println(c.rawText)
+			fatalf("unhandled inline command : %s\n", comment.InlineCommandComment_getCommandName())
 		}
+
+	case clang.Comment_ParamCommand:
+		name := comment.ParamCommandComment_getParamName()
+		direction := comment.ParamCommandComment_getDirection()
+
+		c.params[name] = direction
+		fmt.Fprintf(builder, "  - %s :", name)
+		c.processChildren(builder, comment)
+
+	case clang.Comment_FullComment:
+		c.processChildren(builder, comment)
+
+	case clang.Comment_Null:
+		c.processChildren(builder, comment)
+
+	case clang.Comment_Paragraph:
+		c.processChildren(builder, comment)
+		builder.WriteString("\n\n")
+
+	case clang.Comment_Text:
+		commentText := comment.TextComment_getText()
+		if commentText != "" {
+			builder.WriteString(commentText)
+		}
+		c.processChildren(builder, comment)
+
+	case clang.Comment_VerbatimLine:
+		c.processChildren(builder, comment)
+
+	default:
+		fmt.Println(c.rawText)
+		fatalf("unhandled comment type : %s\n", comment.Kind().Spelling())
 	}
 }
 
-func (comment *comment) formatCodeBlocks() {
-	inBlock := false
-	for i, line := range comment.lines {
-		// line = strings.TrimSpace(line)
-		if line == "```" {
-			inBlock = !inBlock
-			line = ""
-		}
-		if inBlock {
-			comment.lines[i] = "    " + line
-		} else {
-			comment.lines[i] = line
-		}
+func (c *comment) processChildren(builder *strings.Builder, comment clang.Comment) {
+	for i := range comment.NumChildren() {
+		c.processComment(builder, comment.Child(i))
 	}
 }
 
-var linkRegexp = regexp.MustCompile("`([^\\s]+)`")
-
-func (comment *comment) resolveLinks() {
-	for l, line := range comment.lines {
-		parts := linkRegexp.FindStringSubmatch(line)
-		if parts == nil {
-			continue
-		}
-
-		if reference, ok := comment.gen.resolveEntityReference(parts[1]); ok {
-			line := strings.Replace(line, parts[0], "["+reference+"]", 1)
-			comment.lines[l] = line
-		}
-	}
+func (c comment) Dump() {
+	c.dumpComment(c.cursor.ParsedComment(), "")
 }
 
-var seeRegexp = regexp.MustCompile(`@see\s+([^\s]+)`)
+func (c comment) dumpComment(comment clang.Comment, indent string) {
+	fmt.Println(indent, comment.Kind().Spelling(), "=>", comment.TextComment_getText())
 
-func (comment *comment) resolveSees() {
-	for l, line := range comment.lines {
-		parts := seeRegexp.FindStringSubmatch(line)
-		if parts == nil {
-			continue
-		}
+	switch comment.Kind() {
+	case clang.Comment_BlockCommand:
+		fmt.Println(indent, "  Command : Block :", comment.BlockCommandComment_getCommandName())
+	case clang.Comment_InlineCommand:
+		fmt.Println(indent, "  Command : Inline :", comment.InlineCommandComment_getCommandName())
+	case clang.Comment_ParamCommand:
+		fmt.Println(indent, "  Command : Param :", comment.ParamCommandComment_getDirection(), comment.ParamCommandComment_getParamName())
 
-		ref := parts[1]
-		ref = strings.TrimSpace(ref)
-		ref = strings.TrimPrefix(ref, "`")
-		ref = strings.TrimSuffix(ref, "`")
-
-		if strings.HasPrefix(ref, "http") {
-			comment.lines[l] = fmt.Sprintf("See %s", ref)
-		} else {
-			if reference, ok := comment.gen.resolveEntityReference(ref); ok {
-				comment.lines[l] = fmt.Sprintf("see [%s]", reference)
-			}
-		}
-	}
-}
-
-func (comment comment) resolve() {
-	comment.resolveSees()
-	comment.resolveLinks()
-}
-
-func (comment comment) text() string {
-	if len(comment.links) > 0 {
-		comment.lines = append(comment.lines, "")
-		for _, link := range comment.links {
-			comment.lines = append(comment.lines, fmt.Sprintf("[%s]: %s", link.text, link.url))
-		}
 	}
 
-	return strings.Join(comment.lines, "\n")
-}
-
-func (gen gen) commentLines(cursor clang.Cursor) []string {
-	_, cursorLine, _, _ := cursor.Location().FileLocation()
-
-	var lines []string
-	for l := int(cursorLine) - 2; l >= 0; l-- {
-		line := strings.TrimSpace(gen.lines[l])
-
-		if strings.HasPrefix(line, "IMPELLER_EXPORT") {
-			continue
-		}
-
-		if !strings.HasPrefix(line, "//") || strings.HasPrefix(line, "//--") {
-			break
-		}
-
-		line = strings.TrimPrefix(line, "///")
-		line = strings.TrimSpace(line)
-		lines = append(lines, line)
+	for i := range comment.NumChildren() {
+		c.dumpComment(comment.Child(i), indent+"  ")
 	}
-	slices.Reverse(lines)
-	lines = append(lines, gen.lineComment(cursor))
-
-	return lines
-}
-
-func (gen gen) lineComment(cursor clang.Cursor) string {
-	range_ := cursor.Extent()
-	_, endLine, endCol, _ := range_.End().FileLocation()
-	line := gen.lines[endLine-1]
-
-	comment := line[endCol-1:]
-	comment = strings.TrimSpace(comment)
-	comment = strings.TrimPrefix(comment, ",")
-	comment = strings.TrimPrefix(comment, ";")
-	comment = strings.TrimSpace(comment)
-
-	if after, ok := strings.CutPrefix(comment, "//"); ok {
-		comment = after
-		comment = strings.TrimSpace(comment)
-		return comment
-	}
-
-	if after, ok := strings.CutPrefix(comment, "/*"); ok {
-		comment = after
-		comment = strings.TrimSuffix(comment, "*/")
-		comment = strings.TrimSpace(comment)
-		return comment
-	}
-
-	return ""
 }

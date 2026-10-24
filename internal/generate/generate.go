@@ -9,19 +9,21 @@ import (
 )
 
 type gen struct {
-	headerFilename string
-	srcFilename    string
-	tu             clang.TranslationUnit
-	lines          []string
-	enums          enums
-	structs        structs
-	functions      functions
+	headerFilename  string
+	srcFilename     string
+	tu              clang.TranslationUnit
+	lines           []string
+	handlesComments map[string]comment
+	enums           enums
+	structs         structs
+	functions       functions
 }
 
 func Generate() {
 	gen := gen{
-		headerFilename: "internal/interop-linux_amd64/include/impeller.h",
-		srcFilename:    "impeller.h",
+		headerFilename:  "internal/interop-linux_amd64/include/impeller.h",
+		srcFilename:     "impeller.h",
+		handlesComments: make(map[string]comment),
 	}
 
 	timeFunction("code generation", gen.generate)
@@ -32,7 +34,7 @@ func Generate() {
 func (gen *gen) generate() {
 	gen.parseHeaderFile()
 	gen.findEntities()
-	gen.resolve()
+	gen.findHandledComments()
 	gen.generateFiles()
 }
 
@@ -76,11 +78,10 @@ func (gen *gen) findEntities() {
 		case clang.Cursor_StructDecl:
 			cName := cursor.Spelling()
 			gen.structs = append(gen.structs, struct_{
-				gen:     gen,
-				cursor:  cursor,
-				cName:   cName,
-				name:    goName(cName),
-				comment: gen.newComment(cursor),
+				gen:    gen,
+				cursor: cursor,
+				cName:  cName,
+				name:   goName(cName),
 			})
 
 		case clang.Cursor_TypedefDecl:
@@ -95,9 +96,6 @@ func (gen *gen) findEntities() {
 					if found {
 						struct_.cName = cursor.Spelling()
 						struct_.handle = true
-						if struct_.comment.text() == "" {
-							struct_.comment = gen.newComment(cursor)
-						}
 					}
 				}
 			}
@@ -107,23 +105,16 @@ func (gen *gen) findEntities() {
 	})
 }
 
-func (gen *gen) resolve() {
-	gen.enums.resolve()
-	gen.functions.resolve()
-	gen.structs.resolve()
-}
-
 func (gen gen) resolveEntityReference(ref string) (string, bool) {
-	ref = strings.TrimSuffix(ref, "_attrib")
-	ref = strings.TrimSuffix(ref, "_hint")
-
 	if enum, ok := gen.enums.find(ref); ok {
 		return enum.name, true
+
 	} else if function, ok := gen.functions.find(ref); ok {
 		if function.method() {
 			return function.params[0].struct_.name + "." + function.name, true
 		}
 		return function.name, true
+
 	} else if struct_, ok := gen.structs.find(ref); ok {
 		return struct_.name, true
 	}
