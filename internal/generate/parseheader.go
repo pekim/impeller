@@ -35,9 +35,6 @@ func (gen *gen) parseHeaderFile() {
 		"-x", "c-header",
 	}
 
-	// Read header file, and turn comment blocks ("/* ... */") in to documentation
-	// comment blocks ("/** ... */").
-	// This enables clang to make the comment blocks available in the AST.
 	headerData, err := os.ReadFile(gen.headerFilename)
 	fatalOnError(err)
 	headerContents := string(headerData)
@@ -47,21 +44,6 @@ func (gen *gen) parseHeaderFile() {
 		"@param[out]  code_unit_index The range.",
 		"@param[out]  out_range The range.",
 		1)
-
-	headerLines := strings.Split(string(headerContents), "\n")
-	for i, line := range headerLines {
-		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "/********") {
-			if strings.HasSuffix(line, "*/") {
-				headerLines[i] = ""
-			} else {
-				headerLines[i] = "/**"
-			}
-		} else if strings.HasPrefix(line, "/*") {
-			headerLines[i] = strings.Replace(line, "/*", "/**", 1)
-		}
-	}
-	headerContents = strings.Join(headerLines, "\n")
 
 	// write a copy of the modified header file, just for reference
 	modifiedHeaderFilename := strings.Replace(gen.headerFilename, "impeller.h", "impeller_modified.h", 1)
@@ -82,5 +64,5 @@ func (gen *gen) parseHeaderFile() {
 		fatal(errCode)
 	}
 
-	gen.lines = headerLines
+	gen.lines = strings.Split(headerContents, "\n")
 }
