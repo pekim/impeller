@@ -1964,7 +1964,8 @@ func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program Frag
 /*
 Creates a composed filter that when applied is identical to             subsequently applying the inner and then the outer filters.
 
-	           ```             destination = outer_filter(inner_filter(source))             ```
+	             destination = outer_filter(inner_filter(source))
+
 
 
 

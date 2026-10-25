@@ -10,11 +10,12 @@ import (
 type commentParams map[string]clang.CommentParamPassDirection
 
 type comment struct {
-	gen     *gen
-	cursor  clang.Cursor
-	rawText string
-	text    string
-	params  commentParams
+	gen                       *gen
+	cursor                    clang.Cursor
+	rawText                   string
+	text                      string
+	params                    commentParams
+	inMarkdownFencedCodeBlock bool
 }
 
 func (gen *gen) newComment(cursor clang.Cursor) comment {
@@ -92,14 +93,9 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 	case clang.Comment_InlineCommand:
 		switch comment.InlineCommandComment_getCommandName() {
-		case "c": // fixed font
-			builder.WriteString(comment.InlineCommandComment_getArgText(0))
 
 		case "n": // newline
 			builder.WriteRune('\n')
-			builder.WriteString(comment.InlineCommandComment_getArgText(0))
-
-		case "p": // fixed font
 			builder.WriteString(comment.InlineCommandComment_getArgText(0))
 
 		default:
@@ -127,12 +123,19 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 	case clang.Comment_Text:
 		commentText := comment.TextComment_getText()
-		if commentText != "" {
-			builder.WriteString(commentText)
-		}
-		c.processChildren(builder, comment)
 
-	case clang.Comment_VerbatimLine:
+		if strings.Contains(commentText, "```") {
+			c.inMarkdownFencedCodeBlock = !c.inMarkdownFencedCodeBlock
+		} else {
+			if c.inMarkdownFencedCodeBlock {
+				builder.WriteString("  ")
+				builder.WriteString(commentText)
+				builder.WriteString("\n")
+			} else {
+				builder.WriteString(commentText)
+			}
+		}
+
 		c.processChildren(builder, comment)
 
 	default:
