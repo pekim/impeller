@@ -52,15 +52,15 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 			builder.WriteRune('\n')
 
 		case "deprecated":
-			builder.WriteString("\nDEPRECATED:")
+			builder.WriteString("\nDeprecated:")
 			c.processChildren(builder, comment)
 
 		case "note":
-			builder.WriteString("\nNOTE:")
+			builder.WriteString("\nNote:")
 			c.processChildren(builder, comment)
 
 		case "return":
-			builder.WriteString("\nRETURN:")
+			builder.WriteString("\nReturn:")
 			c.processChildren(builder, comment)
 
 		case "see":
@@ -83,7 +83,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 			c.processChildren(builder, comment)
 
 		case "warning":
-			builder.WriteString("\nWARNING:")
+			builder.WriteString("\nWarning:")
 			c.processChildren(builder, comment)
 
 		default:
@@ -109,6 +109,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 		c.params[name] = direction
 		fmt.Fprintf(builder, "  - %s :", name)
+
 		c.processChildren(builder, comment)
 
 	case clang.Comment_FullComment:

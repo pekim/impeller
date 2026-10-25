@@ -162,7 +162,7 @@ A reference to a texture whose data is resident on the GPU. These can be referen
 
 Creating textures is extremely expensive. Creating a single one can typically comfortably blow the frame budget of an application. Textures should be created on background threads.
 
-WARNING:    While textures themselves are thread safe, some context types             (like OpenGL) may need extra configuration to be able to operate             from multiple threads.
+Warning:    While textures themselves are thread safe, some context types             (like OpenGL) may need extra configuration to be able to operate             from multiple threads.
 */
 type Texture struct {
 	_      structs.HostLayout

@@ -17,7 +17,7 @@ Get the version of Impeller standalone API. This is the API that             wil
 
 see [ContextCreateOpenGLESNew]
 
-RETURN:     The version of the standalone API.
+Return:     The version of the standalone API.
 */
 func GetVersion() uint32 {
 	var result uint32
@@ -36,7 +36,7 @@ func GetVersion() uint32 {
 /*
 Create an OpenGL(ES) Impeller context.
 
-WARNING:    Unlike other context types, the OpenGL ES context can only be             created, used, and collected on the calling thread. This             restriction may be lifted in the future once reactor workers are             exposed in the API. No other context types have threading             restrictions. Till reactor workers can be used, using the             context on a background thread will cause a stall of OpenGL             operations.
+Warning:    Unlike other context types, the OpenGL ES context can only be             created, used, and collected on the calling thread. This             restriction may be lifted in the future once reactor workers are             exposed in the API. No other context types have threading             restrictions. Till reactor workers can be used, using the             context on a background thread will cause a stall of OpenGL             operations.
 
   - version :      The version of the Impeller                          standalone API. See `ImpellerGetVersion`. If the                          specified here is not compatible with the version                          of the library, context creation will fail and NULL                          context returned from this call.
 
@@ -44,7 +44,7 @@ WARNING:    Unlike other context types, the OpenGL ES context can only be       
 
   - gl_proc_address_callback_user_data :                          The gl proc address callback user data baton. This                          pointer is not interpreted by Impeller and will be                          returned as user data in the proc address callback.                          user data.
 
-RETURN:     The context or NULL if one cannot be created.
+Return:     The context or NULL if one cannot be created.
 */
 func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddressCallback, gl_proc_address_callback_user_data unsafe.Pointer) Context {
 	var result Context
@@ -69,7 +69,7 @@ Create a Metal context using the system default Metal device.
 
   - version :  The version specified in the IMPELLER_VERSION macro.
 
-RETURN:     The Metal context or NULL if one cannot be created.
+Return:     The Metal context or NULL if one cannot be created.
 */
 func ContextCreateMetalNew(version uint32) Context {
 	var result Context
@@ -94,7 +94,7 @@ Create a Vulkan context using the provided Vulkan Settings.
 
   - settings :  The Vulkan settings.
 
-RETURN:     The Vulkan context or NULL if one cannot be created.
+Return:     The Vulkan context or NULL if one cannot be created.
 */
 func ContextCreateVulkanNew(version uint32, settings *ContextVulkanSettings) Context {
 	var result Context
@@ -154,13 +154,13 @@ func (context Context) Release() {
 /*
 Get internal Vulkan handles managed by the given Vulkan context.             Ownership of the handles is still maintained by Impeller. This             accessor is just available so embedders can create resources             using the same device and instance as Impeller for interop.
 
-WARNING:    If the context is not a Vulkan context, False is returned with             the [out] argument unaffected.
+Warning:    If the context is not a Vulkan context, False is returned with             the [out] argument unaffected.
 
   - context :          The context
 
   - out_vulkan_info :  The out vulkan information
 
-RETURN:     If the Vulkan info could be fetched from the context.
+Return:     If the Vulkan info could be fetched from the context.
 */
 func (context Context) GetVulkanInfo() (ContextVulkanInfo, Bool) {
 	var result Bool
@@ -187,7 +187,7 @@ Create a new Vulkan swapchain using a VkSurfaceKHR instance.             Ownersh
 
   - vulkan_surface_khr :  The vulkan surface.
 
-RETURN:     The vulkan swapchain.
+Return:     The vulkan swapchain.
 */
 func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr unsafe.Pointer) VulkanSwapchain {
 	var result VulkanSwapchain
@@ -249,7 +249,7 @@ A potentially blocking operation, acquires the next surface to             rende
 
   - swapchain :  The swapchain.
 
-RETURN:     The surface if one could be obtained, NULL otherwise.
+Return:     The surface if one could be obtained, NULL otherwise.
 */
 func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 	var result Surface
@@ -278,7 +278,7 @@ Create a new surface by wrapping an existing framebuffer object.             The
 
   - size :     The size of the framebuffer is texels.
 
-RETURN:     The surface if once can be created, NULL otherwise.
+Return:     The surface if once can be created, NULL otherwise.
 */
 func (context Context) SurfaceCreateWrappedFBONew(fbo uint64, format PixelFormat, size *ISize) Surface {
 	var result Surface
@@ -310,7 +310,7 @@ Create a surface by wrapping a Metal drawable. This is useful             during
 
 	- metal_drawable :  The drawable to wrap as a surface.
 
-RETURN:     The surface if one could be wrapped, NULL otherwise.
+Return:     The surface if one could be wrapped, NULL otherwise.
 */
 func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable unsafe.Pointer) Surface {
 	var result Surface
@@ -370,13 +370,13 @@ func (surface Surface) Release() {
 /*
 Draw a display list onto the surface. The same display list can             be drawn multiple times to different surfaces.
 
-WARNING:    In the OpenGL backend, Impeller will not make an effort to             preserve the OpenGL state that is current in the context.             Embedders that perform additional OpenGL operations in the             context should expect the reset state after control transitions             back to them. Key state to watch out for would be the viewports,             stencil rects, test toggles, resource (texture, framebuffer,             buffer) bindings, etc...
+Warning:    In the OpenGL backend, Impeller will not make an effort to             preserve the OpenGL state that is current in the context.             Embedders that perform additional OpenGL operations in the             context should expect the reset state after control transitions             back to them. Key state to watch out for would be the viewports,             stencil rects, test toggles, resource (texture, framebuffer,             buffer) bindings, etc...
 
   - surface :       The surface to draw the display list to.
 
   - display_list :  The display list to draw onto the surface.
 
-RETURN:     If the display list could be drawn onto the surface.
+Return:     If the display list could be drawn onto the surface.
 */
 func (surface Surface) DrawDisplayList(display_list DisplayList) Bool {
 	var result Bool
@@ -400,7 +400,7 @@ Present the surface to the underlying window system.
 
   - surface :  The surface to present.
 
-RETURN:     True if the surface could be presented.
+Return:     True if the surface could be presented.
 */
 func (surface Surface) Present() Bool {
 	var result Bool
@@ -487,7 +487,7 @@ func (path Path) GetBounds() Rect {
 /*
 Create a new path builder. Paths themselves are immutable.             A builder builds these immutable paths.
 
-RETURN:     The path builder.
+Return:     The path builder.
 */
 func PathBuilderNew() PathBuilder {
 	var result PathBuilder
@@ -769,7 +769,7 @@ Create a new path by copying the existing built-up path. The             existin
 
   - fill :     The fill.
 
-RETURN:     The impeller path.
+Return:     The impeller path.
 */
 func (builder PathBuilder) CopyPathNew(fill FillType) Path {
 	var result Path
@@ -795,7 +795,7 @@ Create a new path using the existing built-up path. The existing             pat
 
   - fill :     The fill.
 
-RETURN:     The impeller path.
+Return:     The impeller path.
 */
 func (builder PathBuilder) TakePathNew(fill FillType) Path {
 	var result Path
@@ -817,7 +817,7 @@ func (builder PathBuilder) TakePathNew(fill FillType) Path {
 /*
 Create a new paint with default values.
 
-RETURN:     The impeller paint.
+Return:     The impeller paint.
 */
 func PaintNew() Paint {
 	var result Paint
@@ -1132,7 +1132,7 @@ Create a texture with decompressed bytes.
 
 	Whether an extra data copy actually occurs will always depend on             the rendering backend in use. But it is best practice to provide             a release callback and be resilient to the data being released             in a deferred manner on a background thread.
 
-WARNING:    Do **not** supply compressed image data directly (PNG, JPEG,             etc...). This function only works with tightly packed             decompressed data.
+Warning:    Do **not** supply compressed image data directly (PNG, JPEG,             etc...). This function only works with tightly packed             decompressed data.
 
   - context :                        The context.
 
@@ -1142,7 +1142,7 @@ WARNING:    Do **not** supply compressed image data directly (PNG, JPEG,        
 
   - contents_on_release_user_data :  The baton passes to the contents                                            release callback if one exists.
 
-RETURN:     The texture if one can be created using the provided data, NULL             otherwise.
+Return:     The texture if one can be created using the provided data, NULL             otherwise.
 */
 func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data unsafe.Pointer) Texture {
 	var result Texture
@@ -1180,7 +1180,7 @@ Create a texture with an externally created OpenGL texture             handle.
 
 	- handle :      The handle
 
-RETURN:     The texture if one could be created by adopting the supplied             texture handle, NULL otherwise.
+Return:     The texture if one could be created by adopting the supplied             texture handle, NULL otherwise.
 */
 func (context Context) TextureCreateWithOpenGLTextureHandleNew(descriptor *TextureDescriptor, handle uint64) Texture {
 	var result Texture
@@ -1247,7 +1247,7 @@ Get the OpenGL handle associated with this texture. If this is             not a
 
 	- texture :  The texture.
 
-RETURN:     The OpenGL handle if one is available, GL_NONE otherwise.
+Return:     The OpenGL handle if one is available, GL_NONE otherwise.
 */
 func (texture Texture) GetOpenGLHandle() uint64 {
 	var result uint64
@@ -1268,13 +1268,13 @@ func (texture Texture) GetOpenGLHandle() uint64 {
 /*
 Create a new fragment program using data obtained by compiling a             GLSL shader with `impellerc`.
 
-WARNING:    The data provided must be compiled by `impellerc`. Providing raw             GLSL strings will lead to a `nullptr` return. Impeller does not             compile shaders at runtime.
+Warning:    The data provided must be compiled by `impellerc`. Providing raw             GLSL strings will lead to a `nullptr` return. Impeller does not             compile shaders at runtime.
 
   - data :                    The data compiled by `impellerc`.
 
   - data_release_user_data :  A baton passed back to the caller on the                                     invocation of the mappings release                                     callback. This call can happen on any                                     thread.
 
-RETURN:     The fragment program if one can be created, nullptr otherwise.
+Return:     The fragment program if one can be created, nullptr otherwise.
 */
 func FragmentProgramNew(data *Mapping, data_release_user_data unsafe.Pointer) FragmentProgram {
 	var result FragmentProgram
@@ -1386,7 +1386,7 @@ Create a color source that forms a linear gradient.
 
   - transformation :  The transformation.
 
-RETURN:     The color source.
+Return:     The color source.
 */
 func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1427,7 +1427,7 @@ Create a color source that forms a radial gradient.
 
   - transformation :  The transformation.
 
-RETURN:     The color source.
+Return:     The color source.
 */
 func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1472,7 +1472,7 @@ Create a color source that forms a conical gradient.
 
   - transformation :  The transformation.
 
-RETURN:     The color source.
+Return:     The color source.
 */
 func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float32, end_center *Point, end_radius float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1517,7 +1517,7 @@ Create a color source that forms a sweep gradient.
 
   - transformation :  The transformation.
 
-RETURN:     The color source.
+Return:     The color source.
 */
 func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32, stop_count uint32, colors *Color, stops *float32, tile_mode TileMode, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1555,7 +1555,7 @@ Create a color source that samples from an image.
 
   - transformation :        The transformation.
 
-RETURN:     The color source.
+Return:     The color source.
 */
 func (image Texture) ColorSourceCreateImageNew(horizontal_tile_mode TileMode, vertical_tile_mode TileMode, sampling TextureSampling, transformation *Matrix) ColorSource {
 	var result ColorSource
@@ -1594,7 +1594,7 @@ see https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
   - data_bytes_length :  The data bytes length.
 
-RETURN:     The color source.
+Return:     The color source.
 */
 func (context Context) ColorSourceCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ColorSource {
 	var result ColorSource
@@ -1664,7 +1664,7 @@ Create a color filter that performs blending of pixel values             indepen
 
   - blend_mode :  The blend mode.
 
-RETURN:     The color filter.
+Return:     The color filter.
 */
 func ColorFilterCreateBlendNew(color *Color, blend_mode BlendMode) ColorFilter {
 	var result ColorFilter
@@ -1688,7 +1688,7 @@ Create a color filter that transforms pixel color values             independent
 
   - color_matrix :  The color matrix.
 
-RETURN:     The color filter.
+Return:     The color filter.
 */
 func ColorFilterCreateColorMatrixNew(color_matrix *ColorMatrix) ColorFilter {
 	var result ColorFilter
@@ -1751,7 +1751,7 @@ Create a mask filter that blurs contents in the masked shape.
 
   - sigma :  The sigma.
 
-RETURN:     The mask filter.
+Return:     The mask filter.
 */
 func MaskFilterCreateBlurNew(style BlurStyle, sigma float32) MaskFilter {
 	var result MaskFilter
@@ -1821,7 +1821,7 @@ Creates an image filter that applies a Gaussian blur.
 
 	- tile_mode :  The tile mode.
 
-RETURN:     The image filter.
+Return:     The image filter.
 */
 func ImageFilterCreateBlurNew(x_sigma float32, y_sigma float32, tile_mode TileMode) ImageFilter {
 	var result ImageFilter
@@ -1848,7 +1848,7 @@ Creates an image filter that enhances the per-channel pixel             values t
 
   - y_radius :  The y radius.
 
-RETURN:     The image filter.
+Return:     The image filter.
 */
 func ImageFilterCreateDilateNew(x_radius float32, y_radius float32) ImageFilter {
 	var result ImageFilter
@@ -1874,7 +1874,7 @@ Creates an image filter that dampens the per-channel pixel             values to
 
   - y_radius :  The y radius.
 
-RETURN:     The image filter.
+Return:     The image filter.
 */
 func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
 	var result ImageFilter
@@ -1900,7 +1900,7 @@ Creates an image filter that applies a transformation matrix to             the 
 
   - sampling :  The image sampling mode.
 
-RETURN:     The image filter.
+Return:     The image filter.
 */
 func ImageFilterCreateMatrixNew(matrix *Matrix, sampling TextureSampling) ImageFilter {
 	var result ImageFilter
@@ -1936,7 +1936,7 @@ see https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
   - data_bytes_length :  The data bytes length.
 
-RETURN:     The image filter.
+Return:     The image filter.
 */
 func (context Context) ImageFilterCreateFragmentProgramNew(fragment_program FragmentProgram, samplers *Texture, samplers_count uint64, data string) ImageFilter {
 	var result ImageFilter
@@ -1973,7 +1973,7 @@ Creates a composed filter that when applied is identical to             subseque
 
 	- inner :  The inner image filter.
 
-RETURN:     The combined image filter.
+Return:     The combined image filter.
 */
 func (outer ImageFilter) CreateComposeNew(inner ImageFilter) ImageFilter {
 	var result ImageFilter
@@ -2039,7 +2039,7 @@ Create a new display list builder.
 
 	- cull_rect :  The cull rectangle or NULL.
 
-RETURN:     The display list builder.
+Return:     The display list builder.
 */
 func DisplayListBuilderNew(cull_rect *Rect) DisplayListBuilder {
 	var result DisplayListBuilder
@@ -2100,7 +2100,7 @@ Create a new display list using the rendering intent already             encoded
 
   - builder :  The builder.
 
-RETURN:     The display list.
+Return:     The display list.
 */
 func (builder DisplayListBuilder) CreateDisplayListNew() DisplayList {
 	var result DisplayList
@@ -2352,7 +2352,7 @@ Get the current size of the save stack.
 
   - builder :  The builder.
 
-RETURN:     The save stack size.
+Return:     The save stack size.
 */
 func (builder DisplayListBuilder) GetSaveCount() uint32 {
 	var result uint32
@@ -2868,7 +2868,7 @@ func (builder DisplayListBuilder) DrawTextureRect(texture Texture, src_rect *Rec
 /*
 Create a new typography contents.
 
-RETURN:     The typography context.
+Return:     The typography context.
 */
 func TypographyContextNew() TypographyContext {
 	var result TypographyContext
@@ -2927,7 +2927,7 @@ Register a custom font.
 
 	The following font formats are supported:             * OpenType font collections (.ttc extension)             * TrueType fonts: (.ttf extension)             * OpenType fonts: (.otf extension)
 
-WARNING:    Web Open Font Formats (.woff and .woff2 extensions) are **not**             supported.
+Warning:    Web Open Font Formats (.woff and .woff2 extensions) are **not**             supported.
 
 	The font data is specified as a mapping. It is possible for the             release callback of the mapping to not be called even past the             destruction of the typography context. Care must be taken to not             collect the mapping till the release callback is invoked by             Impeller.
 
@@ -2947,7 +2947,7 @@ see [ParagraphStyle.SetFontFamily]
 
   - family_name_alias :              The family name alias or NULL if                                            the one specified in the font                                            data is to be used.
 
-RETURN:     If the font could be successfully registered.
+Return:     If the font could be successfully registered.
 */
 func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_release_user_data unsafe.Pointer, family_name_alias string) Bool {
 	var result Bool
@@ -2972,7 +2972,7 @@ func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_rel
 /*
 Create a new paragraph style.
 
-RETURN:     The paragraph style.
+Return:     The paragraph style.
 */
 func ParagraphStyleNew() ParagraphStyle {
 	var result ParagraphStyle
@@ -3324,7 +3324,7 @@ Create a new paragraph builder.
 
   - context :  The context.
 
-RETURN:     The paragraph builder.
+Return:     The paragraph builder.
 */
 func (context TypographyContext) ParagraphBuilderNew() ParagraphBuilder {
 	var result ParagraphBuilder
@@ -3461,7 +3461,7 @@ Layout and build a new paragraph using the specified width. The             resu
 
   - width :              The paragraph width.
 
-RETURN:     The paragraph if one can be created, NULL otherwise.
+Return:     The paragraph if one can be created, NULL otherwise.
 */
 func (paragraph_builder ParagraphBuilder) BuildParagraphNew(width float32) Paragraph {
 	var result Paragraph
@@ -3523,7 +3523,7 @@ see [Paragraph.GetMinIntrinsicWidth]
 
   - paragraph :  The paragraph.
 
-RETURN:     The width provided to the paragraph builder during the call to             layout. This is the maximum width any line in the laid out             paragraph can occupy. But, it is not necessarily the actual             width of the paragraph after layout.
+Return:     The width provided to the paragraph builder during the call to             layout. This is the maximum width any line in the laid out             paragraph can occupy. But, it is not necessarily the actual             width of the paragraph after layout.
 */
 func (paragraph Paragraph) GetMaxWidth() float32 {
 	var result float32
@@ -3544,7 +3544,7 @@ func (paragraph Paragraph) GetMaxWidth() float32 {
 /*
 - paragraph :  The paragraph.
 
-RETURN:     The height of the laid out paragraph. This is **not** a tight             bounding box and some glyphs may not reach the minimum location             they are allowed to reach.
+Return:     The height of the laid out paragraph. This is **not** a tight             bounding box and some glyphs may not reach the minimum location             they are allowed to reach.
 */
 func (paragraph Paragraph) GetHeight() float32 {
 	var result float32
@@ -3565,7 +3565,7 @@ func (paragraph Paragraph) GetHeight() float32 {
 /*
 - paragraph :  The paragraph.
 
-RETURN:     The length of the longest line in the paragraph. This is the             horizontal distance between the left edge of the leftmost glyph             and the right edge of the rightmost glyph, in the longest line             in the paragraph.
+Return:     The length of the longest line in the paragraph. This is the             horizontal distance between the left edge of the leftmost glyph             and the right edge of the rightmost glyph, in the longest line             in the paragraph.
 */
 func (paragraph Paragraph) GetLongestLineWidth() float32 {
 	var result float32
@@ -3588,7 +3588,7 @@ see [Paragraph.GetMaxWidth]
 
   - paragraph :  The paragraph.
 
-RETURN:     The actual width of the longest line in the paragraph after             layout. This is expected to be less than or equal to             `ImpellerParagraphGetMaxWidth`.
+Return:     The actual width of the longest line in the paragraph after             layout. This is expected to be less than or equal to             `ImpellerParagraphGetMaxWidth`.
 */
 func (paragraph Paragraph) GetMinIntrinsicWidth() float32 {
 	var result float32
@@ -3609,7 +3609,7 @@ func (paragraph Paragraph) GetMinIntrinsicWidth() float32 {
 /*
 - paragraph :  The paragraph.
 
-RETURN:     The width of the paragraph without line breaking.
+Return:     The width of the paragraph without line breaking.
 */
 func (paragraph Paragraph) GetMaxIntrinsicWidth() float32 {
 	var result float32
@@ -3630,7 +3630,7 @@ func (paragraph Paragraph) GetMaxIntrinsicWidth() float32 {
 /*
 - paragraph :  The paragraph.
 
-RETURN:     The distance from the top of the paragraph to the ideographic             baseline of the first line when using ideographic fonts             (Japanese, Korean, etc...).
+Return:     The distance from the top of the paragraph to the ideographic             baseline of the first line when using ideographic fonts             (Japanese, Korean, etc...).
 */
 func (paragraph Paragraph) GetIdeographicBaseline() float32 {
 	var result float32
@@ -3651,7 +3651,7 @@ func (paragraph Paragraph) GetIdeographicBaseline() float32 {
 /*
 - paragraph :  The paragraph.
 
-RETURN:     The distance from the top of the paragraph to the alphabetic             baseline of the first line when using alphabetic fonts (A-Z,             a-z, Greek, etc...).
+Return:     The distance from the top of the paragraph to the alphabetic             baseline of the first line when using alphabetic fonts (A-Z,             a-z, Greek, etc...).
 */
 func (paragraph Paragraph) GetAlphabeticBaseline() float32 {
 	var result float32
@@ -3672,7 +3672,7 @@ func (paragraph Paragraph) GetAlphabeticBaseline() float32 {
 /*
 - paragraph :  The paragraph.
 
-RETURN:     The number of lines visible in the paragraph after line             breaking.
+Return:     The number of lines visible in the paragraph after line             breaking.
 */
 func (paragraph Paragraph) GetLineCount() uint32 {
 	var result uint32
@@ -3726,7 +3726,7 @@ Get the line metrics of this laid out paragraph. Calculating the             lin
 
   - paragraph :  The paragraph.
 
-RETURN:     The line metrics.
+Return:     The line metrics.
 */
 func (paragraph Paragraph) GetLineMetrics() LineMetrics {
 	var result LineMetrics
@@ -3751,7 +3751,7 @@ Create a new instance of glyph info that can be queried for             informat
 
   - code_unit_index :  The UTF-16 code unit index.
 
-RETURN:     The glyph information.
+Return:     The glyph information.
 */
 func (paragraph Paragraph) CreateGlyphInfoAtCodeUnitIndexNew(code_unit_index uint64) GlyphInfo {
 	var result GlyphInfo
@@ -3779,7 +3779,7 @@ Create a new instance of glyph info that can be queried for             informat
 
   - y :          The x coordinate relative to paragraph origin.
 
-RETURN:     The glyph information.
+Return:     The glyph information.
 */
 func (paragraph Paragraph) CreateGlyphInfoAtParagraphCoordinatesNew(x float64, y float64) GlyphInfo {
 	var result GlyphInfo
@@ -3844,7 +3844,7 @@ The rise from the baseline as calculated from the font and style             for
 
   - line :     The line index (zero based).
 
-RETURN:     The unscaled ascent.
+Return:     The unscaled ascent.
 */
 func (metrics LineMetrics) GetUnscaledAscent(line uint64) float64 {
 	var result float64
@@ -3870,7 +3870,7 @@ The rise from the baseline as calculated from the font and style             for
 
   - line :     The line index (zero based).
 
-RETURN:     The ascent.
+Return:     The ascent.
 */
 func (metrics LineMetrics) GetAscent(line uint64) float64 {
 	var result float64
@@ -3896,7 +3896,7 @@ The drop from the baseline as calculated from the font and style             for
 
   - line :     The line index (zero based).
 
-RETURN:     The descent.
+Return:     The descent.
 */
 func (metrics LineMetrics) GetDescent(line uint64) float64 {
 	var result float64
@@ -3922,7 +3922,7 @@ The y coordinate of the baseline for this line from the top of             the p
 
   - line :     The line index (zero based).
 
-RETURN:     The baseline.
+Return:     The baseline.
 */
 func (metrics LineMetrics) GetBaseline(line uint64) float64 {
 	var result float64
@@ -3949,7 +3949,7 @@ Used to determine if this line ends with an explicit line break             (e.g
 
   - line :     The line index (zero based).
 
-RETURN:     True if the line is a hard break.
+Return:     True if the line is a hard break.
 */
 func (metrics LineMetrics) IsHardbreak(line uint64) Bool {
 	var result Bool
@@ -3975,7 +3975,7 @@ Width of the line from the left edge of the leftmost glyph to             the ri
 
   - line :     The line index (zero based).
 
-RETURN:     The width.
+Return:     The width.
 */
 func (metrics LineMetrics) GetWidth(line uint64) float64 {
 	var result float64
@@ -4001,7 +4001,7 @@ Total height of the line from the top edge to the bottom edge.
 
   - line :     The line index (zero based).
 
-RETURN:     The height.
+Return:     The height.
 */
 func (metrics LineMetrics) GetHeight(line uint64) float64 {
 	var result float64
@@ -4027,7 +4027,7 @@ The x coordinate of left edge of the line.
 
   - line :     The line index (zero based).
 
-RETURN:     The left edge coordinate.
+Return:     The left edge coordinate.
 */
 func (metrics LineMetrics) GetLeft(line uint64) float64 {
 	var result float64
@@ -4053,7 +4053,7 @@ Fetch the start index in the buffer of UTF-16 code units used to             rep
 
   - line :     The line index (zero based).
 
-RETURN:     The UTF-16 code units start index.
+Return:     The UTF-16 code units start index.
 */
 func (metrics LineMetrics) GetCodeUnitStartIndex(line uint64) uint64 {
 	var result uint64
@@ -4079,7 +4079,7 @@ Fetch the end index in the buffer of UTF-16 code units used to             repre
 
   - line :     The line index (zero based).
 
-RETURN:     The UTF-16 code units end index.
+Return:     The UTF-16 code units end index.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndex(line uint64) uint64 {
 	var result uint64
@@ -4105,7 +4105,7 @@ Fetch the end index (excluding whitespace) in the buffer of             UTF-16 c
 
   - line :     The line index (zero based).
 
-RETURN:     The UTF-16 code units end index excluding whitespace.
+Return:     The UTF-16 code units end index excluding whitespace.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndexExcludingWhitespace(line uint64) uint64 {
 	var result uint64
@@ -4131,7 +4131,7 @@ Fetch the end index (including newlines) in the buffer of UTF-16             cod
 
   - line :     The line index (zero based).
 
-RETURN:     The UTF-16 code units end index including newlines.
+Return:     The UTF-16 code units end index including newlines.
 */
 func (metrics LineMetrics) GetCodeUnitEndIndexIncludingNewline(line uint64) uint64 {
 	var result uint64
@@ -4193,7 +4193,7 @@ Fetch the start index in the buffer of UTF-16 code units used to             rep
 
   - glyph_info :  The glyph information.
 
-RETURN:     The UTF-16 code units start index.
+Return:     The UTF-16 code units start index.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeBegin() uint64 {
 	var result uint64
@@ -4216,7 +4216,7 @@ Fetch the end index in the buffer of UTF-16 code units used to             repre
 
   - glyph_info :  The glyph information.
 
-RETURN:     The UTF-16 code units end index.
+Return:     The UTF-16 code units end index.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeEnd() uint64 {
 	var result uint64
@@ -4261,7 +4261,7 @@ func (glyph_info GlyphInfo) GetGraphemeClusterBounds() Rect {
 /*
 - glyph_info :  The glyph information.
 
-RETURN:     True if the glyph represents an ellipsis. False otherwise.
+Return:     True if the glyph represents an ellipsis. False otherwise.
 */
 func (glyph_info GlyphInfo) IsEllipsis() Bool {
 	var result Bool
@@ -4282,7 +4282,7 @@ func (glyph_info GlyphInfo) IsEllipsis() Bool {
 /*
 - glyph_info :  The glyph information.
 
-RETURN:     The direction of the run that contains the glyph.
+Return:     The direction of the run that contains the glyph.
 */
 func (glyph_info GlyphInfo) GetTextDirection() TextDirection {
 	var result TextDirection
