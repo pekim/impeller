@@ -2,10 +2,13 @@ package generate
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
+
+var commentBacktickReferenceRegexp = regexp.MustCompile(".*`(.*?)`.*")
 
 type commentParams map[string]clang.CommentParamPassDirection
 
@@ -133,6 +136,16 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 				builder.WriteString(commentText)
 				builder.WriteString("\n")
 			} else {
+				match := commentBacktickReferenceRegexp.FindStringSubmatch(commentText)
+				if match != nil {
+					reference := match[1]
+					if entity, found := c.gen.resolveEntityReference(reference); found {
+						commentText = strings.Replace(commentText, "`"+reference+"`", "["+entity+"]", 1)
+					} else {
+						commentText = strings.Replace(commentText, "`"+reference+"`", reference, 1)
+					}
+				}
+
 				builder.WriteString(commentText)
 			}
 		}

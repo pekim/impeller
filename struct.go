@@ -186,7 +186,7 @@ type Texture struct {
 }
 
 /*
-The primary form of WSI when using a Vulkan context, these swapchains use the `VK_KHR_surface` Vulkan extension.
+The primary form of WSI when using a Vulkan context, these swapchains use the VK_KHR_surface Vulkan extension.
 
 Creating a swapchain is extremely expensive. One must be created at application startup and re-used throughout the application lifecycle.
 
@@ -198,7 +198,7 @@ type VulkanSwapchain struct {
 }
 
 /*
-A fragment shader is a small program that is authored in GLSL and compiled using `impellerc` that runs on each pixel covered by a polygon and allows the user to configure how it is shaded.
+A fragment shader is a small program that is authored in GLSL and compiled using impellerc that runs on each pixel covered by a polygon and allows the user to configure how it is shaded.
 
 see https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 */
@@ -352,7 +352,7 @@ type ContextVulkanInfo struct {
 type TextDecoration struct {
 	_ structs.HostLayout
 	/*
-	   A mask of `ImpellerTextDecorationType`s to enable.
+	   A mask of [TextDecorationType]s to enable.
 	*/
 	Types int32
 	/*

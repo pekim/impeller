@@ -11,9 +11,9 @@ import (
 /*
 Get the version of Impeller standalone API. This is the API that will be accepted for validity checks when provided to the context creation methods.
 
-The current version of the API  is denoted by the `IMPELLER_VERSION` macro. This version must be passed to APIs that create top-level objects like graphics contexts. Construction of the context may fail if the API version expected by the caller is not supported by the library.
+The current version of the API  is denoted by the IMPELLER_VERSION macro. This version must be passed to APIs that create top-level objects like graphics contexts. Construction of the context may fail if the API version expected by the caller is not supported by the library.
 
-Since there are no API stability guarantees today, passing a version that is different to the one returned by `ImpellerGetVersion` will always fail.
+Since there are no API stability guarantees today, passing a version that is different to the one returned by [GetVersion] will always fail.
 
 see [ContextCreateOpenGLESNew]
 
@@ -38,8 +38,8 @@ Create an OpenGL(ES) Impeller context.
 
 Warning: Unlike other context types, the OpenGL ES context can only be created, used, and collected on the calling thread. This restriction may be lifted in the future once reactor workers are exposed in the API. No other context types have threading restrictions. Till reactor workers can be used, using the context on a background thread will cause a stall of OpenGL operations.
 
-  - version : The version of the Impeller standalone API. See `ImpellerGetVersion`. If the specified here is not compatible with the version of the library, context creation will fail and NULL context returned from this call.
-  - gl_proc_address_callback : The gl proc address callback. For instance, `eglGetProcAddress`.
+  - version : The version of the Impeller standalone API. See [GetVersion]. If the specified here is not compatible with the version of the library, context creation will fail and NULL context returned from this call.
+  - gl_proc_address_callback : The gl proc address callback. For instance, eglGetProcAddress.
   - gl_proc_address_callback_user_data : The gl proc address callback user data baton. This pointer is not interpreted by Impeller and will be returned as user data in the proc address callback. user data.
 
 Return: The context or NULL if one cannot be created.
@@ -263,7 +263,7 @@ func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 }
 
 /*
-Create a new surface by wrapping an existing framebuffer object. The framebuffer must be complete as determined by `glCheckFramebufferStatus`. The framebuffer is still owned by the caller and it must be collected once the surface is collected.
+Create a new surface by wrapping an existing framebuffer object. The framebuffer must be complete as determined by glCheckFramebufferStatus. The framebuffer is still owned by the caller and it must be collected once the surface is collected.
 
   - context : The context.
   - fbo : The framebuffer object handle.
@@ -1205,11 +1205,11 @@ func (texture Texture) GetOpenGLHandle() uint64 {
 }
 
 /*
-Create a new fragment program using data obtained by compiling a GLSL shader with `impellerc`.
+Create a new fragment program using data obtained by compiling a GLSL shader with impellerc.
 
-Warning: The data provided must be compiled by `impellerc`. Providing raw GLSL strings will lead to a `nullptr` return. Impeller does not compile shaders at runtime.
+Warning: The data provided must be compiled by impellerc. Providing raw GLSL strings will lead to a nullptr return. Impeller does not compile shaders at runtime.
 
-  - data : The data compiled by `impellerc`.
+  - data : The data compiled by impellerc.
   - data_release_user_data : A baton passed back to the caller on the invocation of the mappings release callback. This call can happen on any thread.
 
 Return: The fragment program if one can be created, nullptr otherwise.
@@ -2050,7 +2050,7 @@ func (builder DisplayListBuilder) SaveLayer(bounds *Rect, paint Paint, backdrop 
 }
 
 /*
-Pops the last entry pushed onto the save stack using a call to `ImpellerDisplayListBuilderSave` or `ImpellerDisplayListBuilderSaveLayer`.
+Pops the last entry pushed onto the save stack using a call to [DisplayListBuilder.Save] or [DisplayListBuilder.SaveLayer].
 
   - builder : The builder.
 */
@@ -2602,7 +2602,7 @@ func (builder DisplayListBuilder) DrawParagraph(paragraph Paragraph, point *Poin
 }
 
 /*
-Draw a shadow for a Path given a material elevation. If the occluding object is not opaque, additional hints (via the `occluder_is_transparent` argument) must be provided to render the shadow correctly.
+Draw a shadow for a Path given a material elevation. If the occluding object is not opaque, additional hints (via the occluder_is_transparent argument) must be provided to render the shadow correctly.
 
   - builder : The builder.
   - path : The shadow path.
@@ -3101,7 +3101,7 @@ func (paragraph_style ParagraphStyle) SetLocale(locale string) {
 }
 
 /*
-Set the UTF-8 string to use as the ellipsis. Pass `nullptr` to clear the setting to default.
+Set the UTF-8 string to use as the ellipsis. Pass nullptr to clear the setting to default.
 
   - paragraph_style : The paragraph style.
   - data : The ellipsis string UTF-8 data, or null.
@@ -3385,7 +3385,7 @@ see [Paragraph.GetMaxWidth]
 
   - paragraph : The paragraph.
 
-Return: The actual width of the longest line in the paragraph after layout. This is expected to be less than or equal to `ImpellerParagraphGetMaxWidth`.
+Return: The actual width of the longest line in the paragraph after layout. This is expected to be less than or equal to [Paragraph.GetMaxWidth].
 */
 func (paragraph Paragraph) GetMinIntrinsicWidth() float32 {
 	var result float32
@@ -3538,7 +3538,7 @@ func (paragraph Paragraph) GetLineMetrics() LineMetrics {
 }
 
 /*
-Create a new instance of glyph info that can be queried for information about the glyph at the given UTF-16 code unit index. The instance must be freed using `ImpellerGlyphInfoRelease`.
+Create a new instance of glyph info that can be queried for information about the glyph at the given UTF-16 code unit index. The instance must be freed using [GlyphInfo.Release].
 
   - paragraph : The paragraph.
   - code_unit_index : The UTF-16 code unit index.
@@ -3563,7 +3563,7 @@ func (paragraph Paragraph) CreateGlyphInfoAtCodeUnitIndexNew(code_unit_index uin
 }
 
 /*
-Create a new instance of glyph info that can be queried for information about the glyph closest to the specified coordinates relative to the origin of the paragraph. The instance must be freed using `ImpellerGlyphInfoRelease`.
+Create a new instance of glyph info that can be queried for information about the glyph closest to the specified coordinates relative to the origin of the paragraph. The instance must be freed using [GlyphInfo.Release].
 
   - paragraph : The paragraph.
   - x : The x coordinate relative to paragraph origin.
