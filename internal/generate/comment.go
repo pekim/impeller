@@ -103,7 +103,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 		direction := comment.ParamCommandComment_getDirection()
 
 		c.params[name] = direction
-		fmt.Fprintf(builder, "  - %s : ", name)
+		fmt.Fprintf(builder, "  - %s - ", name)
 
 		c.inParam = true
 		c.processChildren(builder, comment)
