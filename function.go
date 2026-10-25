@@ -39,9 +39,7 @@ Create an OpenGL(ES) Impeller context.
 Warning:    Unlike other context types, the OpenGL ES context can only be             created, used, and collected on the calling thread. This             restriction may be lifted in the future once reactor workers are             exposed in the API. No other context types have threading             restrictions. Till reactor workers can be used, using the             context on a background thread will cause a stall of OpenGL             operations.
 
   - version :      The version of the Impeller                          standalone API. See `ImpellerGetVersion`. If the                          specified here is not compatible with the version                          of the library, context creation will fail and NULL                          context returned from this call.
-
   - gl_proc_address_callback :                          The gl proc address callback. For instance,                          `eglGetProcAddress`.
-
   - gl_proc_address_callback_user_data :                          The gl proc address callback user data baton. This                          pointer is not interpreted by Impeller and will be                          returned as user data in the proc address callback.                          user data.
 
 Return:     The context or NULL if one cannot be created.
@@ -91,7 +89,6 @@ func ContextCreateMetalNew(version uint32) Context {
 Create a Vulkan context using the provided Vulkan Settings.
 
   - version :   The version specified in the IMPELLER_VERSION macro.
-
   - settings :  The Vulkan settings.
 
 Return:     The Vulkan context or NULL if one cannot be created.
@@ -157,7 +154,6 @@ Get internal Vulkan handles managed by the given Vulkan context.             Own
 Warning:    If the context is not a Vulkan context, False is returned with             the [out] argument unaffected.
 
   - context :          The context
-
   - out_vulkan_info :  The out vulkan information
 
 Return:     If the Vulkan info could be fetched from the context.
@@ -184,7 +180,6 @@ func (context Context) GetVulkanInfo() (ContextVulkanInfo, Bool) {
 Create a new Vulkan swapchain using a VkSurfaceKHR instance.             Ownership of the surface is transferred over to Impeller. The             Vulkan instance the surface is created from must the same as the             context provided.
 
   - context :             The context. Must be a Vulkan context whose                                 instance is the same used to create the                                 surface passed into the next argument.
-
   - vulkan_surface_khr :  The vulkan surface.
 
 Return:     The vulkan swapchain.
@@ -271,11 +266,8 @@ func (swapchain VulkanSwapchain) AcquireNextSurfaceNew() Surface {
 Create a new surface by wrapping an existing framebuffer object.             The framebuffer must be complete as determined by             `glCheckFramebufferStatus`. The framebuffer is still owned by             the caller and it must be collected once the surface is             collected.
 
   - context :  The context.
-
   - fbo :      The framebuffer object handle.
-
   - format :   The format of the framebuffer.
-
   - size :     The size of the framebuffer is texels.
 
 Return:     The surface if once can be created, NULL otherwise.
@@ -307,7 +299,6 @@ Create a surface by wrapping a Metal drawable. This is useful             during
 
 
 	- context :         The context. The Metal device managed by this                             context must be the same used to create the                             drawable that is being wrapped.
-
 	- metal_drawable :  The drawable to wrap as a surface.
 
 Return:     The surface if one could be wrapped, NULL otherwise.
@@ -373,7 +364,6 @@ Draw a display list onto the surface. The same display list can             be d
 Warning:    In the OpenGL backend, Impeller will not make an effort to             preserve the OpenGL state that is current in the context.             Embedders that perform additional OpenGL operations in the             context should expect the reset state after control transitions             back to them. Key state to watch out for would be the viewports,             stencil rects, test toggles, resource (texture, framebuffer,             buffer) bindings, etc...
 
   - surface :       The surface to draw the display list to.
-
   - display_list :  The display list to draw onto the surface.
 
 Return:     If the display list could be drawn onto the surface.
@@ -464,7 +454,6 @@ Get the bounds of the path.
 
 
 	- path :        The path
-
 	- out_bounds :  The conservative bounds of the path.
 */
 func (path Path) GetBounds() Rect {
@@ -545,7 +534,6 @@ func (builder PathBuilder) Release() {
 Move the cursor to the specified location.
 
   - builder :   The builder.
-
   - location :  The location.
 */
 func (builder PathBuilder) MoveTo(location *Point) {
@@ -567,7 +555,6 @@ func (builder PathBuilder) MoveTo(location *Point) {
 Add a line segment from the current cursor location to the given             location. The cursor location is updated to be at the endpoint.
 
   - builder :   The builder.
-
   - location :  The location.
 */
 func (builder PathBuilder) LineTo(location *Point) {
@@ -593,9 +580,7 @@ Add a quadratic curve from whose start point is the cursor to             the sp
 
 
 	- builder :        The builder.
-
 	- control_point :  The control point.
-
 	- end_point :      The end point.
 */
 func (builder PathBuilder) QuadraticCurveTo(control_point *Point, end_point *Point) {
@@ -622,11 +607,8 @@ Add a cubic curve whose start point is current cursor location             to th
 
 
 	- builder :          The builder
-
 	- control_point_1 :  The control point 1
-
 	- control_point_2 :  The control point 2
-
 	- end_point :        The end point
 */
 func (builder PathBuilder) CubicCurveTo(control_point_1 *Point, control_point_2 *Point, end_point *Point) {
@@ -650,7 +632,6 @@ func (builder PathBuilder) CubicCurveTo(control_point_1 *Point, control_point_2 
 Adds a rectangle to the path.
 
   - builder :  The builder.
-
   - rect :     The rectangle.
 */
 func (builder PathBuilder) AddRect(rect *Rect) {
@@ -672,11 +653,8 @@ func (builder PathBuilder) AddRect(rect *Rect) {
 Add an arc to the path.
 
   - builder :              The builder.
-
   - oval_bounds :          The oval bounds.
-
   - start_angle_degrees :  The start angle in degrees.
-
   - end_angle_degrees :    The end angle in degrees.
 */
 func (builder PathBuilder) AddArc(oval_bounds *Rect, start_angle_degrees float32, end_angle_degrees float32) {
@@ -700,7 +678,6 @@ func (builder PathBuilder) AddArc(oval_bounds *Rect, start_angle_degrees float32
 Add an oval to the path.
 
   - builder :      The builder.
-
   - oval_bounds :  The oval bounds.
 */
 func (builder PathBuilder) AddOval(oval_bounds *Rect) {
@@ -722,9 +699,7 @@ func (builder PathBuilder) AddOval(oval_bounds *Rect) {
 Add a rounded rect with potentially non-uniform radii to the             path.
 
   - builder :         The builder.
-
   - rect :            The rectangle.
-
   - rounding_radii :  The rounding radii.
 */
 func (builder PathBuilder) AddRoundedRect(rect *Rect, rounding_radii *RoundingRadii) {
@@ -766,7 +741,6 @@ func (builder PathBuilder) Close() {
 Create a new path by copying the existing built-up path. The             existing path can continue being added to.
 
   - builder :  The builder.
-
   - fill :     The fill.
 
 Return:     The impeller path.
@@ -792,7 +766,6 @@ func (builder PathBuilder) CopyPathNew(fill FillType) Path {
 Create a new path using the existing built-up path. The existing             path builder now contains an empty path.
 
   - builder :  The builder.
-
   - fill :     The fill.
 
 Return:     The impeller path.
@@ -875,7 +848,6 @@ func (paint Paint) Release() {
 Set the paint color.
 
   - paint :  The paint.
-
   - color :  The color.
 */
 func (paint Paint) SetColor(color *Color) {
@@ -897,7 +869,6 @@ func (paint Paint) SetColor(color *Color) {
 Set the paint blend mode. The blend mode controls how the new             paints contents are mixed with the values already drawn using             previous draw calls.
 
   - paint :  The paint.
-
   - mode :   The mode.
 */
 func (paint Paint) SetBlendMode(mode BlendMode) {
@@ -919,7 +890,6 @@ func (paint Paint) SetBlendMode(mode BlendMode) {
 Set the paint draw style. The style controls if the closed             shapes are filled and/or stroked.
 
   - paint :  The paint.
-
   - style :  The style.
 */
 func (paint Paint) SetDrawStyle(style DrawStyle) {
@@ -941,7 +911,6 @@ func (paint Paint) SetDrawStyle(style DrawStyle) {
 Sets how strokes rendered using this paint are capped.
 
   - paint :  The paint.
-
   - cap :    The stroke cap style.
 */
 func (paint Paint) SetStrokeCap(cap StrokeCap) {
@@ -963,7 +932,6 @@ func (paint Paint) SetStrokeCap(cap StrokeCap) {
 Sets how strokes rendered using this paint are joined.
 
   - paint :  The paint.
-
   - join :   The join.
 */
 func (paint Paint) SetStrokeJoin(join StrokeJoin) {
@@ -985,7 +953,6 @@ func (paint Paint) SetStrokeJoin(join StrokeJoin) {
 Set the width of the strokes rendered using this paint.
 
   - paint :  The paint.
-
   - width :  The width.
 */
 func (paint Paint) SetStrokeWidth(width float32) {
@@ -1007,7 +974,6 @@ func (paint Paint) SetStrokeWidth(width float32) {
 Set the miter limit of the strokes rendered using this paint.
 
   - paint :  The paint.
-
   - miter :  The miter limit.
 */
 func (paint Paint) SetStrokeMiter(miter float32) {
@@ -1033,7 +999,6 @@ Set the color filter of the paint.
 
 
 	- paint :         The paint.
-
 	- color_filter :  The color filter.
 */
 func (paint Paint) SetColorFilter(color_filter ColorFilter) {
@@ -1059,7 +1024,6 @@ Set the color source of the paint.
 
 
 	- paint :         The paint.
-
 	- color_source :  The color source.
 */
 func (paint Paint) SetColorSource(color_source ColorSource) {
@@ -1085,7 +1049,6 @@ Set the image filter of a paint.
 
 
 	- paint :         The paint.
-
 	- image_filter :  The image filter.
 */
 func (paint Paint) SetImageFilter(image_filter ImageFilter) {
@@ -1107,7 +1070,6 @@ func (paint Paint) SetImageFilter(image_filter ImageFilter) {
 Set the mask filter of a paint.
 
   - paint :        The paint.
-
   - mask_filter :  The mask filter.
 */
 func (paint Paint) SetMaskFilter(mask_filter MaskFilter) {
@@ -1135,11 +1097,8 @@ Create a texture with decompressed bytes.
 Warning:    Do **not** supply compressed image data directly (PNG, JPEG,             etc...). This function only works with tightly packed             decompressed data.
 
   - context :                        The context.
-
   - descriptor :                     The texture descriptor.
-
   - contents :                       The contents.
-
   - contents_on_release_user_data :  The baton passes to the contents                                            release callback if one exists.
 
 Return:     The texture if one can be created using the provided data, NULL             otherwise.
@@ -1175,9 +1134,7 @@ Create a texture with an externally created OpenGL texture             handle.
 
 
 	- context :     The context
-
 	- descriptor :  The descriptor
-
 	- handle :      The handle
 
 Return:     The texture if one could be created by adopting the supplied             texture handle, NULL otherwise.
@@ -1271,7 +1228,6 @@ Create a new fragment program using data obtained by compiling a             GLS
 Warning:    The data provided must be compiled by `impellerc`. Providing raw             GLSL strings will lead to a `nullptr` return. Impeller does not             compile shaders at runtime.
 
   - data :                    The data compiled by `impellerc`.
-
   - data_release_user_data :  A baton passed back to the caller on the                                     invocation of the mappings release                                     callback. This call can happen on any                                     thread.
 
 Return:     The fragment program if one can be created, nullptr otherwise.
@@ -1373,17 +1329,11 @@ func (color_source ColorSource) Release() {
 Create a color source that forms a linear gradient.
 
   - start_point :     The start point.
-
   - end_point :       The end point.
-
   - stop_count :      The stop count.
-
   - colors :          The colors.
-
   - stops :           The stops.
-
   - tile_mode :       The tile mode.
-
   - transformation :  The transformation.
 
 Return:     The color source.
@@ -1414,17 +1364,11 @@ func ColorSourceCreateLinearGradientNew(start_point *Point, end_point *Point, st
 Create a color source that forms a radial gradient.
 
   - center :          The center.
-
   - radius :          The radius.
-
   - stop_count :      The stop count.
-
   - colors :          The colors.
-
   - stops :           The stops.
-
   - tile_mode :       The tile mode.
-
   - transformation :  The transformation.
 
 Return:     The color source.
@@ -1455,21 +1399,13 @@ func ColorSourceCreateRadialGradientNew(center *Point, radius float32, stop_coun
 Create a color source that forms a conical gradient.
 
   - start_center :    The start center.
-
   - start_radius :    The start radius.
-
   - end_center :      The end center.
-
   - end_radius :      The end radius.
-
   - stop_count :      The stop count.
-
   - colors :          The colors.
-
   - stops :           The stops.
-
   - tile_mode :       The tile mode.
-
   - transformation :  The transformation.
 
 Return:     The color source.
@@ -1502,19 +1438,12 @@ func ColorSourceCreateConicalGradientNew(start_center *Point, start_radius float
 Create a color source that forms a sweep gradient.
 
   - center :          The center.
-
   - start :           The start.
-
   - end :             The end.
-
   - stop_count :      The stop count.
-
   - colors :          The colors.
-
   - stops :           The stops.
-
   - tile_mode :       The tile mode.
-
   - transformation :  The transformation.
 
 Return:     The color source.
@@ -1546,13 +1475,9 @@ func ColorSourceCreateSweepGradientNew(center *Point, start float32, end float32
 Create a color source that samples from an image.
 
   - image :                 The image.
-
   - horizontal_tile_mode :  The horizontal tile mode.
-
   - vertical_tile_mode :    The vertical tile mode.
-
   - sampling :              The sampling.
-
   - transformation :        The transformation.
 
 Return:     The color source.
@@ -1583,15 +1508,10 @@ Create a color source whose pixels are shaded by a fragment             program.
 see https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
   - context :            The context.
-
   - fragment_program :   The fragment program.
-
   - samplers :           The samplers.
-
   - samplers_count :     The samplers count.
-
   - data :               The data (copied).
-
   - data_bytes_length :  The data bytes length.
 
 Return:     The color source.
@@ -1661,7 +1581,6 @@ func (color_filter ColorFilter) Release() {
 Create a color filter that performs blending of pixel values             independently.
 
   - color :       The color.
-
   - blend_mode :  The blend mode.
 
 Return:     The color filter.
@@ -1748,7 +1667,6 @@ func (mask_filter MaskFilter) Release() {
 Create a mask filter that blurs contents in the masked shape.
 
   - style :  The style.
-
   - sigma :  The sigma.
 
 Return:     The mask filter.
@@ -1816,9 +1734,7 @@ Creates an image filter that applies a Gaussian blur.
 
 
 	- x_sigma :    The x sigma.
-
 	- y_sigma :    The y sigma.
-
 	- tile_mode :  The tile mode.
 
 Return:     The image filter.
@@ -1845,7 +1761,6 @@ func ImageFilterCreateBlurNew(x_sigma float32, y_sigma float32, tile_mode TileMo
 Creates an image filter that enhances the per-channel pixel             values to the maximum value in a circle around the pixel.
 
   - x_radius :  The x radius.
-
   - y_radius :  The y radius.
 
 Return:     The image filter.
@@ -1871,7 +1786,6 @@ func ImageFilterCreateDilateNew(x_radius float32, y_radius float32) ImageFilter 
 Creates an image filter that dampens the per-channel pixel             values to the minimum value in a circle around the pixel.
 
   - x_radius :  The x radius.
-
   - y_radius :  The y radius.
 
 Return:     The image filter.
@@ -1897,7 +1811,6 @@ func ImageFilterCreateErodeNew(x_radius float32, y_radius float32) ImageFilter {
 Creates an image filter that applies a transformation matrix to             the underlying image.
 
   - matrix :    The transformation matrix.
-
   - sampling :  The image sampling mode.
 
 Return:     The image filter.
@@ -1925,15 +1838,10 @@ Create an image filter where each pixel is shaded by a fragment             prog
 see https://docs.flutter.dev/ui/design/graphics/fragment-shaders
 
   - context :            The context.
-
   - fragment_program :   The fragment program.
-
   - samplers :           The samplers.
-
   - samplers_count :     The samplers count.
-
   - data :               The data (copied).
-
   - data_bytes_length :  The data bytes length.
 
 Return:     The image filter.
@@ -1970,7 +1878,6 @@ Creates a composed filter that when applied is identical to             subseque
 
 
 	- outer :  The outer image filter.
-
 	- inner :  The inner image filter.
 
 Return:     The combined image filter.
@@ -2145,11 +2052,8 @@ Stashes the current transformation and clip state onto a save             stack 
 
 
 	- builder :   The builder.
-
 	- bounds :    The bounds.
-
 	- paint :     The paint.
-
 	- backdrop :  The backdrop.
 */
 func (builder DisplayListBuilder) SaveLayer(bounds *Rect, paint Paint, backdrop ImageFilter) {
@@ -2192,9 +2096,7 @@ func (builder DisplayListBuilder) Restore() {
 Apply a scale to the transformation matrix currently on top of             the save stack.
 
   - builder :  The builder.
-
   - x_scale :  The x scale.
-
   - y_scale :  The y scale.
 */
 func (builder DisplayListBuilder) Scale(x_scale float32, y_scale float32) {
@@ -2217,7 +2119,6 @@ func (builder DisplayListBuilder) Scale(x_scale float32, y_scale float32) {
 Apply a clockwise rotation to the transformation matrix             currently on top of the save stack.
 
   - builder :        The builder.
-
   - angle_degrees :  The angle in degrees.
 */
 func (builder DisplayListBuilder) Rotate(angle_degrees float32) {
@@ -2239,9 +2140,7 @@ func (builder DisplayListBuilder) Rotate(angle_degrees float32) {
 Apply a translation to the transformation matrix currently on             top of the save stack.
 
   - builder :        The builder.
-
   - x_translation :  The x translation.
-
   - y_translation :  The y translation.
 */
 func (builder DisplayListBuilder) Translate(x_translation float32, y_translation float32) {
@@ -2264,7 +2163,6 @@ func (builder DisplayListBuilder) Translate(x_translation float32, y_translation
 Appends the the provided transformation to the transformation             already on the save stack.
 
   - builder :    The builder.
-
   - transform :  The transform to append.
 */
 func (builder DisplayListBuilder) Transform(transform *Matrix) {
@@ -2286,7 +2184,6 @@ func (builder DisplayListBuilder) Transform(transform *Matrix) {
 Clear the transformation on top of the save stack and replace it             with a new value.
 
   - builder :    The builder.
-
   - transform :  The new transform.
 */
 func (builder DisplayListBuilder) SetTransform(transform *Matrix) {
@@ -2308,7 +2205,6 @@ func (builder DisplayListBuilder) SetTransform(transform *Matrix) {
 Get the transformation currently built up on the top of the             transformation stack.
 
   - builder :        The builder.
-
   - out_transform :  The transform.
 */
 func (builder DisplayListBuilder) GetTransform() Matrix {
@@ -2374,7 +2270,6 @@ func (builder DisplayListBuilder) GetSaveCount() uint32 {
 Effectively calls ImpellerDisplayListBuilderRestore till the             size of the save stack becomes a specified count.
 
   - builder :  The builder.
-
   - count :    The count.
 */
 func (builder DisplayListBuilder) RestoreToCount(count uint32) {
@@ -2396,9 +2291,7 @@ func (builder DisplayListBuilder) RestoreToCount(count uint32) {
 Reduces the clip region to the intersection of the current clip             and the given rectangle taking into account the clip operation.
 
   - builder :  The builder.
-
   - rect :     The rectangle.
-
   - op :       The operation.
 */
 func (builder DisplayListBuilder) ClipRect(rect *Rect, op ClipOperation) {
@@ -2421,9 +2314,7 @@ func (builder DisplayListBuilder) ClipRect(rect *Rect, op ClipOperation) {
 Reduces the clip region to the intersection of the current clip             and the given oval taking into account the clip operation.
 
   - builder :      The builder.
-
   - oval_bounds :  The oval bounds.
-
   - op :           The operation.
 */
 func (builder DisplayListBuilder) ClipOval(oval_bounds *Rect, op ClipOperation) {
@@ -2446,11 +2337,8 @@ func (builder DisplayListBuilder) ClipOval(oval_bounds *Rect, op ClipOperation) 
 Reduces the clip region to the intersection of the current clip             and the given rounded rectangle taking into account the clip             operation.
 
   - builder :  The builder.
-
   - rect :     The rectangle.
-
   - radii :    The radii.
-
   - op :       The operation.
 */
 func (builder DisplayListBuilder) ClipRoundedRect(rect *Rect, radii *RoundingRadii, op ClipOperation) {
@@ -2474,9 +2362,7 @@ func (builder DisplayListBuilder) ClipRoundedRect(rect *Rect, radii *RoundingRad
 Reduces the clip region to the intersection of the current clip             and the given path taking into account the clip operation.
 
   - builder :  The builder.
-
   - path :     The path.
-
   - op :       The operation.
 */
 func (builder DisplayListBuilder) ClipPath(path Path, op ClipOperation) {
@@ -2499,7 +2385,6 @@ func (builder DisplayListBuilder) ClipPath(path Path, op ClipOperation) {
 Fills the current clip with the specified paint.
 
   - builder :  The builder.
-
   - paint :    The paint.
 */
 func (builder DisplayListBuilder) DrawPaint(paint Paint) {
@@ -2521,11 +2406,8 @@ func (builder DisplayListBuilder) DrawPaint(paint Paint) {
 Draws a line segment.
 
   - builder :  The builder.
-
   - from :     The starting point of the line.
-
   - to :       The end point of the line.
-
   - paint :    The paint.
 */
 func (builder DisplayListBuilder) DrawLine(from *Point, to *Point, paint Paint) {
@@ -2549,15 +2431,10 @@ func (builder DisplayListBuilder) DrawLine(from *Point, to *Point, paint Paint) 
 Draws a dash line segment.
 
   - builder :     The builder.
-
   - from :        The starting point of the line.
-
   - to :          The end point of the line.
-
   - on_length :   On length.
-
   - off_length :  Off length.
-
   - paint :       The paint.
 */
 func (builder DisplayListBuilder) DrawDashedLine(from *Point, to *Point, on_length float32, off_length float32, paint Paint) {
@@ -2583,9 +2460,7 @@ func (builder DisplayListBuilder) DrawDashedLine(from *Point, to *Point, on_leng
 Draws a rectangle.
 
   - builder :  The builder.
-
   - rect :     The rectangle.
-
   - paint :    The paint.
 */
 func (builder DisplayListBuilder) DrawRect(rect *Rect, paint Paint) {
@@ -2608,9 +2483,7 @@ func (builder DisplayListBuilder) DrawRect(rect *Rect, paint Paint) {
 Draws an oval.
 
   - builder :      The builder.
-
   - oval_bounds :  The oval bounds.
-
   - paint :        The paint.
 */
 func (builder DisplayListBuilder) DrawOval(oval_bounds *Rect, paint Paint) {
@@ -2633,11 +2506,8 @@ func (builder DisplayListBuilder) DrawOval(oval_bounds *Rect, paint Paint) {
 Draws a rounded rect.
 
   - builder :  The builder.
-
   - rect :     The rectangle.
-
   - radii :    The radii.
-
   - paint :    The paint.
 */
 func (builder DisplayListBuilder) DrawRoundedRect(rect *Rect, radii *RoundingRadii, paint Paint) {
@@ -2661,15 +2531,10 @@ func (builder DisplayListBuilder) DrawRoundedRect(rect *Rect, radii *RoundingRad
 Draws a shape that is the different between the specified             rectangles (each with configurable corner radii).
 
   - builder :      The builder.
-
   - outer_rect :   The outer rectangle.
-
   - outer_radii :  The outer radii.
-
   - inner_rect :   The inner rectangle.
-
   - inner_radii :  The inner radii.
-
   - paint :        The paint.
 */
 func (builder DisplayListBuilder) DrawRoundedRectDifference(outer_rect *Rect, outer_radii *RoundingRadii, inner_rect *Rect, inner_radii *RoundingRadii, paint Paint) {
@@ -2695,9 +2560,7 @@ func (builder DisplayListBuilder) DrawRoundedRectDifference(outer_rect *Rect, ou
 Draws the specified shape.
 
   - builder :  The builder.
-
   - path :     The path.
-
   - paint :    The paint.
 */
 func (builder DisplayListBuilder) DrawPath(path Path, paint Paint) {
@@ -2720,9 +2583,7 @@ func (builder DisplayListBuilder) DrawPath(path Path, paint Paint) {
 Flattens the contents of another display list into the one             currently being built.
 
   - builder :       The builder.
-
   - display_list :  The display list.
-
   - opacity :       The opacity.
 */
 func (builder DisplayListBuilder) DrawDisplayList(display_list DisplayList, opacity float32) {
@@ -2745,9 +2606,7 @@ func (builder DisplayListBuilder) DrawDisplayList(display_list DisplayList, opac
 Draw a paragraph at the specified point.
 
   - builder :    The builder.
-
   - paragraph :  The paragraph.
-
   - point :      The point.
 */
 func (builder DisplayListBuilder) DrawParagraph(paragraph Paragraph, point *Point) {
@@ -2770,15 +2629,10 @@ func (builder DisplayListBuilder) DrawParagraph(paragraph Paragraph, point *Poin
 Draw a shadow for a Path given a material elevation. If the             occluding object is not opaque, additional hints (via the             `occluder_is_transparent` argument) must be provided to render             the shadow correctly.
 
   - builder :    The builder.
-
   - path :       The shadow path.
-
   - color :      The shadow color.
-
   - elevation :  The material elevation.
-
   - occluder_is_transparent :                        If the object casting the shadow is transparent.
-
   - device_pixel_ratio :                        The device pixel ratio.
 */
 func (builder DisplayListBuilder) DrawShadow(path Path, color *Color, elevation float32, occluder_is_transparent Bool, device_pixel_ratio float32) {
@@ -2804,13 +2658,9 @@ func (builder DisplayListBuilder) DrawShadow(path Path, color *Color, elevation 
 Draw a texture at the specified point.
 
   - builder :   The builder.
-
   - texture :   The texture.
-
   - point :     The point.
-
   - sampling :  The sampling.
-
   - paint :     The paint.
 */
 func (builder DisplayListBuilder) DrawTexture(texture Texture, point *Point, sampling TextureSampling, paint Paint) {
@@ -2835,15 +2685,10 @@ func (builder DisplayListBuilder) DrawTexture(texture Texture, point *Point, sam
 Draw a portion of texture at the specified location.
 
   - builder :   The builder.
-
   - texture :   The texture.
-
   - src_rect :  The source rectangle.
-
   - dst_rect :  The destination rectangle.
-
   - sampling :  The sampling.
-
   - paint :     The paint.
 */
 func (builder DisplayListBuilder) DrawTextureRect(texture Texture, src_rect *Rect, dst_rect *Rect, sampling TextureSampling, paint Paint) {
@@ -2940,11 +2785,8 @@ Warning:    Web Open Font Formats (.woff and .woff2 extensions) are **not**     
 see [ParagraphStyle.SetFontFamily]
 
   - context :                        The context.
-
   - contents :                       The contents.
-
   - contents_on_release_user_data :  The user data baton to be passed                                            to the contents release callback.
-
   - family_name_alias :              The family name alias or NULL if                                            the one specified in the font                                            data is to be used.
 
 Return:     If the font could be successfully registered.
@@ -3030,7 +2872,6 @@ func (paragraph_style ParagraphStyle) Release() {
 Set the paint used to render the text glyph contents.
 
   - paragraph_style :  The paragraph style.
-
   - paint :            The paint.
 */
 func (paragraph_style ParagraphStyle) SetForeground(paint Paint) {
@@ -3052,7 +2893,6 @@ func (paragraph_style ParagraphStyle) SetForeground(paint Paint) {
 Set the paint used to render the background of the text glyphs.
 
   - paragraph_style :  The paragraph style.
-
   - paint :            The paint.
 */
 func (paragraph_style ParagraphStyle) SetBackground(paint Paint) {
@@ -3074,7 +2914,6 @@ func (paragraph_style ParagraphStyle) SetBackground(paint Paint) {
 Set the weight of the font to select when rendering glyphs.
 
   - paragraph_style :  The paragraph style.
-
   - weight :           The weight.
 */
 func (paragraph_style ParagraphStyle) SetFontWeight(weight FontWeight) {
@@ -3096,7 +2935,6 @@ func (paragraph_style ParagraphStyle) SetFontWeight(weight FontWeight) {
 Set whether the glyphs should be bolded or italicized.
 
   - paragraph_style :  The paragraph style.
-
   - style :            The style.
 */
 func (paragraph_style ParagraphStyle) SetFontStyle(style FontStyle) {
@@ -3118,7 +2956,6 @@ func (paragraph_style ParagraphStyle) SetFontStyle(style FontStyle) {
 Set the font family.
 
   - paragraph_style :  The paragraph style.
-
   - family_name :      The family name.
 */
 func (paragraph_style ParagraphStyle) SetFontFamily(family_name string) {
@@ -3141,7 +2978,6 @@ func (paragraph_style ParagraphStyle) SetFontFamily(family_name string) {
 Set the font size.
 
   - paragraph_style :  The paragraph style.
-
   - size :             The size.
 */
 func (paragraph_style ParagraphStyle) SetFontSize(size float32) {
@@ -3167,7 +3003,6 @@ The height of the text as a multiple of text size.
 
 
 	- paragraph_style :  The paragraph style.
-
 	- height :           The height.
 */
 func (paragraph_style ParagraphStyle) SetHeight(height float32) {
@@ -3189,7 +3024,6 @@ func (paragraph_style ParagraphStyle) SetHeight(height float32) {
 Set the alignment of text within the paragraph.
 
   - paragraph_style :  The paragraph style.
-
   - align :            The align.
 */
 func (paragraph_style ParagraphStyle) SetTextAlignment(align TextAlignment) {
@@ -3211,7 +3045,6 @@ func (paragraph_style ParagraphStyle) SetTextAlignment(align TextAlignment) {
 Set the directionality of the text within the paragraph.
 
   - paragraph_style :  The paragraph style.
-
   - direction :        The direction.
 */
 func (paragraph_style ParagraphStyle) SetTextDirection(direction TextDirection) {
@@ -3233,7 +3066,6 @@ func (paragraph_style ParagraphStyle) SetTextDirection(direction TextDirection) 
 Set one of more text decorations on the paragraph. Decorations             can be underlines, overlines, strikethroughs, etc.. The style of             decorations can be set as well (dashed, dotted, wavy, etc..)
 
   - ImpellerParagraphStyle :  The paragraph style.
-
   - decoration :              The text decoration.
 */
 func (paragraph_style ParagraphStyle) SetTextDecoration(decoration *TextDecoration) {
@@ -3255,7 +3087,6 @@ func (paragraph_style ParagraphStyle) SetTextDecoration(decoration *TextDecorati
 Set the maximum line count within the paragraph.
 
   - paragraph_style :  The paragraph style.
-
   - max_lines :        The maximum lines.
 */
 func (paragraph_style ParagraphStyle) SetMaxLines(max_lines uint32) {
@@ -3277,7 +3108,6 @@ func (paragraph_style ParagraphStyle) SetMaxLines(max_lines uint32) {
 Set the paragraph locale.
 
   - paragraph_style :  The paragraph style.
-
   - locale :           The locale.
 */
 func (paragraph_style ParagraphStyle) SetLocale(locale string) {
@@ -3300,7 +3130,6 @@ func (paragraph_style ParagraphStyle) SetLocale(locale string) {
 Set the UTF-8 string to use as the ellipsis. Pass `nullptr` to             clear the setting to default.
 
   - paragraph_style :  The paragraph style.
-
   - data :             The ellipsis string UTF-8 data, or null.
 */
 func (paragraph_style ParagraphStyle) SetEllipsis(ellipsis string) {
@@ -3390,7 +3219,6 @@ Push a new paragraph style onto the paragraph style stack             managed by
 
 
 	- paragraph_builder :  The paragraph builder.
-
 	- style :              The style.
 */
 func (paragraph_builder ParagraphBuilder) PushStyle(style ParagraphStyle) {
@@ -3431,9 +3259,7 @@ func (paragraph_builder ParagraphBuilder) PopStyle() {
 Add UTF-8 encoded text to the paragraph. The text will be styled             according to the paragraph style already on top of the paragraph             style stack.
 
   - paragraph_builder :  The paragraph builder.
-
   - data :               The data.
-
   - length :             The length.
 */
 func (paragraph_builder ParagraphBuilder) AddText(data string) {
@@ -3458,7 +3284,6 @@ func (paragraph_builder ParagraphBuilder) AddText(data string) {
 Layout and build a new paragraph using the specified width. The             resulting paragraph is immutable. The paragraph builder must be             discarded and a new one created to build more paragraphs.
 
   - paragraph_builder :  The paragraph builder.
-
   - width :              The paragraph width.
 
 Return:     The paragraph if one can be created, NULL otherwise.
@@ -3698,9 +3523,7 @@ Get the range into the UTF-16 code unit buffer that represents             the w
 
 
 	- paragraph :        The paragraph
-
 	- code_unit_index :  The code unit index
-
 	- out_range : The range.
 */
 func (paragraph Paragraph) GetWordBoundary(code_unit_index uint64) Range {
@@ -3748,7 +3571,6 @@ func (paragraph Paragraph) GetLineMetrics() LineMetrics {
 Create a new instance of glyph info that can be queried for             information about the glyph at the given UTF-16 code unit index.             The instance must be freed using `ImpellerGlyphInfoRelease`.
 
   - paragraph :        The paragraph.
-
   - code_unit_index :  The UTF-16 code unit index.
 
 Return:     The glyph information.
@@ -3774,9 +3596,7 @@ func (paragraph Paragraph) CreateGlyphInfoAtCodeUnitIndexNew(code_unit_index uin
 Create a new instance of glyph info that can be queried for             information about the glyph closest to the specified coordinates             relative to the origin of the paragraph. The instance must be             freed using `ImpellerGlyphInfoRelease`.
 
   - paragraph :  The paragraph.
-
   - x :          The x coordinate relative to paragraph origin.
-
   - y :          The x coordinate relative to paragraph origin.
 
 Return:     The glyph information.
@@ -3841,7 +3661,6 @@ func (line_metrics LineMetrics) Release() {
 The rise from the baseline as calculated from the font and style             for this line ignoring the height from the text style.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The unscaled ascent.
@@ -3867,7 +3686,6 @@ func (metrics LineMetrics) GetUnscaledAscent(line uint64) float64 {
 The rise from the baseline as calculated from the font and style             for this line.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The ascent.
@@ -3893,7 +3711,6 @@ func (metrics LineMetrics) GetAscent(line uint64) float64 {
 The drop from the baseline as calculated from the font and style             for this line.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The descent.
@@ -3919,7 +3736,6 @@ func (metrics LineMetrics) GetDescent(line uint64) float64 {
 The y coordinate of the baseline for this line from the top of             the paragraph.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The baseline.
@@ -3946,7 +3762,6 @@ Used to determine if this line ends with an explicit line break             (e.g
 ') or is the end of the paragraph.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     True if the line is a hard break.
@@ -3972,7 +3787,6 @@ func (metrics LineMetrics) IsHardbreak(line uint64) Bool {
 Width of the line from the left edge of the leftmost glyph to             the right edge of the rightmost glyph.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The width.
@@ -3998,7 +3812,6 @@ func (metrics LineMetrics) GetWidth(line uint64) float64 {
 Total height of the line from the top edge to the bottom edge.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The height.
@@ -4024,7 +3837,6 @@ func (metrics LineMetrics) GetHeight(line uint64) float64 {
 The x coordinate of left edge of the line.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The left edge coordinate.
@@ -4050,7 +3862,6 @@ func (metrics LineMetrics) GetLeft(line uint64) float64 {
 Fetch the start index in the buffer of UTF-16 code units used to             represent the paragraph line.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The UTF-16 code units start index.
@@ -4076,7 +3887,6 @@ func (metrics LineMetrics) GetCodeUnitStartIndex(line uint64) uint64 {
 Fetch the end index in the buffer of UTF-16 code units used to             represent the paragraph line.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The UTF-16 code units end index.
@@ -4102,7 +3912,6 @@ func (metrics LineMetrics) GetCodeUnitEndIndex(line uint64) uint64 {
 Fetch the end index (excluding whitespace) in the buffer of             UTF-16 code units used to represent the paragraph line.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The UTF-16 code units end index excluding whitespace.
@@ -4128,7 +3937,6 @@ func (metrics LineMetrics) GetCodeUnitEndIndexExcludingWhitespace(line uint64) u
 Fetch the end index (including newlines) in the buffer of UTF-16             code units used to represent the paragraph line.
 
   - metrics :  The metrics.
-
   - line :     The line index (zero based).
 
 Return:     The UTF-16 code units end index including newlines.
@@ -4238,7 +4046,6 @@ func (glyph_info GlyphInfo) GetGraphemeClusterCodeUnitRangeEnd() uint64 {
 Fetch the bounds of the grapheme cluster for the glyph in the             coordinate space of the paragraph.
 
   - glyph_info :  The glyph information.
-
   - out_bounds :  The grapheme cluster bounds.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterBounds() Rect {

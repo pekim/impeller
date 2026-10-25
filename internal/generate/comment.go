@@ -16,6 +16,7 @@ type comment struct {
 	text                      string
 	params                    commentParams
 	inMarkdownFencedCodeBlock bool
+	inParam                   bool
 }
 
 func (gen *gen) newComment(cursor clang.Cursor) comment {
@@ -110,7 +111,9 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 		c.params[name] = direction
 		fmt.Fprintf(builder, "  - %s :", name)
 
+		c.inParam = true
 		c.processChildren(builder, comment)
+		c.inParam = false
 
 	case clang.Comment_FullComment:
 		c.processChildren(builder, comment)
@@ -120,7 +123,11 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 	case clang.Comment_Paragraph:
 		c.processChildren(builder, comment)
-		builder.WriteString("\n\n")
+		if c.inParam {
+			builder.WriteString("\n")
+		} else {
+			builder.WriteString("\n\n")
+		}
 
 	case clang.Comment_Text:
 		commentText := comment.TextComment_getText()
