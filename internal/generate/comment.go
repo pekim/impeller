@@ -29,16 +29,7 @@ func (gen *gen) newComment(cursor clang.Cursor) comment {
 
 	var builder strings.Builder
 	c.processComment(&builder, c.cursor.ParsedComment())
-	text := builder.String()
-	lines := strings.Split(text, "\n")
-	for i, line := range lines {
-		if len(line) > 1 && line[0] == ' ' && line[1] != ' ' {
-			// Remove a lone space that most (all) of the block comment lines have
-			// at the start of the line.
-			lines[i] = line[1:]
-		}
-	}
-	c.text = strings.TrimSpace(strings.Join(lines, "\n"))
+	c.text = builder.String()
 
 	return c
 }
@@ -53,15 +44,15 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 			builder.WriteRune('\n')
 
 		case "deprecated":
-			builder.WriteString("\nDeprecated:")
+			builder.WriteString("\nDeprecated: ")
 			c.processChildren(builder, comment)
 
 		case "note":
-			builder.WriteString("\nNote:")
+			builder.WriteString("\nNote: ")
 			c.processChildren(builder, comment)
 
 		case "return":
-			builder.WriteString("\nReturn:")
+			builder.WriteString("\nReturn: ")
 			c.processChildren(builder, comment)
 
 		case "see":
@@ -80,11 +71,11 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 			}
 
 		case "since":
-			builder.WriteString("Since:")
+			builder.WriteString("Since: ")
 			c.processChildren(builder, comment)
 
 		case "warning":
-			builder.WriteString("\nWarning:")
+			builder.WriteString("\nWarning: ")
 			c.processChildren(builder, comment)
 
 		default:
@@ -109,7 +100,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 		direction := comment.ParamCommandComment_getDirection()
 
 		c.params[name] = direction
-		fmt.Fprintf(builder, "  - %s :", name)
+		fmt.Fprintf(builder, "  - %s : ", name)
 
 		c.inParam = true
 		c.processChildren(builder, comment)
@@ -123,6 +114,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 	case clang.Comment_Paragraph:
 		c.processChildren(builder, comment)
+
 		if c.inParam {
 			builder.WriteString("\n")
 		} else {
@@ -131,6 +123,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 	case clang.Comment_Text:
 		commentText := comment.TextComment_getText()
+		commentText = strings.TrimSpace(commentText)
 
 		if strings.Contains(commentText, "```") {
 			c.inMarkdownFencedCodeBlock = !c.inMarkdownFencedCodeBlock
@@ -153,8 +146,15 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 }
 
 func (c *comment) processChildren(builder *strings.Builder, comment clang.Comment) {
+	previousWasText := false
+
 	for i := range comment.NumChildren() {
-		c.processComment(builder, comment.Child(i))
+		child := comment.Child(i)
+		if previousWasText && child.Kind() == clang.Comment_Text {
+			builder.WriteRune(' ')
+		}
+		c.processComment(builder, child)
+		previousWasText = child.Kind() == clang.Comment_Text
 	}
 }
 
