@@ -70,6 +70,9 @@ func main() {
 
 		para := paraBuilder.BuildParagraphNew(float32(windowWidth) - (2 * padding))
 		builder.DrawParagraph(para, &impeller.Point{X: padding, Y: padding})
+
+		para.Release()
+		paraBuilder.Release()
 	}
 
 	common.Run("simple", setup, teardown, draw)

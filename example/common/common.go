@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"runtime"
+	"time"
 	"unsafe"
 
 	"github.com/pekim/go-glfw"
@@ -52,6 +53,16 @@ func Run(
 		nil,
 	)
 
+	typographyContext := impeller.TypographyContextNew()
+
+	black := impeller.Color{Red: 0.0, Green: 0.0, Blue: 0.0, Alpha: 1.0}
+	blackPaint := impeller.PaintNew()
+	blackPaint.SetColor(&black)
+
+	style := impeller.ParagraphStyleNew()
+	style.SetFontSize(20)
+	style.SetForeground(blackPaint)
+
 	framebufferWidth, framebufferHeight := window.GetFramebufferSize()
 	surfaceSize := impeller.ISize{
 		Width:  int64(framebufferWidth),
@@ -92,15 +103,48 @@ func Run(
 
 	window.Show()
 
+	var lastFrameDuration time.Duration
+
+	drawStats := func() {
+		var memstats runtime.MemStats
+		runtime.ReadMemStats(&memstats)
+
+		paraBuilder := typographyContext.ParagraphBuilderNew()
+		paraBuilder.PushStyle(style)
+
+		secondsMultiplier := 1_000_000
+		durationUnits := "µs"
+		if lastFrameDuration >= time.Millisecond {
+			secondsMultiplier = 1_000
+			durationUnits = "ms"
+		}
+		paraBuilder.AddText(fmt.Sprintf(
+			"Heap alloc = %1.1fM  Frame draw = %1.1f%s",
+			float64(memstats.HeapAlloc)/(1_024*1_024),
+			lastFrameDuration.Seconds()*float64(secondsMultiplier),
+			durationUnits,
+		))
+		paraBuilder.PopStyle()
+		padding := float32(20)
+		para := paraBuilder.BuildParagraphNew(float32(framebufferWidth) - (2 * padding))
+		paraHeight := para.GetHeight()
+		builder.DrawParagraph(para, &impeller.Point{X: padding, Y: float32(framebufferHeight) - paraHeight - padding})
+		para.Release()
+		paraBuilder.Release()
+	}
+
 	for window.ShouldClose() == glfw.FALSE {
 		if shouldDraw {
+			start := time.Now()
 			draw(builder, int32(framebufferWidth), int32(framebufferHeight))
+			drawStats()
 
 			dl := builder.CreateDisplayListNew()
 			surface.DrawDisplayList(dl)
 			dl.Release()
 
 			window.SwapBuffers()
+			lastFrameDuration = time.Since(start)
 			shouldDraw = false
 		}
 
