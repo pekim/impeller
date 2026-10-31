@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/pekim/go-glfw"
 	"github.com/pekim/impeller"
 	"github.com/pekim/impeller/example/common"
 )
@@ -18,7 +17,7 @@ func main() {
 	var redPaint impeller.Paint
 	var whitePaint impeller.Paint
 
-	setup := func(_window *glfw.Window, _context impeller.Context, _draw common.RequestDraw) {
+	setup := func(_context impeller.Context, _draw common.RequestDraw) {
 		typographyContext = impeller.TypographyContextNew()
 
 		blackPaint = impeller.PaintNew()

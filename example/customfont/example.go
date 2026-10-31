@@ -3,7 +3,6 @@ package main
 import (
 	_ "embed"
 
-	"github.com/pekim/go-glfw"
 	"github.com/pekim/impeller"
 	"github.com/pekim/impeller/example/common"
 )
@@ -35,7 +34,7 @@ func main() {
 		}
 	}
 
-	setup := func(_window *glfw.Window, _context impeller.Context, _draw common.RequestDraw) {
+	setup := func(_context impeller.Context, _draw common.RequestDraw) {
 		typographyContext = impeller.TypographyContextNew()
 
 		registerFont(dejaVuSans, dejaVuSansTTF)

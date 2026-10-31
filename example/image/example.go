@@ -7,7 +7,6 @@ import (
 	"image"
 	_ "image/png" // register png decoder
 
-	"github.com/pekim/go-glfw"
 	"github.com/pekim/impeller"
 	"github.com/pekim/impeller/example/common"
 )
@@ -33,7 +32,7 @@ func main() {
 	var imageTexture impeller.Texture
 	var paint impeller.Paint
 
-	setup := func(_window *glfw.Window, context impeller.Context, _draw common.RequestDraw) {
+	setup := func(context impeller.Context, _draw common.RequestDraw) {
 		paint = impeller.PaintNew()
 
 		imageTexture = context.TextureCreateWithContentsNew(
