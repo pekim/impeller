@@ -160,20 +160,20 @@ Return: If the Vulkan info could be fetched from the context.
 */
 func (context Context) GetVulkanInfo() (ContextVulkanInfo, Bool) {
 	var result Bool
-	var out_vulkan_info *ContextVulkanInfo
+	var out_vulkan_info ContextVulkanInfo
 	_, err := ffi.CallFunction(
 		cifImpellerContextGetVulkanInfo,
 		funcImpellerContextGetVulkanInfo,
 		unsafe.Pointer(&result),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&context),
-			unsafe.Pointer(&out_vulkan_info),
+			unsafe.Pointer(new(&out_vulkan_info)),
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
-	return *out_vulkan_info, result
+	return out_vulkan_info, result
 }
 
 /*
@@ -453,20 +453,20 @@ The bounds are conservative. That is, they may be larger than the actual shape o
   - out_bounds - The conservative bounds of the path.
 */
 func (path Path) GetBounds() Rect {
-	var out_bounds *Rect
+	var out_bounds Rect
 	_, err := ffi.CallFunction(
 		cifImpellerPathGetBounds,
 		funcImpellerPathGetBounds,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&path),
-			unsafe.Pointer(&out_bounds),
+			unsafe.Pointer(new(&out_bounds)),
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
-	return *out_bounds
+	return out_bounds
 }
 
 /*
@@ -2184,20 +2184,20 @@ Get the transformation currently built up on the top of the transformation stack
   - out_transform - The transform.
 */
 func (builder DisplayListBuilder) GetTransform() Matrix {
-	var out_transform *Matrix
+	var out_transform Matrix
 	_, err := ffi.CallFunction(
 		cifImpellerDisplayListBuilderGetTransform,
 		funcImpellerDisplayListBuilderGetTransform,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&builder),
-			unsafe.Pointer(&out_transform),
+			unsafe.Pointer(new(&out_transform)),
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
-	return *out_transform
+	return out_transform
 }
 
 /*
@@ -3497,7 +3497,7 @@ Word boundaries are defined more precisely in [Unicode Standard Annex #29](http:
   - out_range - The range.
 */
 func (paragraph Paragraph) GetWordBoundary(code_unit_index uint64) Range {
-	var out_range *Range
+	var out_range Range
 	_, err := ffi.CallFunction(
 		cifImpellerParagraphGetWordBoundary,
 		funcImpellerParagraphGetWordBoundary,
@@ -3505,13 +3505,13 @@ func (paragraph Paragraph) GetWordBoundary(code_unit_index uint64) Range {
 		[]unsafe.Pointer{
 			unsafe.Pointer(&paragraph),
 			unsafe.Pointer(&code_unit_index),
-			unsafe.Pointer(&out_range),
+			unsafe.Pointer(new(&out_range)),
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
-	return *out_range
+	return out_range
 }
 
 /*
@@ -4019,20 +4019,20 @@ Fetch the bounds of the grapheme cluster for the glyph in the coordinate space o
   - out_bounds - The grapheme cluster bounds.
 */
 func (glyph_info GlyphInfo) GetGraphemeClusterBounds() Rect {
-	var out_bounds *Rect
+	var out_bounds Rect
 	_, err := ffi.CallFunction(
 		cifImpellerGlyphInfoGetGraphemeClusterBounds,
 		funcImpellerGlyphInfoGetGraphemeClusterBounds,
 		unsafe.Pointer(nil),
 		[]unsafe.Pointer{
 			unsafe.Pointer(&glyph_info),
-			unsafe.Pointer(&out_bounds),
+			unsafe.Pointer(new(&out_bounds)),
 		},
 	)
 	if err != nil {
 		panic(err)
 	}
-	return *out_bounds
+	return out_bounds
 }
 
 /*

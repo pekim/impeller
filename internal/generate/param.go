@@ -66,8 +66,22 @@ func (param param) cArgVar(g *jen.Group) {
 }
 
 func (param param) outVar(g *jen.Group) {
-	if param.direction == clang.CommentParamPassDirection_Out {
-		g.Var().Add(param.goDecl())
+	if param.direction == clang.CommentParamPassDirection_In {
+		return
+	}
+
+	if !param.isPointer {
+		panic(fmt.Sprintf("out param %s (%s) is not a pointer", param.name, param.typ.typ.Spelling()))
+	}
+
+	if param.isScalar {
+		g.Var().Id(param.name).Add(param.scalar.goType)
+
+	} else if param.isStruct {
+		g.Var().Id(param.name).Id(param.struct_.name)
+
+	} else {
+		panic(fmt.Sprintf("out param %s of type %s", param.name, param.typ.typ.Spelling()))
 	}
 }
 
