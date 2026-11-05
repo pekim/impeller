@@ -26,8 +26,8 @@ type Teardown func()
 
 type app struct {
 	window            *glfw.Window
-	framebufferWidth  glfw.Int
-	framebufferHeight glfw.Int
+	framebufferWidth  float32
+	framebufferHeight float32
 	scale             float32
 	surface           *impeller.Surface
 	statsStyle        impeller.ParagraphStyle
@@ -107,7 +107,9 @@ func (app *app) onKey(_window *glfw.Window, key, _scancode, action, mods glfw.In
 }
 
 func (app *app) onFramebufferSize(_window *glfw.Window, _width, _height glfw.Int) {
-	app.framebufferWidth, app.framebufferHeight = app.window.GetFramebufferSize()
+	framebufferWidth, framebufferHeight := app.window.GetFramebufferSize()
+	app.framebufferWidth = float32(framebufferWidth)
+	app.framebufferHeight = float32(framebufferHeight)
 
 	if app.surface != nil {
 		app.surface.Release()
@@ -155,7 +157,10 @@ func (app app) drawStats() {
 	padding := float32(20)
 	para := paraBuilder.BuildParagraphNew(float32(app.framebufferWidth) - (2 * padding))
 	paraHeight := para.GetHeight()
-	app.builder.DrawParagraph(para, &impeller.Point{X: padding, Y: float32(app.framebufferHeight) - paraHeight - padding})
+	app.builder.DrawParagraph(para, &impeller.Point{
+		X: padding,
+		Y: (app.framebufferHeight / app.scale) - paraHeight - padding,
+	})
 	para.Release()
 	paraBuilder.Release()
 }
