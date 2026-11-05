@@ -21,17 +21,28 @@ func main() {
 		paint.SetColor(&clearColour)
 		builder.DrawPaint(paint)
 
-		// Draw a red box, centred in the window.
-		boxColour := impeller.Color{Red: 1.0, Green: 0.0, Blue: 0.0, Alpha: 1.0}
+		// Draw a black box, near top left.
+		boxColour := impeller.Color{Red: 0.0, Green: 0.0, Blue: 0.0, Alpha: 1.0}
 		paint.SetColor(&boxColour)
 		boxSize := float32(100)
 		boxRect := impeller.Rect{
+			X:      boxSize,
+			Y:      boxSize,
+			Width:  boxSize,
+			Height: boxSize,
+		}
+		builder.DrawRect(&boxRect, paint)
+
+		// Draw a red box, centred in the window.
+		boxColour2 := impeller.Color{Red: 1.0, Green: 0.0, Blue: 0.0, Alpha: 1.0}
+		paint.SetColor(&boxColour2)
+		boxRect2 := impeller.Rect{
 			X:      float32(width/2) - boxSize/2,
 			Y:      float32(height/2) - boxSize/2,
 			Width:  boxSize,
 			Height: boxSize,
 		}
-		builder.DrawRect(&boxRect, paint)
+		builder.DrawRect(&boxRect2, paint)
 	}
 
 	common.Run("simple", setup, teardown, draw)

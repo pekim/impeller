@@ -28,6 +28,7 @@ type app struct {
 	window            *glfw.Window
 	framebufferWidth  glfw.Int
 	framebufferHeight glfw.Int
+	scale             float32
 	surface           *impeller.Surface
 	statsStyle        impeller.ParagraphStyle
 	context           impeller.Context
@@ -63,6 +64,7 @@ func (app *app) init() {
 
 	app.typographyContext = impeller.TypographyContextNew()
 	app.builder = impeller.DisplayListBuilderNew(nil)
+	app.scale = 1.0
 
 	app.shouldDraw = true
 }
@@ -83,10 +85,24 @@ func (app *app) createContext() {
 	)
 }
 
-func (app *app) onKey(_window *glfw.Window, key, _scancode, _action, mods glfw.Int) {
+func (app *app) onKey(_window *glfw.Window, key, _scancode, action, mods glfw.Int) {
+	if action != glfw.PRESS && action != glfw.REPEAT {
+		return
+	}
+
 	// Quit on CTRL+Q or ESCAPE pressed.
 	if (mods == glfw.MOD_CONTROL && key == glfw.KEY_Q) || (mods == 0 && key == glfw.KEY_ESCAPE) {
 		app.window.SetShouldClose(glfw.TRUE)
+	}
+
+	if mods == glfw.MOD_CONTROL && key == glfw.KEY_EQUAL {
+		app.setScale(app.scale + 0.1)
+	}
+	if mods == glfw.MOD_CONTROL && key == glfw.KEY_MINUS {
+		app.setScale(app.scale - 0.1)
+	}
+	if mods == glfw.MOD_CONTROL && key == glfw.KEY_0 {
+		app.setScale(1.0)
 	}
 }
 
@@ -104,6 +120,16 @@ func (app *app) onFramebufferSize(_window *glfw.Window, _width, _height glfw.Int
 	app.surface = &surface
 
 	app.shouldDraw = true
+}
+
+func (app *app) setScale(scale float32) {
+	scale = max(scale, 0.5)
+	scale = min(scale, 3.0)
+
+	if scale != app.scale {
+		app.scale = scale
+		app.shouldDraw = true
+	}
 }
 
 func (app app) drawStats() {
@@ -142,6 +168,8 @@ func (app *app) runEventLoop(draw Draw) {
 	for app.window.ShouldClose() == glfw.FALSE {
 		if app.shouldDraw {
 			start := time.Now()
+
+			app.builder.Scale(app.scale, app.scale)
 			draw(app.builder, int32(app.framebufferWidth), int32(app.framebufferHeight))
 			app.drawStats()
 
