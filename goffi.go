@@ -539,6 +539,11 @@ var cifImpellerGlyphInfoGetTextDirection = &types.CallInterface{}
 
 var initialised = false
 
+/*
+Init loads the impeller shared library, and performs other initialisation.
+It must be called before any other function is called,
+and failure to do so will result in a panic when an API function is called.
+*/
 func Init() error {
 	if initialised {
 		return nil

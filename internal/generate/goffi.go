@@ -80,6 +80,11 @@ func (functions functions) generateGoffiInit(file file) {
 	file.Var().Id("initialised").Op("=").False()
 	file.Line()
 
+	file.Comment(`
+		Init loads the impeller shared library, and performs other initialisation.
+		It must be called before any other function is called,
+		and failure to do so will result in a panic when an API function is called.
+	`)
 	file.Func().Id("Init").Params().Error().BlockFunc(func(g *jen.Group) {
 		g.If(jen.Id("initialised")).Block(
 			jen.Return(jen.Nil()),
