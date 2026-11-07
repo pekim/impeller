@@ -2,7 +2,6 @@ package impeller
 
 import (
 	"testing"
-	"unsafe"
 
 	"github.com/pekim/go-glfw"
 	"github.com/stretchr/testify/assert"
@@ -19,17 +18,16 @@ func TestContext(t *testing.T) {
 	assert.NotZero(t, window)
 	window.MakeContextCurrent()
 
-	data := 42
-	dataPtr := unsafe.Pointer(&data)
+	data := uintptr(42)
 	calledCount := 0
 	context := ContextCreateOpenGLESNew(
 		GetVersion(),
-		NewProcAddressCallback(func(procName string, user_data unsafe.Pointer) unsafe.Pointer {
-			assert.Equal(t, data, *(*int)(user_data))
+		NewProcAddressCallback(func(procName string, user_data uintptr) uintptr {
+			assert.Equal(t, data, user_data)
 			calledCount++
-			return unsafe.Pointer(glfw.GetProcAddress(procName))
+			return uintptr(glfw.GetProcAddress(procName))
 		}),
-		dataPtr,
+		data,
 	)
 	assert.NotNil(t, context.handle)
 	assert.NotZero(t, calledCount)

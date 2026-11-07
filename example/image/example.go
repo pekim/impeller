@@ -48,7 +48,7 @@ func main() {
 				Data:   &pix[0],
 				Length: uint64(len(pix)),
 			},
-			nil,
+			0,
 		)
 	}
 

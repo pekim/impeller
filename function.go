@@ -44,7 +44,7 @@ Warning: Unlike other context types, the OpenGL ES context can only be created, 
 
 Return: The context or NULL if one cannot be created.
 */
-func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddressCallback, gl_proc_address_callback_user_data unsafe.Pointer) Context {
+func ContextCreateOpenGLESNew(version uint32, gl_proc_address_callback ProcAddressCallback, gl_proc_address_callback_user_data uintptr) Context {
 	var result Context
 	_, err := ffi.CallFunction(
 		cifImpellerContextCreateOpenGLESNew,
@@ -184,7 +184,7 @@ Create a new Vulkan swapchain using a VkSurfaceKHR instance. Ownership of the su
 
 Return: The vulkan swapchain.
 */
-func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr unsafe.Pointer) VulkanSwapchain {
+func (context Context) VulkanSwapchainCreateNew(vulkan_surface_khr uintptr) VulkanSwapchain {
 	var result VulkanSwapchain
 	_, err := ffi.CallFunction(
 		cifImpellerVulkanSwapchainCreateNew,
@@ -301,7 +301,7 @@ The Metal layer must be using the same device managed by the underlying context.
 
 Return: The surface if one could be wrapped, NULL otherwise.
 */
-func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable unsafe.Pointer) Surface {
+func (context Context) SurfaceCreateWrappedMetalDrawableNew(metal_drawable uintptr) Surface {
 	var result Surface
 	_, err := ffi.CallFunction(
 		cifImpellerSurfaceCreateWrappedMetalDrawableNew,
@@ -1089,7 +1089,7 @@ Warning: Do **not** supply compressed image data directly (PNG, JPEG, etc...). T
 
 Return: The texture if one can be created using the provided data, NULL otherwise.
 */
-func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data unsafe.Pointer) Texture {
+func (context Context) TextureCreateWithContentsNew(descriptor *TextureDescriptor, contents *Mapping, contents_on_release_user_data uintptr) Texture {
 	var result Texture
 	_, err := ffi.CallFunction(
 		cifImpellerTextureCreateWithContentsNew,
@@ -1214,7 +1214,7 @@ Warning: The data provided must be compiled by impellerc. Providing raw GLSL str
 
 Return: The fragment program if one can be created, nullptr otherwise.
 */
-func FragmentProgramNew(data *Mapping, data_release_user_data unsafe.Pointer) FragmentProgram {
+func FragmentProgramNew(data *Mapping, data_release_user_data uintptr) FragmentProgram {
 	var result FragmentProgram
 	_, err := ffi.CallFunction(
 		cifImpellerFragmentProgramNew,
@@ -2767,7 +2767,7 @@ see [ParagraphStyle.SetFontFamily]
 
 Return: If the font could be successfully registered.
 */
-func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_release_user_data unsafe.Pointer, family_name_alias string) Bool {
+func (context TypographyContext) RegisterFont(contents *Mapping, contents_on_release_user_data uintptr, family_name_alias string) Bool {
 	var result Bool
 	c_family_name_alias := cString(family_name_alias)
 	_, err := ffi.CallFunction(

@@ -1,8 +1,6 @@
 package impeller
 
 import (
-	"unsafe"
-
 	"github.com/go-webgpu/goffi/ffi"
 )
 
@@ -27,18 +25,18 @@ type ProcAddressCallback uintptr
 // back to the user in the callback.
 type VulkanProcAddressCallback uintptr
 
-func NewCallback(cb func(user_data unsafe.Pointer)) Callback {
+func NewCallback(cb func(user_data uintptr)) Callback {
 	return Callback(ffi.NewCallback(cb))
 }
 
 func NewProcAddressCallback(cb func(
 	procName string,
-	user_data unsafe.Pointer,
-) unsafe.Pointer) ProcAddressCallback {
+	user_data uintptr,
+) uintptr) ProcAddressCallback {
 	return ProcAddressCallback(ffi.NewCallback(func(
 		proc_name *byte,
-		user_data unsafe.Pointer,
-	) unsafe.Pointer {
+		user_data uintptr,
+	) uintptr {
 		return cb(
 			goString(proc_name),
 			user_data,
@@ -47,14 +45,14 @@ func NewProcAddressCallback(cb func(
 }
 
 func NewVulkanProcAddressCallback(cb func(
-	vulkan_instance unsafe.Pointer,
+	vulkan_instance uintptr,
 	vulkan_proc_name string,
-	user_data unsafe.Pointer,
+	user_data uintptr,
 )) VulkanProcAddressCallback {
 	return VulkanProcAddressCallback(ffi.NewCallback(func(
-		vulkan_instance unsafe.Pointer,
+		vulkan_instance uintptr,
 		vulkan_proc_name *byte,
-		user_data unsafe.Pointer,
+		user_data uintptr,
 	) {
 		cb(
 			vulkan_instance,

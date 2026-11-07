@@ -100,7 +100,7 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 func (typ typ) goDecl() jen.Code {
 	if typ.isVoid {
 		if typ.isPointer {
-			return jen.Qual("unsafe", "Pointer")
+			return jen.Uintptr()
 		}
 		return jen.Null()
 	}

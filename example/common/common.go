@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"runtime"
 	"time"
-	"unsafe"
 
 	"github.com/pekim/go-glfw"
 	"github.com/pekim/impeller"
@@ -78,10 +77,10 @@ func (app *app) createWindow(title string) {
 func (app *app) createContext() {
 	app.context = impeller.ContextCreateOpenGLESNew(
 		impeller.GetVersion(),
-		impeller.NewProcAddressCallback(func(procName string, _user_data unsafe.Pointer) unsafe.Pointer {
-			return unsafe.Pointer(glfw.GetProcAddress(procName))
+		impeller.NewProcAddressCallback(func(procName string, _user_data uintptr) uintptr {
+			return uintptr(glfw.GetProcAddress(procName))
 		}),
-		nil,
+		0,
 	)
 }
 

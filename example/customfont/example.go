@@ -29,7 +29,7 @@ func main() {
 			Data:   &data[0],
 			Length: uint64(len(data)),
 		}
-		if !typographyContext.RegisterFont(&fontMapping, nil, name).Bool() {
+		if !typographyContext.RegisterFont(&fontMapping, 0, name).Bool() {
 			panic("failed to register font")
 		}
 	}
