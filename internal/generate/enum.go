@@ -15,7 +15,9 @@ type enum struct {
 
 func (enum enum) generate(file file) {
 	file.Comment(enum.comment.text)
-	file.Type().Id(enum.name).Id("enum")
+	typ := scalars[clang.CursorKind(enum.cursor.EnumDeclIntegerType().Kind())].goType
+
+	file.Type().Id(enum.name).Add(typ)
 
 	enum.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		name := goName(cursor.Spelling())

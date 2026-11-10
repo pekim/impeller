@@ -2,17 +2,17 @@
 
 package impeller
 
-type FillType enum
+type FillType uint32
 
 const FillTypeNonZero FillType = 0
 const FillTypeOdd FillType = 1
 
-type ClipOperation enum
+type ClipOperation uint32
 
 const ClipOperationDifference ClipOperation = 0
 const ClipOperationIntersect ClipOperation = 1
 
-type BlendMode enum
+type BlendMode uint32
 
 const BlendModeClear BlendMode = 0
 const BlendModeSource BlendMode = 1
@@ -44,54 +44,54 @@ const BlendModeSaturation BlendMode = 26
 const BlendModeColor BlendMode = 27
 const BlendModeLuminosity BlendMode = 28
 
-type DrawStyle enum
+type DrawStyle uint32
 
 const DrawStyleFill DrawStyle = 0
 const DrawStyleStroke DrawStyle = 1
 const DrawStyleStrokeAndFill DrawStyle = 2
 
-type StrokeCap enum
+type StrokeCap uint32
 
 const StrokeCapButt StrokeCap = 0
 const StrokeCapRound StrokeCap = 1
 const StrokeCapSquare StrokeCap = 2
 
-type StrokeJoin enum
+type StrokeJoin uint32
 
 const StrokeJoinMiter StrokeJoin = 0
 const StrokeJoinRound StrokeJoin = 1
 const StrokeJoinBevel StrokeJoin = 2
 
-type PixelFormat enum
+type PixelFormat uint32
 
 const PixelFormatRGBA8888 PixelFormat = 0
 
-type TextureSampling enum
+type TextureSampling uint32
 
 const TextureSamplingNearestNeighbor TextureSampling = 0
 const TextureSamplingLinear TextureSampling = 1
 
-type TileMode enum
+type TileMode uint32
 
 const TileModeClamp TileMode = 0
 const TileModeRepeat TileMode = 1
 const TileModeMirror TileMode = 2
 const TileModeDecal TileMode = 3
 
-type BlurStyle enum
+type BlurStyle uint32
 
 const BlurStyleNormal BlurStyle = 0
 const BlurStyleSolid BlurStyle = 1
 const BlurStyleOuter BlurStyle = 2
 const BlurStyleInner BlurStyle = 3
 
-type ColorSpace enum
+type ColorSpace uint32
 
 const ColorSpaceSRGB ColorSpace = 0
 const ColorSpaceExtendedSRGB ColorSpace = 1
 const ColorSpaceDisplayP3 ColorSpace = 2
 
-type FontWeight enum
+type FontWeight uint32
 
 const FontWeight100 FontWeight = 0
 const FontWeight200 FontWeight = 1
@@ -103,12 +103,12 @@ const FontWeight700 FontWeight = 6
 const FontWeight800 FontWeight = 7
 const FontWeight900 FontWeight = 8
 
-type FontStyle enum
+type FontStyle uint32
 
 const FontStyleNormal FontStyle = 0
 const FontStyleItalic FontStyle = 1
 
-type TextAlignment enum
+type TextAlignment uint32
 
 const TextAlignmentLeft TextAlignment = 0
 const TextAlignmentRight TextAlignment = 1
@@ -117,19 +117,19 @@ const TextAlignmentJustify TextAlignment = 3
 const TextAlignmentStart TextAlignment = 4
 const TextAlignmentEnd TextAlignment = 5
 
-type TextDirection enum
+type TextDirection uint32
 
 const TextDirectionRTL TextDirection = 0
 const TextDirectionLTR TextDirection = 1
 
-type TextDecorationType enum
+type TextDecorationType uint32
 
 const TextDecorationTypeNone TextDecorationType = 0
 const TextDecorationTypeUnderline TextDecorationType = 1
 const TextDecorationTypeOverline TextDecorationType = 2
 const TextDecorationTypeLineThrough TextDecorationType = 4
 
-type TextDecorationStyle enum
+type TextDecorationStyle uint32
 
 const TextDecorationStyleSolid TextDecorationStyle = 0
 const TextDecorationStyleDouble TextDecorationStyle = 1
