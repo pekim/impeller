@@ -8,19 +8,16 @@ import (
 )
 
 type struct_ struct {
-	gen    *gen
-	cursor clang.Cursor
-	cName  string
-	name   string
-	handle bool // defined using the IMPELLER_DEFINE_HANDLE macro
+	gen     *gen
+	cursor  clang.Cursor
+	cName   string
+	name    string
+	comment string
+	handle  bool // defined using the IMPELLER_DEFINE_HANDLE macro
 }
 
 func (struct_ struct_) generate(file file) {
-	comment := struct_.gen.newComment(struct_.cursor).text
-	if comment == "" {
-		comment = struct_.gen.handlesComments[struct_.cName].text
-	}
-	file.Comment(comment)
+	file.Comment(struct_.comment)
 
 	file.Type().Id(struct_.name).StructFunc(func(g *jen.Group) {
 		g.Id("_").Qual("structs", "HostLayout")

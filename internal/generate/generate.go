@@ -36,7 +36,6 @@ func Generate() {
 func (gen *gen) generate() {
 	gen.parseHeaderFile()
 	gen.findEntities()
-	gen.findHandledComments()
 	gen.generateFiles()
 }
 
@@ -80,10 +79,11 @@ func (gen *gen) findEntities() {
 		case clang.Cursor_StructDecl:
 			cName := cursor.Spelling()
 			gen.structs = append(gen.structs, struct_{
-				gen:    gen,
-				cursor: cursor,
-				cName:  cName,
-				name:   goName(cName),
+				gen:     gen,
+				cursor:  cursor,
+				cName:   cName,
+				comment: gen.newComment(cursor).text,
+				name:    goName(cName),
 			})
 
 		case clang.Cursor_TypedefDecl:
@@ -97,6 +97,7 @@ func (gen *gen) findEntities() {
 					struct_, found := gen.structs.find(structName)
 					if found {
 						struct_.cName = cursor.Spelling()
+						struct_.comment = gen.newComment(cursor).text
 						struct_.handle = true
 					}
 				}
