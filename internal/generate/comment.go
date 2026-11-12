@@ -5,7 +5,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 var commentBacktickReferenceRegexp = regexp.MustCompile(".*`(.*?)`.*")
@@ -41,7 +41,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 	switch comment.Kind() {
 
 	case clang.Comment_BlockCommand:
-		switch comment.BlockCommandComment_getCommandName() {
+		switch comment.BlockCommandCommentCommandName() {
 		case "brief":
 			c.processChildren(builder, comment)
 			builder.WriteRune('\n')
@@ -59,7 +59,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 			c.processChildren(builder, comment)
 
 		case "see":
-			reference := comment.Child(0).Child(0).TextComment_getText()
+			reference := comment.Child(0).Child(0).TextCommentText()
 			reference = strings.TrimSpace(reference)
 
 			// remove surrounding backticks
@@ -83,24 +83,24 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 		default:
 			fmt.Println(c.rawText)
-			fatalf("unhandled block command : %s\n", comment.BlockCommandComment_getCommandName())
+			fatalf("unhandled block command : %s\n", comment.BlockCommandCommentCommandName())
 		}
 
 	case clang.Comment_InlineCommand:
-		switch comment.InlineCommandComment_getCommandName() {
+		switch comment.InlineCommandCommentCommandName() {
 
 		case "n": // newline
 			builder.WriteRune('\n')
-			builder.WriteString(comment.InlineCommandComment_getArgText(0))
+			builder.WriteString(comment.InlineCommandCommentArgText(0))
 
 		default:
 			fmt.Println(c.rawText)
-			fatalf("unhandled inline command : %s\n", comment.InlineCommandComment_getCommandName())
+			fatalf("unhandled inline command : %s\n", comment.InlineCommandCommentCommandName())
 		}
 
 	case clang.Comment_ParamCommand:
-		name := comment.ParamCommandComment_getParamName()
-		direction := comment.ParamCommandComment_getDirection()
+		name := comment.ParamCommandCommentParamName()
+		direction := comment.ParamCommandCommentDirection()
 
 		c.params[name] = direction
 		fmt.Fprintf(builder, "  - %s - ", name)
@@ -125,7 +125,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 		}
 
 	case clang.Comment_Text:
-		commentText := comment.TextComment_getText()
+		commentText := comment.TextCommentText()
 		commentText = strings.TrimSpace(commentText)
 
 		if strings.Contains(commentText, "```") {
@@ -154,7 +154,7 @@ func (c *comment) processComment(builder *strings.Builder, comment clang.Comment
 
 	default:
 		fmt.Println(c.rawText)
-		fatalf("unhandled comment type : %s\n", comment.Kind().Spelling())
+		fatalf("unhandled comment type : %#v\n", comment.Kind())
 	}
 }
 
@@ -176,15 +176,15 @@ func (c comment) Dump() {
 }
 
 func (c comment) dumpComment(comment clang.Comment, indent string) {
-	fmt.Println(indent, comment.Kind().Spelling(), "=>", comment.TextComment_getText())
+	fmt.Printf("%s %#v => %s\n", indent, comment.Kind(), comment.TextCommentText())
 
 	switch comment.Kind() {
 	case clang.Comment_BlockCommand:
-		fmt.Println(indent, "  Command : Block :", comment.BlockCommandComment_getCommandName())
+		fmt.Println(indent, "  Command : Block :", comment.BlockCommandCommentCommandName())
 	case clang.Comment_InlineCommand:
-		fmt.Println(indent, "  Command : Inline :", comment.InlineCommandComment_getCommandName())
+		fmt.Println(indent, "  Command : Inline :", comment.InlineCommandCommentCommandName())
 	case clang.Comment_ParamCommand:
-		fmt.Println(indent, "  Command : Param :", comment.ParamCommandComment_getDirection(), comment.ParamCommandComment_getParamName())
+		fmt.Println(indent, "  Command : Param :", comment.ParamCommandCommentDirection(), comment.ParamCommandCommentParamName())
 
 	}
 

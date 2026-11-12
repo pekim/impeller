@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 var clangResourceDir = sync.OnceValue(func() string {
@@ -50,19 +50,22 @@ func (gen *gen) parseHeaderFile() {
 	err = os.WriteFile(modifiedHeaderFilename, []byte(headerContents), 0600)
 	fatalOnError(err)
 
-	srcFile := clang.NewUnsavedFile(gen.srcFilename, string(headerContents))
+	var srcFile clang.UnsavedFile
+	srcFile.SetFilename(gen.srcFilename)
+	srcFile.SetContents(headerContents)
+	srcFile.Length = uint64(len(headerContents))
 
-	index := clang.NewIndex(0, 1)
-	errCode := index.ParseTranslationUnit2(
+	index := clang.CreateIndex(0, 1)
+	tu, errCode := index.ParseTranslationUnit2(
 		gen.srcFilename,
 		parseArgs,
 		[]clang.UnsavedFile{srcFile},
 		uint32(clang.TranslationUnit_SkipFunctionBodies|clang.TranslationUnit_DetailedPreprocessingRecord),
-		&gen.tu,
 	)
 	if errCode != clang.Error_Success {
 		fatal(errCode)
 	}
+	gen.tu = tu
 
 	gen.lines = strings.Split(headerContents, "\n")
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 type result struct {

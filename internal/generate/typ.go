@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 type scalar struct {
@@ -13,7 +13,7 @@ type scalar struct {
 	typeDescriptor jen.Code
 }
 
-var scalars = map[clang.CursorKind]scalar{
+var scalars = map[clang.TypeKind]scalar{
 	clang.Type_Bool: {
 		goType:         jen.Id("Bool"),
 		typeDescriptor: jen.Qual(typesImportPath, "UInt8TypeDescriptor"),
@@ -71,25 +71,25 @@ func newTyp(gen *gen, typ_ clang.Type) typ {
 	}
 
 	typ.enum, typ.isEnum = gen.enums.findByGoName(goName(typ.typ.Spelling()))
-	typ.scalar, typ.isScalar = scalars[clang.CursorKind(typ.typ.CanonicalType().Kind())]
+	typ.scalar, typ.isScalar = scalars[typ.typ.CanonicalType().Kind]
 	typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(typ.typ.Spelling()))
-	typ.isVoid = typ.typ.CanonicalType().Kind() == clang.Type_Void
+	typ.isVoid = typ.typ.CanonicalType().Kind == clang.Type_Void
 
 	if strings.HasSuffix(typ.typ.Spelling(), "Callback") {
 		typ.isCallback = true
 		typ.callback = goName(typ.typ.Spelling())
 	}
 
-	typ.isPointer = typ.typ.Kind() == clang.Type_Pointer
+	typ.isPointer = typ.typ.Kind == clang.Type_Pointer
 	if typ.isPointer {
 		pointeeType := typ.typ.PointeeType()
-		pointeeKind := pointeeType.CanonicalType().Kind()
+		pointeeKind := pointeeType.CanonicalType().Kind
 
 		possibleStructName := pointeeType.Spelling()
 		possibleStructName = strings.TrimPrefix(possibleStructName, "const ")
 
 		typ.struct_, typ.isStruct = gen.structs.findByGoName(goName(possibleStructName))
-		typ.scalar, typ.isScalar = scalars[clang.CursorKind(pointeeKind)]
+		typ.scalar, typ.isScalar = scalars[pointeeKind]
 		typ.isString = pointeeKind == clang.Type_Char_S || pointeeKind == clang.Type_UChar
 		typ.isVoid = pointeeKind == clang.Type_Void
 	}

@@ -2,7 +2,7 @@ package generate
 
 import (
 	"github.com/dave/jennifer/jen"
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 type enum struct {
@@ -15,11 +15,11 @@ type enum struct {
 
 func (enum enum) generate(file file) {
 	file.Comment(enum.comment.text)
-	typ := scalars[clang.CursorKind(enum.cursor.EnumDeclIntegerType().Kind())].goType
+	typ := scalars[enum.cursor.EnumDeclIntegerType().Kind].goType
 
 	file.Type().Id(enum.name).Add(typ)
 
-	enum.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+	enum.cursor.VisitChildren(clang.MakeChildVisitor(func(cursor, _parent clang.Cursor) clang.ChildVisitResult {
 		name := goName(cursor.Spelling())
 		value := int(cursor.EnumConstantDeclValue())
 
@@ -36,7 +36,7 @@ func (enum enum) generate(file file) {
 			})
 
 		return clang.ChildVisit_Continue
-	})
+	}))
 }
 
 type enums []enum

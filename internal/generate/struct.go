@@ -4,7 +4,7 @@ import (
 	"unicode"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 type struct_ struct {
@@ -28,13 +28,13 @@ func (struct_ struct_) generate(file file) {
 		if struct_.handle {
 			g.Id("handle").Qual("unsafe", "Pointer")
 		} else {
-			struct_.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
-				if cursor.Kind() == clang.Cursor_FieldDecl {
+			struct_.cursor.VisitChildren(clang.MakeChildVisitor(func(cursor, _parent clang.Cursor) clang.ChildVisitResult {
+				if cursor.Kind == clang.Cursor_FieldDecl {
 					struct_.generateField(g, cursor)
 				}
 
 				return clang.ChildVisit_Continue
-			})
+			}))
 		}
 	})
 }
@@ -48,19 +48,19 @@ func (struct_ struct_) generateField(g *jen.Group, cursor clang.Cursor) {
 	// comment.resolve()
 	g.Comment(comment.text)
 
-	if scalar, ok := scalars[clang.CursorKind(cursor.Type().CanonicalType().Kind())]; ok {
+	if scalar, ok := scalars[cursor.Type().CanonicalType().Kind]; ok {
 		g.Id(name).Add(scalar.goType)
 
 	} else if unicode.IsUpper([]rune(typ)[0]) {
 		g.Id(name).Id(goName(typ))
 
-	} else if cursor.Type().Kind() == clang.Type_Pointer {
+	} else if cursor.Type().Kind == clang.Type_Pointer {
 		g.Id(name).Op("*").Byte()
 
-	} else if cursor.Type().Kind() == clang.Type_ConstantArray {
+	} else if cursor.Type().Kind == clang.Type_ConstantArray {
 		arraySize := int(cursor.Type().ArraySize())
 		elementType := cursor.Type().ArrayElementType()
-		if scalar, ok := scalars[clang.CursorKind(elementType.Kind())]; ok {
+		if scalar, ok := scalars[elementType.Kind]; ok {
 			g.Id(name).Index(jen.Lit(arraySize)).Add(scalar.goType)
 
 		} else {

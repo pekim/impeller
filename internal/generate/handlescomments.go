@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 func (gen *gen) findHandledComments() {
@@ -43,21 +43,21 @@ func (gen *gen) findHandledComments() {
 			}
 
 			srcFilename := handle + "_comment.h"
-			srcFile := clang.NewUnsavedFile(srcFilename, comment)
-			index := clang.NewIndex(0, 1)
-			var tu clang.TranslationUnit
-			errCode := index.ParseTranslationUnit2(
+			var srcFile clang.UnsavedFile
+			srcFile.SetFilename(srcFilename)
+			srcFile.SetContents(comment)
+			index := clang.CreateIndex(0, 1)
+			tu, errCode := index.ParseTranslationUnit2(
 				srcFilename,
 				parseArgs,
 				[]clang.UnsavedFile{srcFile},
 				uint32(clang.TranslationUnit_SkipFunctionBodies|clang.TranslationUnit_DetailedPreprocessingRecord),
-				&tu,
 			)
 			if errCode != clang.Error_Success {
 				fatal(errCode)
 			}
 
-			tu.TranslationUnitCursor().Visit(func(cursor, _parent clang.Cursor) clang.ChildVisitResult {
+			tu.TranslationUnitCursor().VisitChildren(clang.MakeChildVisitor(func(cursor, _parent clang.Cursor) clang.ChildVisitResult {
 				file, _, _, _ := cursor.Location().FileLocation()
 				if file.Name() != srcFilename {
 					return clang.ChildVisit_Continue
@@ -65,7 +65,7 @@ func (gen *gen) findHandledComments() {
 
 				gen.handlesComments[handle] = gen.newComment(cursor)
 				return clang.ChildVisit_Continue
-			})
+			}))
 		}
 	}
 }

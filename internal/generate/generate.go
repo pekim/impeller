@@ -5,7 +5,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-clang/clang-v15/clang"
+	"github.com/pekim/clang"
 )
 
 type gen struct {
@@ -20,6 +20,8 @@ type gen struct {
 }
 
 func Generate() {
+	fatalOnError(clang.Init(nil))
+
 	gen := gen{
 		headerFilename:  "internal/interop-linux_amd64/include/impeller.h",
 		srcFilename:     "impeller.h",
@@ -54,14 +56,14 @@ func (gen *gen) printStatistics() {
 }
 
 func (gen *gen) findEntities() {
-	gen.tu.TranslationUnitCursor().Visit(func(cursor, _parent clang.Cursor) clang.ChildVisitResult {
+	gen.tu.TranslationUnitCursor().VisitChildren(clang.MakeChildVisitor(func(cursor, _parent clang.Cursor) clang.ChildVisitResult {
 		// ignore cursors that are not from the header file
 		file, _, _, _ := cursor.Location().FileLocation()
 		if file.Name() != gen.srcFilename {
 			return clang.ChildVisit_Continue
 		}
 
-		switch cursor.Kind() {
+		switch cursor.CursorKind() {
 
 		case clang.Cursor_FunctionDecl:
 			gen.functions = append(gen.functions, newFunction(gen, cursor))
@@ -88,7 +90,7 @@ func (gen *gen) findEntities() {
 			underlyingType := cursor.TypedefDeclUnderlyingType().Spelling()
 			parts := strings.Split(underlyingType, " ")
 
-			switch cursor.TypedefDeclUnderlyingType().Kind() {
+			switch cursor.TypedefDeclUnderlyingType().Kind {
 			case clang.Type_Pointer:
 				if parts[0] == "struct" {
 					structName := parts[1]
@@ -102,7 +104,7 @@ func (gen *gen) findEntities() {
 		}
 
 		return clang.ChildVisit_Continue
-	})
+	}))
 }
 
 func (gen gen) resolveEntityReference(ref string) (string, bool) {
