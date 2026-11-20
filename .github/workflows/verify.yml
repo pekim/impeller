@@ -44,7 +44,7 @@ jobs:
 
     steps:
       - name: install dependencies
-        run: sudo apt install -y libglfw3-dev libx11-dev libxcursor-dev libxrandr-dev libgl-dev libxinerama-dev libxi-dev xvfb
+        run: sudo apt update && sudo apt install -y libglfw3-dev libx11-dev libxcursor-dev libxrandr-dev libgl-dev libxinerama-dev libxi-dev xvfb
 
       - uses: actions/checkout@v6
 
